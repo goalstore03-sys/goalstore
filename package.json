@@ -2,6 +2,6 @@
   "name": "goalstore",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx serve -l $PORT ."
+    "start": "npx serve -s . -l $PORT"
   }
 }
