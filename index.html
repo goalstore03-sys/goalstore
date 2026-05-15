@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoalStore - Camisetas de Fútbol Premium</title>
+<style>
+  :root {
+    --verde: #1a3a2a;
+    --verde-medio: #2d5a3d;
+    --verde-claro: #3d7a52;
+    --dorado: #c9a84c;
+    --dorado-claro: #e8c87a;
+    --dorado-oscuro: #a07830;
+    --blanco: #f8f9fa;
+    --gris-claro: #e9ecef;
+    --gris: #6c757d;
+    --texto: #1a1a1a;
+    --radio: 12px;
+    --transicion: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f4f1;
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--verde) 0%, var(--verde-medio) 100%);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .logo-img {
+    height: 52px;
+    width: auto;
+    border-radius: 50%;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+    transition: var(--transicion);
+  }
+  .logo:hover .logo-img { transform: scale(1.05); filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)); }
+  /* Fallback texto si la imagen no carga */
+  .logo-text {
+    font-size: 1.6rem; font-weight: 800; color: var(--dorado);
+    letter-spacing: -0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    display: none;
+  }
+  .logo-text span { color: var(--blanco); }
+  nav { display: flex; gap: 4px; }
+  nav a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    padding: 8px 14px; border-radius: 8px; font-weight: 500;
+    font-size: 0.9rem; transition: var(--transicion); cursor: pointer;
+  }
+  nav a:hover, nav a.activo { background: rgba(201,168,76,0.2); color: var(--dorado-claro); }
+  .carrito-btn {
+    background: linear-gradient(135deg, var(--dorado), var(--dorado-oscuro));
+    border: none; border-radius: 50px; padding: 10px 20px;
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    transition: var(--transicion); font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .carrito-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .carrito-contador {
+    background: #e74c3c; color: white; border-radius: 50%;
+    width: 22px; height: 22px; display: flex; align-items: center;
+    justify-content: center; font-size: 0.75rem; font-weight: 700;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--verde) 0%, #0d2b1a 50%, #1a4030 100%);
+    min-height: 520px; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 60px 24px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 40%, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+  .hero-decoracion { position: absolute; font-size: 8rem; opacity: 0.04; user-select: none; }
+  .hero-decoracion:nth-child(1) { top: 10%; left: 5%; font-size: 6rem; }
+  .hero-decoracion:nth-child(2) { top: 60%; right: 5%; font-size: 10rem; }
+  .hero-decoracion:nth-child(3) { bottom: 10%; left: 40%; font-size: 5rem; }
+  .hero-contenido { position: relative; z-index: 1; max-width: 700px; }
+  .hero-logo {
+    width: min(220px, 55vw);
+    height: auto;
+    border-radius: 50%;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+    margin-bottom: 28px;
+    animation: floatLogo 4s ease-in-out infinite;
+  }
+  @keyframes floatLogo {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-8px); }
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3);
+    color: var(--dorado-claro); padding: 6px 16px; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; color: white;
+    line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;
+  }
+  .hero h1 span { color: var(--dorado); }
+  .hero p { font-size: 1.15rem; color: rgba(255,255,255,0.7); margin-bottom: 36px; line-height: 1.7; }
+  .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primario {
+    background: linear-gradient(135deg, var(--dorado), var(--dorado-oscuro));
+    color: var(--verde); padding: 16px 36px; border-radius: 50px;
+    font-size: 1rem; font-weight: 700; border: none; cursor: pointer;
+    transition: var(--transicion); letter-spacing: 0.5px;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+  }
+  .btn-primario:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(201,168,76,0.5); }
+  .btn-secundario {
+    background: transparent; color: white; padding: 16px 36px;
+    border-radius: 50px; font-size: 1rem; font-weight: 600;
+    border: 2px solid rgba(255,255,255,0.3); cursor: pointer; transition: var(--transicion);
+  }
+  .btn-secundario:hover { border-color: var(--dorado); color: var(--dorado-claro); transform: translateY(-3px); }
+
+  /* ── STATS ── */
+  .stats {
+    background: var(--verde); padding: 24px;
+    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+  }
+  .stat { text-align: center; color: white; }
+  .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--dorado); display: block; }
+  .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── CATÁLOGO ── */
+  .catalogo { max-width: 1280px; margin: 0 auto; padding: 60px 24px; }
+  .catalogo-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 36px; flex-wrap: wrap; gap: 20px;
+  }
+  .catalogo-titulo h2 { font-size: 2rem; font-weight: 800; color: var(--verde); margin-bottom: 4px; }
+  .catalogo-titulo p { color: var(--gris); font-size: 0.95rem; }
+  .filtros { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filtro-btn {
+    padding: 8px 20px; border-radius: 50px; border: 2px solid var(--gris-claro);
+    background: white; color: var(--gris); font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: var(--transicion);
+  }
+  .filtro-btn:hover { border-color: var(--verde-claro); color: var(--verde); }
+  .filtro-btn.activo { background: var(--verde); border-color: var(--verde); color: white; }
+
+  /* ── GRID CAMISETAS ── */
+  .camisetas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .camiseta-card {
+    background: white; border-radius: var(--radio); overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: var(--transicion);
+    cursor: pointer; position: relative;
+  }
+  .camiseta-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,0.15); }
+  .camiseta-imagen {
+    background: #f0f2f0;
+    height: 220px; display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; position: relative; overflow: hidden; transition: var(--transicion);
+  }
+  .camiseta-img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .camiseta-card:hover .camiseta-img { transform: scale(1.07); }
+  .camiseta-badge {
+    position: absolute; top: 12px; left: 12px; background: var(--verde);
+    color: white; font-size: 0.7rem; font-weight: 700; padding: 4px 10px;
+    border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .camiseta-badge.retro { background: #7b5e2a; }
+  .camiseta-badge.nuevo { background: #e74c3c; }
+  .ver-mas-hover {
+    position: absolute; inset: 0; background: rgba(26,58,42,0.7);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: var(--transicion); color: white; font-size: 0.9rem; font-weight: 700;
+    gap: 8px; flex-direction: column;
+  }
+  .ver-mas-hover span { font-size: 1.6rem; }
+  .camiseta-card:hover .ver-mas-hover { opacity: 1; }
+  .camiseta-info { padding: 16px; }
+  .camiseta-liga { font-size: 0.72rem; color: var(--verde-claro); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .camiseta-nombre { font-size: 1rem; font-weight: 700; color: var(--texto); margin-bottom: 10px; line-height: 1.3; }
+  .camiseta-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .precio-desde { font-size: 0.72rem; color: var(--gris); display: block; line-height: 1; }
+  .camiseta-precio { font-size: 1.3rem; font-weight: 800; color: var(--verde); }
+  .camiseta-precio.retro-precio { color: var(--dorado-oscuro); }
+  .btn-ver {
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    color: white; border: none; padding: 9px 14px; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: var(--transicion); white-space: nowrap;
+  }
+  .btn-ver:hover { background: linear-gradient(135deg, var(--verde-claro), var(--dorado-oscuro)); transform: scale(1.05); }
+
+  /* ── MODAL PRODUCTO ── */
+  .prod-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    z-index: 1500; opacity: 0; visibility: hidden;
+    transition: var(--transicion); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .prod-overlay.abierto { opacity: 1; visibility: visible; }
+  .prod-modal {
+    background: white; border-radius: 20px; width: 100%; max-width: 640px;
+    max-height: 92vh; overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+    transform: scale(0.92) translateY(24px); transition: var(--transicion);
+  }
+  .prod-overlay.abierto .prod-modal { transform: scale(1) translateY(0); }
+
+  .prod-cabecera {
+    background: linear-gradient(135deg, var(--verde), var(--verde-medio));
+    padding: 20px 24px; display: flex; align-items: center;
+    justify-content: space-between; border-radius: 20px 20px 0 0; color: white;
+  }
+  .prod-cabecera-info { display: flex; align-items: center; gap: 12px; }
+  .prod-emoji-mini {
+    background: rgba(255,255,255,0.12);
+    width: 52px; height: 52px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0;
+  }
+  .prod-mini-img { width: 100%; height: 100%; object-fit: cover; }
+  .prod-cabecera-liga { font-size: 0.72rem; color: var(--dorado-claro); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .prod-cabecera-nombre { font-size: 1.2rem; font-weight: 800; }
+
+  .prod-cuerpo { padding: 28px; }
+
+  /* Imagen grande producto (legacy kept for fallback) */
+  .prod-imagen-grande {
+    background: #f0f2f0;
+    border-radius: 16px; min-height: 220px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7rem; margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  .prod-img-grande {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 16px;
+    transition: opacity 0.2s ease;
+  }
+  /* ── GALERÍA ── */
+  .prod-galeria { display: flex; flex-direction: column; gap: 12px; margin-bottom: 4px; }
+  .prod-galeria-main {
+    position: relative; width: 100%; aspect-ratio: 1/1;
+    border-radius: 16px; overflow: hidden; background: #f5f5f5;
+  }
+  .gal-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.9); border: none; border-radius: 50%;
+    width: 36px; height: 36px; font-size: 1.4rem; line-height: 1;
+    cursor: pointer; z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  }
+  .gal-arrow:hover { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transform: translateY(-50%) scale(1.1); }
+  .gal-prev { left: 10px; }
+  .gal-next { right: 10px; }
+  .prod-galeria-thumbs {
+    display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+    scrollbar-width: thin; scrollbar-color: var(--gris-claro) transparent;
+  }
+  .gal-thumb {
+    width: 64px; height: 64px; object-fit: cover; border-radius: 10px;
+    cursor: pointer; border: 2px solid transparent; flex-shrink: 0;
+    transition: all 0.2s; opacity: 0.65;
+  }
+  .gal-thumb:hover { opacity: 0.9; transform: scale(1.05); }
+  .gal-thumb.activo { border-color: var(--dorado); opacity: 1; }
+  .prod-retro-tag {
+    position: absolute; top: 12px; right: 12px;
+    background: linear-gradient(135deg, #7b5e2a, #a07830);
+    color: white; font-size: 0.75rem; font-weight: 700;
+    padding: 5px 12px; border-radius: 50px; letter-spacing: 0.5px;
+    z-index: 1;
+  }
+
+  /* Sección título en modal producto */
+  .prod-seccion { margin-bottom: 22px; }
+  .prod-seccion-titulo {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--gris); margin-bottom: 12px;
+  }
+
+  /* Selector versión */
+  .version-opciones { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .version-opcion { position: relative; }
+  .version-opcion input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .version-label {
+    display: flex; flex-direction: column; gap: 4px; padding: 16px;
+    border: 2px solid var(--gris-claro); border-radius: var(--radio);
+    cursor: pointer; transition: var(--transicion); background: #fafafa;
+  }
+  .version-label:hover { border-color: var(--verde-claro); background: #f0f8f3; }
+  .version-opcion input:checked + .version-label {
+    border-color: var(--verde); background: #e8f5ed;
+    box-shadow: 0 0 0 3px rgba(61,122,82,0.12);
+  }
+  .version-nombre { font-size: 0.95rem; font-weight: 700; color: var(--texto); }
+  .version-precio { font-size: 1.2rem; font-weight: 900; color: var(--verde); }
+  .version-desc { font-size: 0.75rem; color: var(--gris); margin-top: 2px; }
+
+  /* Selector talla */
+  .talla-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+  .talla-opcion { position: relative; }
+  .talla-opcion input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .talla-label {
+    display: flex; align-items: center; justify-content: center;
+    width: 56px; height: 48px; border: 2px solid var(--gris-claro);
+    border-radius: 10px; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: var(--transicion); background: #fafafa; color: var(--texto);
+  }
+  .talla-label:hover { border-color: var(--verde-claro); background: #f0f8f3; color: var(--verde); }
+  .talla-opcion input:checked + .talla-label {
+    border-color: var(--verde); background: var(--verde); color: white;
+    box-shadow: 0 2px 8px rgba(26,58,42,0.25);
+  }
+
+  /* Guía tallas */
+  .talla-guia {
+    margin-top: 10px; font-size: 0.78rem; color: var(--gris);
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .talla-guia span { opacity: 0.7; }
+
+  /* Precio total en modal */
+  .prod-precio-total {
+    background: linear-gradient(135deg, #e8f5ed, #d4edde);
+    border-radius: var(--radio); padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; gap: 12px;
+  }
+  .prod-precio-label { font-size: 0.85rem; color: var(--gris); }
+  .prod-precio-valor { font-size: 1.8rem; font-weight: 900; color: var(--verde); }
+  .prod-precio-retro { color: var(--dorado-oscuro); }
+
+  /* Botón añadir modal */
+  .btn-anadir-prod {
+    width: 100%; background: linear-gradient(135deg, var(--dorado), var(--dorado-oscuro));
+    color: var(--verde); border: none; padding: 18px; border-radius: var(--radio);
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: var(--transicion);
+    letter-spacing: 0.5px; box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+  }
+  .btn-anadir-prod:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(201,168,76,0.5); }
+  .btn-anadir-prod:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ── OVERLAY CARRITO ── */
+  .carrito-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 2000; opacity: 0; visibility: hidden;
+    transition: var(--transicion); backdrop-filter: blur(4px);
+  }
+  .carrito-overlay.abierto { opacity: 1; visibility: visible; }
+
+  /* ── PANEL CARRITO ── */
+  .carrito-panel {
+    position: fixed; top: 0; right: -480px;
+    width: min(480px, 100vw); height: 100vh;
+    background: white; z-index: 2001; display: flex; flex-direction: column;
+    transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: -8px 0 40px rgba(0,0,0,0.2);
+  }
+  .carrito-panel.abierto { right: 0; }
+  .carrito-cabecera {
+    background: linear-gradient(135deg, var(--verde), var(--verde-medio));
+    padding: 24px; display: flex; align-items: center;
+    justify-content: space-between; color: white;
+  }
+  .carrito-cabecera h2 { font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .btn-cerrar {
+    background: rgba(255,255,255,0.15); border: none; color: white;
+    width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+    cursor: pointer; transition: var(--transicion);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-cerrar:hover { background: rgba(255,255,255,0.3); }
+  .carrito-items { flex: 1; overflow-y: auto; padding: 16px; }
+  .carrito-vacio {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100%; color: var(--gris); gap: 16px;
+  }
+  .carrito-vacio .icono { font-size: 4rem; opacity: 0.3; }
+  .carrito-item {
+    display: flex; gap: 12px; padding: 14px; border-radius: var(--radio);
+    background: #f8f9fa; margin-bottom: 10px; transition: var(--transicion);
+  }
+  .carrito-item:hover { background: #e9f5ee; }
+  .item-thumb {
+    width: 60px; height: 60px; border-radius: 10px;
+    object-fit: cover; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .item-detalles { flex: 1; min-width: 0; }
+  .item-nombre { font-size: 0.88rem; font-weight: 700; color: var(--texto); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-meta { font-size: 0.75rem; color: var(--gris); margin-bottom: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .item-meta-tag {
+    background: var(--gris-claro); padding: 2px 8px; border-radius: 50px; font-weight: 600;
+  }
+  .item-meta-tag.jugador { background: #e0f0e8; color: var(--verde-claro); }
+  .item-meta-tag.fan { background: #fff3cd; color: var(--dorado-oscuro); }
+  .item-meta-tag.retro { background: #f3e8d0; color: #7b5e2a; }
+  .item-controles { display: flex; align-items: center; gap: 8px; }
+  .qty-btn {
+    background: white; border: 1px solid var(--gris-claro);
+    width: 26px; height: 26px; border-radius: 6px; cursor: pointer;
+    font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+    transition: var(--transicion);
+  }
+  .qty-btn:hover { background: var(--verde); color: white; border-color: var(--verde); }
+  .qty-num { font-size: 0.9rem; font-weight: 700; min-width: 20px; text-align: center; }
+  .item-precio { font-size: 0.95rem; font-weight: 800; color: var(--verde); align-self: flex-start; white-space: nowrap; }
+  .btn-eliminar-item {
+    background: none; border: none; color: #e74c3c; cursor: pointer;
+    font-size: 1rem; padding: 4px; border-radius: 4px; transition: var(--transicion); align-self: flex-start;
+  }
+  .btn-eliminar-item:hover { background: #ffeaea; }
+  .carrito-pie { border-top: 2px solid var(--gris-claro); padding: 20px; background: white; }
+  .subtotal-linea { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.9rem; color: var(--gris); }
+  .total-linea { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-top: 12px; border-top: 1px solid var(--gris-claro); }
+  .total-label { font-size: 1.1rem; font-weight: 700; }
+  .total-precio { font-size: 1.6rem; font-weight: 900; color: var(--verde); }
+  .btn-finalizar {
+    width: 100%; background: linear-gradient(135deg, var(--dorado), var(--dorado-oscuro));
+    color: var(--verde); border: none; padding: 16px; border-radius: var(--radio);
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: var(--transicion);
+    letter-spacing: 0.5px; box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+  }
+  .btn-finalizar:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(201,168,76,0.5); }
+  .btn-finalizar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ── PASARELA DE PAGO ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 3000;
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    opacity: 0; visibility: hidden; transition: var(--transicion); backdrop-filter: blur(6px);
+  }
+  .modal-overlay.abierto { opacity: 1; visibility: visible; }
+  .modal {
+    background: white; border-radius: 22px; width: 100%; max-width: 600px;
+    max-height: 92vh; overflow-y: auto; overflow-x: hidden;
+    box-shadow: 0 30px 100px rgba(0,0,0,0.35);
+    transform: scale(0.92) translateY(24px); transition: var(--transicion);
+  }
+  .modal-overlay.abierto .modal { transform: scale(1) translateY(0); }
+
+  /* Header con pasos */
+  .checkout-header {
+    background: linear-gradient(135deg, var(--verde) 0%, #1e4d34 100%);
+    padding: 22px 28px; display: flex; align-items: center;
+    justify-content: space-between; border-radius: 22px 22px 0 0; color: white;
+    gap: 12px;
+  }
+  .checkout-pasos { display: flex; align-items: center; gap: 6px; flex: 1; }
+  .checkout-paso-ind {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.45);
+    transition: color 0.3s;
+  }
+  .checkout-paso-ind.activo { color: var(--dorado-claro); }
+  .checkout-paso-ind.hecho { color: rgba(255,255,255,0.7); }
+  .checkout-paso-num {
+    width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800;
+    transition: background 0.3s;
+  }
+  .checkout-paso-ind.activo .checkout-paso-num { background: var(--dorado); color: var(--verde); }
+  .checkout-paso-ind.hecho .checkout-paso-num { background: #5cb85c; color: white; }
+  .checkout-sep { color: rgba(255,255,255,0.25); font-size: 0.7rem; }
+
+  /* Body */
+  .checkout-body { padding: 28px; }
+  .checkout-step { display: none; }
+  .checkout-step.activo { display: block; animation: fadeSlideIn 0.3s ease; }
+  @keyframes fadeSlideIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
+
+  /* Formularios */
+  .form-seccion { margin-bottom: 24px; }
+  .form-seccion-titulo {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--verde-claro);
+    margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--gris-claro);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-grupo { display: flex; flex-direction: column; gap: 6px; }
+  .form-grupo.completo { grid-column: 1 / -1; }
+  label { font-size: 0.8rem; font-weight: 600; color: var(--texto); }
+  input, select { padding: 11px 14px; border: 2px solid var(--gris-claro); border-radius: 10px; font-size: 0.9rem; font-family: inherit; transition: var(--transicion); color: var(--texto); background: #fafafa; width: 100%; }
+  input:focus, select:focus { outline: none; border-color: var(--verde-claro); background: white; box-shadow: 0 0 0 3px rgba(61,122,82,0.1); }
+
+  /* Tarjeta visual 3D */
+  .tarjeta-scene { perspective: 1000px; margin-bottom: 24px; }
+  .tarjeta-flip { position: relative; height: 180px; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .tarjeta-flip.girada { transform: rotateY(180deg); }
+  .tarjeta-cara {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 16px;
+    padding: 24px; color: white; box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .tarjeta-frente { background: linear-gradient(135deg, #1a2a3a 0%, #2d4a6a 50%, #1a3a5a 100%); }
+  .tarjeta-dorso { background: linear-gradient(135deg, #2a1a1a 0%, #4a2d2d 50%, #3a1a2a 100%); transform: rotateY(180deg); }
+  .tarjeta-chip { width: 40px; height: 30px; background: linear-gradient(135deg,#d4a843,#f0c060); border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2); }
+  .tarjeta-numero { font-size: 1.2rem; letter-spacing: 4px; font-family: 'Courier New', monospace; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.4); margin: 8px 0; }
+  .tarjeta-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .tarjeta-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; margin-bottom: 2px; }
+  .tarjeta-valor { font-size: 0.88rem; font-weight: 600; letter-spacing: 1px; }
+  .tarjeta-logo { font-size: 1.6rem; align-self: flex-start; }
+  .tarjeta-banda { background: #111; height: 44px; margin: 20px -24px 16px; }
+  .tarjeta-cvv-area { display: flex; justify-content: flex-end; padding: 0 4px; }
+  .tarjeta-cvv-box { background: white; color: #333; border-radius: 6px; padding: 8px 16px; font-family: monospace; font-size: 1rem; letter-spacing: 4px; min-width: 60px; text-align: center; font-weight: 700; }
+  .tarjeta-dorso-label { font-size: 0.7rem; opacity: 0.6; margin-top: 4px; text-align: right; padding-right: 4px; }
+
+  /* Inputs tarjeta */
+  .card-inputs { display: flex; flex-direction: column; gap: 12px; }
+  .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .input-icon-wrap { position: relative; }
+  .input-icon-wrap input { padding-right: 48px; }
+  .input-card-type {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 1.2rem; pointer-events: none;
+  }
+
+  /* Métodos de pago tabs */
+  .pago-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 24px; }
+  .pago-tab {
+    padding: 12px 8px; border: 2px solid var(--gris-claro); border-radius: 12px;
+    cursor: pointer; text-align: center; transition: var(--transicion); background: #fafafa;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+  }
+  .pago-tab:hover { border-color: var(--verde-claro); background: #f0f8f2; }
+  .pago-tab.activo { border-color: var(--verde); background: #e8f5ec; }
+  .pago-tab-icon { font-size: 1.4rem; }
+  .pago-tab-txt { font-size: 0.72rem; font-weight: 700; color: var(--texto); }
+  .pago-panel { display: none; }
+  .pago-panel.activo { display: block; animation: fadeSlideIn 0.25s ease; }
+
+  /* PayPal */
+  .paypal-area { text-align: center; padding: 12px 0; }
+  #paypal-button-container { max-width: 380px; margin: 0 auto; }
+  .paypal-sep { margin: 16px 0; color: var(--gris); font-size: 0.8rem; display: flex; align-items: center; gap: 10px; }
+  .paypal-sep::before, .paypal-sep::after { content:''; flex:1; border-top: 1px solid var(--gris-claro); }
+
+  /* Transferencia bancaria */
+  .transferencia-cabecera { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .transferencia-icono { font-size:2rem; }
+  .transferencia-titulo { font-weight:800; font-size:1rem; color:var(--texto); }
+  .transferencia-subtitulo { font-size:0.82rem; color:var(--gris); }
+  .transferencia-datos { background:#f8f9fa; border-radius:12px; padding:16px 18px; margin-bottom:14px; border:1px solid var(--gris-claro); }
+  .transferencia-fila { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f0f0f0; gap:12px; }
+  .transferencia-fila:last-child { border-bottom:none; }
+  .transferencia-fila-label { font-size:0.75rem; color:var(--gris); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; flex-shrink:0; }
+  .transferencia-fila-valor { font-size:0.88rem; font-weight:700; color:var(--texto); text-align:right; word-break:break-all; }
+  .transferencia-fila-valor.iban { font-family:monospace; letter-spacing:1px; }
+  .transferencia-fila-valor.ref { color:var(--verde); font-size:1rem; }
+  .btn-copiar { background:none; border:1px solid var(--gris-claro); border-radius:6px; padding:3px 8px; font-size:0.7rem; cursor:pointer; color:var(--gris); margin-left:8px; transition:var(--transicion); white-space:nowrap; }
+  .btn-copiar:hover { background:var(--verde); color:white; border-color:var(--verde); }
+  .transferencia-aviso { background:linear-gradient(135deg,#fff8e1,#fff3cd); border:1px solid #ffd54f; border-radius:10px; padding:12px 14px; font-size:0.83rem; color:#7a5c00; line-height:1.6; margin-bottom:4px; }
+
+  /* Resumen mini */
+  .resumen-mini {
+    background: #f8f9fa; border-radius: 12px; padding: 14px 16px; margin-bottom: 22px;
+    border: 1px solid var(--gris-claro);
+  }
+  .resumen-mini-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .resumen-mini-titulo { font-weight: 700; font-size: 0.82rem; color: var(--verde); text-transform: uppercase; letter-spacing: 1px; }
+  .resumen-mini-total { font-weight: 800; color: var(--verde); font-size: 1rem; }
+  .resumen-items { margin-top: 10px; }
+  .resumen-item { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 4px 0; color: var(--gris); border-bottom: 1px solid #f0f0f0; }
+  .resumen-item:last-child { border-bottom: none; }
+
+  /* Seguridad */
+  .seguridad { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gris-claro); }
+  .seguridad-item { display: flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--gris); }
+  .seguridad-cards { display: flex; gap: 6px; justify-content: center; margin-top: 8px; }
+  .card-badge { background: #f0f0f0; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; color: #555; border: 1px solid #ddd; }
+  .card-badge.visa { color: #1a1f71; background: #e8eaf6; }
+  .card-badge.mc { color: #eb001b; background: #fce8e8; }
+  .card-badge.amex { color: #007BC1; background: #e8f4fb; }
+
+  /* Botones navegación */
+  .btn-siguiente {
+    width: 100%; background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    color: white; border: none; padding: 16px; border-radius: 12px;
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: var(--transicion);
+    letter-spacing: 0.5px; box-shadow: 0 4px 16px rgba(26,58,42,0.3); margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-siguiente:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,58,42,0.4); }
+  .btn-siguiente:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-volver {
+    background: none; border: none; color: var(--gris); font-size: 0.85rem; cursor: pointer;
+    padding: 8px 0; display: flex; align-items: center; gap: 6px; transition: color 0.2s;
+    margin-bottom: 16px;
+  }
+  .btn-volver:hover { color: var(--verde); }
+
+  /* Procesando */
+  .procesando { display: none; flex-direction: column; align-items: center; gap: 16px; padding: 40px 32px; text-align: center; }
+  .procesando.visible { display: flex; }
+  .spinner { width: 48px; height: 48px; border: 4px solid var(--gris-claro); border-top-color: var(--verde); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .procesando p { color: var(--gris); font-size: 0.9rem; }
+
+  /* Confirmación */
+  .confirmacion { display: none; flex-direction: column; align-items: center; gap: 16px; padding: 48px 32px; text-align: center; }
+  .confirmacion.visible { display: flex; animation: fadeSlideIn 0.4s ease; }
+  .confirmacion-check { width: 72px; height: 72px; background: linear-gradient(135deg,#4caf50,#45a049); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 8px 24px rgba(76,175,80,0.35); }
+  .confirmacion h2 { font-size: 1.6rem; font-weight: 800; color: var(--verde); margin: 0; }
+  .confirmacion p { color: var(--gris); line-height: 1.7; margin: 0; }
+  .confirmacion-num { background: linear-gradient(135deg, var(--verde), var(--verde-claro)); color: white; padding: 12px 28px; border-radius: 50px; font-weight: 700; font-size: 1rem; letter-spacing: 1px; }
+  .confirmacion-detalles { background: #f8f9fa; border-radius: 12px; padding: 16px 20px; width: 100%; text-align: left; font-size: 0.84rem; color: var(--gris); line-height: 1.8; }
+  .confirmacion-detalles strong { color: var(--texto); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--verde); color: white;
+    padding: 14px 24px; border-radius: 50px;
+    font-weight: 600; font-size: 0.9rem; z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    display: flex; align-items: center; gap: 10px; white-space: nowrap;
+  }
+  .toast.visible { transform: translateX(-50%) translateY(0); }
+
+  /* ── RESEÑAS ── */
+  .reseñas-section {
+    background: linear-gradient(180deg, #f0f4f1 0%, #e8f0ea 100%);
+    padding: 60px 0 56px;
+    overflow: hidden;
+  }
+  .reseñas-header {
+    text-align: center; margin-bottom: 36px; padding: 0 24px;
+  }
+  .reseñas-header h2 {
+    font-size: 1.7rem; font-weight: 800; color: var(--verde); margin-bottom: 10px;
+  }
+  .reseñas-agg {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: white; border-radius: 50px; padding: 8px 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); font-size: 0.9rem;
+  }
+  .reseñas-agg-estrellas { color: #f5a623; font-size: 1.1rem; letter-spacing: 2px; }
+  .reseñas-agg-num { font-weight: 800; font-size: 1.1rem; color: var(--texto); }
+  .reseñas-agg-total { color: var(--gris); font-size: 0.85rem; }
+  .reseñas-banda { overflow: hidden; position: relative; }
+  .reseñas-banda::before, .reseñas-banda::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+  }
+  .reseñas-banda::before { left: 0; background: linear-gradient(to right, #e8f0ea, transparent); }
+  .reseñas-banda::after  { right: 0; background: linear-gradient(to left, #e8f0ea, transparent); }
+  .reseñas-scroll {
+    display: flex; gap: 16px; padding: 8px 16px;
+    width: max-content;
+    animation: scrollReseñas 40s linear infinite;
+  }
+  .reseñas-scroll:hover { animation-play-state: paused; }
+  @keyframes scrollReseñas {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .reseña-card {
+    background: white; border-radius: 16px; padding: 20px 22px;
+    width: 280px; flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+  }
+  .reseña-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+  .reseña-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .reseña-avatar {
+    width: 42px; height: 42px; border-radius: 50%; background: var(--verde);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .reseña-info { flex: 1; min-width: 0; }
+  .reseña-nombre { font-weight: 700; font-size: 0.92rem; color: var(--texto); }
+  .reseña-ciudad { font-size: 0.78rem; color: var(--gris); }
+  .reseña-estrellas { color: #f5a623; font-size: 0.95rem; letter-spacing: 1px; margin-bottom: 9px; }
+  .reseña-texto {
+    font-size: 0.88rem; color: #444; line-height: 1.55;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .reseña-prod {
+    margin-top: 12px; display: inline-block;
+    background: var(--gris-claro); border-radius: 50px;
+    padding: 3px 10px; font-size: 0.75rem; color: var(--gris);
+    font-weight: 600;
+  }
+  .reseña-fecha { font-size: 0.73rem; color: #bbb; margin-top: 6px; }
+
+  /* Reseñas en modal producto */
+  .modal-reseñas { margin-top: 24px; border-top: 1px solid var(--gris-claro); padding-top: 20px; }
+  .modal-reseñas-titulo {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--gris); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .modal-reseña {
+    background: #f8f9fa; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
+    border-left: 3px solid var(--dorado);
+  }
+  .modal-reseña-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+  .modal-reseña-nombre { font-weight: 700; font-size: 0.85rem; }
+  .modal-reseña-estrellas { color: #f5a623; font-size: 0.8rem; }
+  .modal-reseña-texto { font-size: 0.83rem; color: #555; line-height: 1.5; }
+  .modal-reseña-meta { font-size: 0.72rem; color: #aaa; margin-top: 6px; }
+
+  /* Rating badge en tarjeta */
+  .camiseta-rating { font-size: 0.78rem; color: #888; display: flex; align-items: center; gap: 3px; }
+  .camiseta-rating-star { color: #f5a623; }
+
+  /* ── BUSCADOR HEADER ── */
+  .header-buscador {
+    position: relative; display: flex; align-items: center;
+    flex: 1; max-width: 300px;
+  }
+  .header-buscador-icon {
+    position: absolute; left: 12px; font-size: 0.85rem;
+    pointer-events: none; color: rgba(255,255,255,0.55);
+  }
+  .header-buscador-input {
+    width: 100%; padding: 8px 34px 8px 34px;
+    background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 50px; color: white; font-size: 0.85rem; font-family: inherit;
+    transition: var(--transicion);
+  }
+  .header-buscador-input::placeholder { color: rgba(255,255,255,0.45); }
+  .header-buscador-input:focus {
+    outline: none; background: rgba(255,255,255,0.15);
+    border-color: rgba(201,168,76,0.5); box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .header-buscador-clear {
+    position: absolute; right: 9px;
+    background: rgba(255,255,255,0.15); border: none; border-radius: 50%;
+    width: 20px; height: 20px; cursor: pointer; font-size: 0.6rem; color: white;
+    display: none; align-items: center; justify-content: center; transition: var(--transicion);
+  }
+  .header-buscador-clear.visible { display: flex; }
+  .header-buscador-clear:hover { background: rgba(255,255,255,0.3); }
+  @media (max-width: 768px) {
+    .header-buscador { max-width: none; flex: 1; }
+  }
+
+  /* ── BUSCADOR ── */
+  .buscador-wrap {
+    position: relative; display: flex; align-items: center;
+    margin-bottom: 28px;
+  }
+  .buscador-icono {
+    position: absolute; left: 16px; font-size: 1rem;
+    pointer-events: none; z-index: 1;
+  }
+  .buscador-input {
+    width: 100%; padding: 13px 48px 13px 46px;
+    border: 2px solid var(--gris-claro); border-radius: 50px;
+    font-size: 0.95rem; font-family: inherit; transition: var(--transicion);
+    background: white; color: var(--texto);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .buscador-input:focus {
+    outline: none; border-color: var(--verde-claro);
+    box-shadow: 0 0 0 3px rgba(61,122,82,0.1);
+  }
+  .buscador-input::placeholder { color: #aaa; }
+  .buscador-clear {
+    position: absolute; right: 14px;
+    background: var(--gris-claro); border: none; border-radius: 50%;
+    width: 26px; height: 26px; cursor: pointer; font-size: 0.75rem;
+    display: none; align-items: center; justify-content: center;
+    transition: var(--transicion); color: var(--gris);
+  }
+  .buscador-clear.visible { display: flex; }
+  .buscador-clear:hover { background: var(--gris); color: white; }
+  .sin-resultados {
+    text-align: center; padding: 60px 24px; color: var(--gris);
+    grid-column: 1 / -1;
+  }
+  .sin-resultados .sr-icono { font-size: 3rem; margin-bottom: 12px; }
+  .sin-resultados p { font-size: 1rem; font-weight: 600; margin-bottom: 6px; color: var(--texto); }
+  .sin-resultados span { font-size: 0.88rem; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--verde); color: rgba(255,255,255,0.7); text-align: center; padding: 40px 24px; margin-top: 60px; }
+  .footer-logo { margin-bottom: 16px; display: flex; justify-content: center; }
+  .footer-logo img { height: 64px; width: auto; border-radius: 50%; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)) brightness(1.05); }
+  .footer-logo-text { font-size: 1.4rem; font-weight: 800; color: var(--dorado); }
+  footer p { font-size: 0.85rem; line-height: 1.8; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: var(--verde-claro); border-radius: 3px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hero h1 { font-size: 2rem; }
+    .hero p { font-size: 1rem; }
+    .catalogo { padding: 40px 12px; }
+    .catalogo-header { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+    .catalogo-titulo { text-align: center; }
+    .filtros { justify-content: center; }
+    .camisetas-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .camiseta-imagen { height: 160px; font-size: 3.5rem; }
+    .camiseta-info { padding: 12px; }
+    .camiseta-nombre { font-size: 0.88rem; }
+    .form-grid { grid-template-columns: 1fr; }
+    .card-row { grid-template-columns: 1fr; }
+    .stats { gap: 24px; }
+    .version-opciones { grid-template-columns: 1fr; }
+    .prod-cuerpo { padding: 20px; }
+    .checkout-body { padding: 20px; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .btn-primario, .btn-secundario { width: 100%; max-width: 300px; text-align: center; }
+  }
+
+  @media (max-width: 400px) {
+    .camisetas-grid { grid-template-columns: 1fr; }
+    .camiseta-imagen { height: 200px; }
+    .filtro-btn { font-size: 0.8rem; padding: 7px 14px; }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .camiseta-card { animation: fadeInUp 0.5s ease forwards; }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- OVERLAY CARRITO -->
+<div class="carrito-overlay" id="carritoOverlay" onclick="cerrarCarrito()"></div>
+
+<!-- PANEL CARRITO -->
+<div class="carrito-panel" id="carritoPanel">
+  <div class="carrito-cabecera">
+    <h2>🛒 Tu Carrito</h2>
+    <button class="btn-cerrar" onclick="cerrarCarrito()">✕</button>
+  </div>
+  <div class="carrito-items" id="carritoItems">
+    <div class="carrito-vacio" id="carritoVacio">
+      <div class="icono">🛒</div>
+      <p style="font-weight:600;">Tu carrito está vacío</p>
+      <p style="font-size:0.85rem;">Elige una camiseta para empezar</p>
+    </div>
+  </div>
+  <div class="carrito-pie">
+    <div class="subtotal-linea"><span>Subtotal</span><span id="subtotalPrecio">0,00 €</span></div>
+    <div class="subtotal-linea"><span>Envío</span><span id="envioPrecio">—</span></div>
+    <div class="total-linea">
+      <span class="total-label">Total</span>
+      <span class="total-precio" id="totalPrecio">0,00 €</span>
+    </div>
+    <button class="btn-finalizar" id="btnFinalizar" onclick="abrirModal()" disabled>
+      Finalizar pedido →
+    </button>
+  </div>
+</div>
+
+<!-- MODAL PRODUCTO -->
+<div class="prod-overlay" id="prodOverlay">
+  <div class="prod-modal" id="prodModal">
+    <!-- Se rellena dinámicamente -->
+  </div>
+</div>
+
+<!-- PASARELA DE PAGO -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+
+    <!-- Header con indicador de pasos -->
+    <div class="checkout-header">
+      <div class="checkout-pasos">
+        <div class="checkout-paso-ind activo" id="ind1">
+          <div class="checkout-paso-num">1</div><span>Envío</span>
+        </div>
+        <div class="checkout-sep">›</div>
+        <div class="checkout-paso-ind" id="ind2">
+          <div class="checkout-paso-num">2</div><span>Pago</span>
+        </div>
+        <div class="checkout-sep">›</div>
+        <div class="checkout-paso-ind" id="ind3">
+          <div class="checkout-paso-num">3</div><span>Confirmación</span>
+        </div>
+      </div>
+      <button class="btn-cerrar" onclick="cerrarModal()" style="color:white;background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;flex-shrink:0;">✕</button>
+    </div>
+
+    <div class="checkout-body">
+
+      <!-- ── PASO 1: DATOS DE ENVÍO ── -->
+      <div class="checkout-step activo" id="paso1">
+        <div class="form-seccion">
+          <div class="form-seccion-titulo">👤 Datos personales</div>
+          <div class="form-grid">
+            <div class="form-grupo completo">
+              <label for="ck_nombre">Nombre completo</label>
+              <input type="text" id="ck_nombre" placeholder="Carlos García López">
+            </div>
+            <div class="form-grupo">
+              <label for="ck_email">Email</label>
+              <input type="email" id="ck_email" placeholder="correo@ejemplo.com">
+            </div>
+            <div class="form-grupo">
+              <label for="ck_telefono">Teléfono</label>
+              <input type="tel" id="ck_telefono" placeholder="+34 600 000 000">
+            </div>
+          </div>
+        </div>
+        <div class="form-seccion">
+          <div class="form-seccion-titulo">📍 Dirección de envío</div>
+          <div class="form-grid">
+            <div class="form-grupo completo">
+              <label for="ck_direccion">Dirección</label>
+              <input type="text" id="ck_direccion" placeholder="Calle, número, piso...">
+            </div>
+            <div class="form-grupo">
+              <label for="ck_ciudad">Ciudad</label>
+              <input type="text" id="ck_ciudad" placeholder="Madrid">
+            </div>
+            <div class="form-grupo">
+              <label for="ck_cp">Código postal</label>
+              <input type="text" id="ck_cp" placeholder="28001" maxlength="5">
+            </div>
+            <div class="form-grupo completo">
+              <label for="ck_pais">País</label>
+              <select id="ck_pais">
+                <option value="ES">🇪🇸 España</option>
+                <option value="PT">🇵🇹 Portugal</option>
+                <option value="FR">🇫🇷 Francia</option>
+                <option value="DE">🇩🇪 Alemania</option>
+                <option value="IT">🇮🇹 Italia</option>
+                <option value="MX">🇲🇽 México</option>
+                <option value="CO">🇨🇴 Colombia</option>
+                <option value="AR">🇦🇷 Argentina</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Resumen del carrito -->
+        <div class="resumen-mini">
+          <div class="resumen-mini-header">
+            <span class="resumen-mini-titulo">🛒 Resumen del pedido</span>
+            <span class="resumen-mini-total" id="ck_totalPaso1">—</span>
+          </div>
+          <div class="resumen-items" id="ck_items1"></div>
+        </div>
+        <button class="btn-siguiente" onclick="irPaso2()">
+          Continuar al pago <span>→</span>
+        </button>
+      </div>
+
+      <!-- ── PASO 2: PAGO ── -->
+      <div class="checkout-step" id="paso2">
+        <button class="btn-volver" onclick="irPaso(1)">← Volver a envío</button>
+
+        <!-- Resumen mini -->
+        <div class="resumen-mini" style="margin-bottom:20px;">
+          <div class="resumen-mini-header">
+            <span class="resumen-mini-titulo">🛒 Tu pedido</span>
+            <span class="resumen-mini-total" id="ck_totalPaso2">—</span>
+          </div>
+        </div>
+
+        <!-- Tabs de método de pago -->
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gris);margin-bottom:12px;">Método de pago</div>
+        <div class="pago-tabs">
+          <div class="pago-tab activo" id="tabPaypal" onclick="selMetodo('paypal')">
+            <div class="pago-tab-icon"><img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" style="width:28px;height:28px;object-fit:contain;" onerror="this.outerHTML='<span style=font-size:1.6rem>🅿</span>'"></div>
+            <div class="pago-tab-txt">PayPal</div>
+          </div>
+          <div class="pago-tab" id="tabTransferencia" onclick="selMetodo('transferencia')">
+            <div class="pago-tab-icon">🏦</div>
+            <div class="pago-tab-txt">Transferencia</div>
+          </div>
+        </div>
+
+        <!-- Panel: PayPal -->
+        <div class="pago-panel activo" id="panelPaypal">
+          <div class="paypal-area">
+            <p style="font-size:0.85rem;color:var(--gris);margin-bottom:16px;">Paga de forma segura con tu cuenta PayPal o con tarjeta a través de PayPal.</p>
+            <div id="paypal-button-container"></div>
+          </div>
+          <div class="seguridad" style="margin-top:16px;">
+            <div class="seguridad-item">🔒 Protegido por PayPal Buyer Protection</div>
+          </div>
+        </div>
+
+        <!-- Panel: Transferencia Bancaria -->
+        <div class="pago-panel" id="panelTransferencia">
+          <div class="transferencia-cabecera">
+            <span class="transferencia-icono">🏦</span>
+            <div>
+              <div class="transferencia-titulo">Transferencia bancaria</div>
+              <div class="transferencia-subtitulo">Realiza el ingreso con los datos siguientes</div>
+            </div>
+          </div>
+          <div class="transferencia-datos" id="transferenciaDatos"></div>
+          <div class="transferencia-aviso">
+            ⏱️ Tu pedido se reservará <strong>48 horas</strong>. Lo procesaremos al confirmar el ingreso.
+          </div>
+          <button class="btn-siguiente" onclick="procesarPago()" style="margin-top:16px;">
+            ✅ He realizado la transferencia
+          </button>
+        </div>
+      </div>
+
+      <!-- ── PROCESANDO ── -->
+      <div class="procesando" id="procesando">
+        <div class="spinner"></div>
+        <p>Procesando tu pago de forma segura...</p>
+        <p style="font-size:0.75rem;color:#bbb;">No cierres esta ventana</p>
+      </div>
+
+      <!-- ── CONFIRMACIÓN ── -->
+      <div class="confirmacion" id="confirmacion">
+        <div class="confirmacion-check">✓</div>
+        <h2>¡Pago completado!</h2>
+        <div class="confirmacion-num" id="numPedido">GS-XXXXXX</div>
+        <div class="confirmacion-detalles" id="confirmDetalles"></div>
+        <p style="font-size:0.82rem;">Recibirás un email de confirmación en breve.</p>
+        <button class="btn-siguiente" onclick="cerrarTodo()" style="max-width:280px;">
+          🛍️ Seguir comprando
+        </button>
+      </div>
+
+    </div><!-- /checkout-body -->
+  </div><!-- /modal -->
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="scrollTop()">
+      <img class="logo-img" src="logo.png" alt="GoalStore"
+           onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block'">
+      <span class="logo-text">Goal<span>Store</span></span>
+    </div>
+    <nav>
+      <a onclick="filtrar('todos', null, true)" class="activo" id="navTodos">Inicio</a>
+      <a onclick="filtrar('laliga', null, true)" id="navLaliga">LaLiga</a>
+      <a onclick="filtrar('premier', null, true)" id="navPremier">Premier League</a>
+      <a onclick="filtrar('seriea', null, true)" id="navSeriea">Serie A</a>
+      <a onclick="filtrar('bundesliga', null, true)" id="navBundesliga">Bundesliga</a>
+      <a onclick="filtrar('ligue1', null, true)" id="navLigue1">Ligue 1</a>
+      <a onclick="filtrar('eredivisie', null, true)" id="navEredivisie">Eredivisie</a>
+      <a onclick="filtrar('superlig', null, true)" id="navSuperlig">Süper Lig</a>
+      <a onclick="filtrar('primeiraliga', null, true)" id="navPrimeiraliga">Primeira Liga</a>
+      <a onclick="filtrar('saudi', null, true)" id="navSaudi">Saudi Pro League</a>
+      <a onclick="filtrar('selecciones', null, true)" id="navSelecciones">Selecciones</a>
+      <a onclick="filtrar('retro', null, true)" id="navRetro">Retro</a>
+    </nav>
+    <div class="header-buscador">
+      <span class="header-buscador-icon">🔍</span>
+      <input type="text" id="headerBuscador" class="header-buscador-input" placeholder="Buscar...">
+      <button class="header-buscador-clear" id="headerBuscadorClear" onclick="limpiarBusqueda()" title="Limpiar">✕</button>
+    </div>
+    <button class="carrito-btn" onclick="abrirCarrito()">
+      🛒 <span class="carrito-contador" id="carritoContador">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-decoracion">⚽</div>
+  <div class="hero-decoracion">🏆</div>
+  <div class="hero-decoracion">👕</div>
+  <div class="hero-contenido">
+    <img class="hero-logo" src="logo.png" alt="GoalStore"
+         onerror="this.style.display='none'">
+    <div class="hero-badge">⚽ Temporada 2025/26</div>
+    <h1>Las mejores camisetas<br><span>del mundo</span></h1>
+    <p>Versiones Jugador y Fan de los mejores clubes y selecciones.<br>Envío gratis en todos los pedidos.</p>
+    <div class="hero-btns">
+      <button class="btn-primario" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
+        Ver colección →
+      </button>
+      <button class="btn-secundario" onclick="filtrar('retro', null, true)">
+        🕹️ Edición Retro
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><span class="stat-num">+500</span><span class="stat-label">Modelos</span></div>
+  <div class="stat"><span class="stat-num">48h</span><span class="stat-label">Envío express</span></div>
+  <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Oficial</span></div>
+  <div class="stat"><span class="stat-num">30d</span><span class="stat-label">Devolución</span></div>
+</div>
+
+<!-- CATÁLOGO -->
+<section class="catalogo" id="catalogo">
+  <div class="catalogo-header">
+    <div class="catalogo-titulo">
+      <h2>Nuestra colección</h2>
+      <p id="resultadosTexto">Mostrando 116 camisetas</p>
+    </div>
+    <div class="filtros">
+      <button class="filtro-btn activo" onclick="filtrar('todos', this)">Todos</button>
+      <button class="filtro-btn" onclick="filtrar('laliga', this)">🇪🇸 LaLiga</button>
+      <button class="filtro-btn" onclick="filtrar('premier', this)">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
+      <button class="filtro-btn" onclick="filtrar('seriea', this)">🇮🇹 Serie A</button>
+      <button class="filtro-btn" onclick="filtrar('bundesliga', this)">🇩🇪 Bundesliga</button>
+      <button class="filtro-btn" onclick="filtrar('ligue1', this)">🇫🇷 Ligue 1</button>
+      <button class="filtro-btn" onclick="filtrar('eredivisie', this)">🇳🇱 Eredivisie</button>
+      <button class="filtro-btn" onclick="filtrar('superlig', this)">🇹🇷 Süper Lig</button>
+      <button class="filtro-btn" onclick="filtrar('primeiraliga', this)">🇵🇹 Primeira Liga</button>
+      <button class="filtro-btn" onclick="filtrar('saudi', this)">🇸🇦 Saudi Pro League</button>
+      <button class="filtro-btn" onclick="filtrar('selecciones', this)">🌍 Selecciones</button>
+      <button class="filtro-btn" onclick="filtrar('retro', this)">🕹️ Retro</button>
+    </div>
+  </div>
+  <div class="buscador-wrap">
+    <span class="buscador-icono">🔍</span>
+    <input type="text" id="buscadorInput" class="buscador-input"
+           placeholder="Buscar equipo, liga o edición...">
+    <button class="buscador-clear" id="buscadorClear" onclick="limpiarBusqueda()" title="Limpiar">✕</button>
+  </div>
+  <div class="camisetas-grid" id="camisetasGrid"></div>
+</section>
+
+<!-- RESEÑAS -->
+<section class="reseñas-section">
+  <div class="reseñas-header">
+    <h2>Lo que dicen nuestros clientes</h2>
+    <div class="reseñas-agg">
+      <span class="reseñas-agg-estrellas">★★★★★</span>
+      <span class="reseñas-agg-num">4,9</span>
+      <span class="reseñas-agg-total">· +2.800 opiniones verificadas</span>
+    </div>
+  </div>
+  <div class="reseñas-banda">
+    <div class="reseñas-scroll" id="reseñasScroll"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="logo.png" alt="GoalStore"
+         onerror="this.outerHTML='<span class=\'footer-logo-text\'>⚽ GoalStore</span>'">
+  </div>
+  <p>Tu tienda de confianza para camisetas de fútbol premium.<br>
+  Versión Jugador · Versión Fan · Edición Retro · Envío gratis</p>
+  <p style="margin-top:16px; font-size:0.8rem; opacity:0.5;">© 2026 GoalStore. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+  /* ─── CONFIGURACIÓN DE PAGO ─── */
+  const PAYPAL_CLIENT_ID = 'AcASgvUkoCxD98BlmSPoMOew9YmZAesFCVXhVLE6sxiXXZyPwNxnziQjE50HRNUK99-1fPmLpYTdp7EW';
+  const BANK_DETAILS = {
+    titular: 'Antoni Mateo Berrocal',
+    iban:    'ES96 1583 0001 1290 7961 4773',
+    bic:     'REVOESM2',
+    banco:   'Revolut',
+  };
+
+  /* ─── DATOS ─── */
+  const PRECIO_JUGADOR = 29.99;
+  const PRECIO_FAN     = 24.99;
+  const PRECIO_RETRO   = 39.99;
+
+  const TALLAS = ['S','M','L','XL','XXL','2XL'];
+
+  const CDN = 'https://media.sellfy.store/images/lC8jT75D/';
+  const CAMISETAS = [
+    // ── TEMPORADA 25/26 · LA LIGA ──
+    { id:1,  nombre:'FC Barcelona Edición Especial 25/26',           liga:'laliga',      categoria:['laliga'], imgs:[CDN+'wK7t/759c6a3b.jpg',CDN+'CRic/59ffa6d9.jpg',CDN+'ClWd/7df7440f.jpg',CDN+'5wxE/febacce0.jpg'],  tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:2,  nombre:'FC Barcelona Edición Especial 25/26 (II)',      liga:'laliga',      categoria:['laliga'], imgs:[CDN+'umVF/2a08b003.jpg',CDN+'NvnN/a016cce7.jpg',CDN+'BwN5/a995d1b6.jpg',CDN+'ui2T/51c96f12.jpg'],  tipo:'regular', badge:null },
+    { id:3,  nombre:'FC Barcelona Edición Especial 25/26 (III)',     liga:'laliga',      categoria:['laliga'], imgs:[CDN+'FL5N/af8c6393.jpg',CDN+'QaX8/2e8e7106.jpg',CDN+'YEh5/8c092cd8.jpg',CDN+'ho7U/7a7f3bad.jpg'],  tipo:'regular', badge:null },
+    // ── TEMPORADA 25/26 · PREMIER LEAGUE ──
+    { id:4,  nombre:'Arsenal Primera Equipación 25/26',              liga:'premier',     categoria:['premier'],imgs:[CDN+'PNaK/ad869c5a.jpg',CDN+'7LyX/075242f7.jpg',CDN+'64FD/877cbffe.jpg'],  tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:5,  nombre:'Arsenal Edición Especial 25/26',                liga:'premier',     categoria:['premier'],imgs:[CDN+'vFc1/b4929dd3.jpg',CDN+'Tj6m/3a29760b.jpg',CDN+'rIRV/64ae545a.jpg',CDN+'1bEp/ad7a028a.jpg'],  tipo:'regular', badge:null },
+    { id:6,  nombre:'Arsenal Edición Especial 25/26 (II)',           liga:'premier',     categoria:['premier'],imgs:[CDN+'zJ1m/8656f6ef.jpg',CDN+'pImE/f7064740.jpg',CDN+'OZ1q/357a5161.jpg',CDN+'Wrhd/bb5b80f2.jpg'],  tipo:'regular', badge:null },
+    { id:7,  nombre:'Arsenal Edición Especial 25/26 (III)',          liga:'premier',     categoria:['premier'],imgs:[CDN+'zb6Q/a95664d8.jpg',CDN+'bxOB/9fa98423.jpg',CDN+'uQER/1a3034c3.jpg',CDN+'HLTv/006644fc.jpg'],  tipo:'regular', badge:null },
+    { id:8,  nombre:'Liverpool Tercera Equipación 25/26',            liga:'premier',     categoria:['premier'],imgs:[CDN+'1jH9/9dcf060a.jpg',CDN+'WoCF/5e67f80c.jpg',CDN+'mcCO/c3e33179.jpg',CDN+'TbUJ/8868f1de.jpg'],  tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:9,  nombre:'Chelsea Tercera Equipación 25/26',              liga:'premier',     categoria:['premier'],imgs:[CDN+'OoNp/5cf25256.jpg',CDN+'LIcc/d9dd7582.jpg',CDN+'Yxa4/936cd6a4.jpg',CDN+'DUYp/bcf64b11.jpg'],  tipo:'regular', badge:null },
+    { id:10, nombre:'Everton Tercera Equipación 25/26',              liga:'premier',     categoria:['premier'],            imgs:[CDN+'jx33/febe1c75.jpg',CDN+'PdY2/45cf8b68.jpg',CDN+'c621/2077bc73.jpg',CDN+'2QNe/e249345b.jpg'], tipo:'regular', badge:null },
+    { id:11, nombre:'Fulham Primera Equipación 25/26',               liga:'premier',     categoria:['premier'],            imgs:[CDN+'vHuG/a3e049bb.jpg',CDN+'1Nac/a21eb010.jpg',CDN+'qdxu/90e1abc1.jpg',CDN+'tt1j/4f3877f7.jpg'], tipo:'regular', badge:null },
+    { id:12, nombre:'Fulham Segunda Equipación 25/26',               liga:'premier',     categoria:['premier'],            imgs:[CDN+'TmKn/8e6e7520.jpg',CDN+'LO9y/f41684dd.jpg',CDN+'negc/3bc2e8c9.jpg',CDN+'PVCZ/7cddca6a.jpg'], tipo:'regular', badge:null },
+    { id:13, nombre:'Fulham Tercera Equipación 25/26',               liga:'premier',     categoria:['premier'],            imgs:[CDN+'IBzT/8283501e.jpg',CDN+'Pyil/a1614ecd.jpg',CDN+'wOUO/f23d6230.jpg'], tipo:'regular', badge:null },
+    { id:14, nombre:'Crystal Palace Segunda Equipación 25/26',       liga:'premier',     categoria:['premier'],            imgs:[CDN+'unjU/72f4c5e5.jpg',CDN+'wp6y/f1bc0240.jpg',CDN+'NcuY/505d6db1.jpg'], tipo:'regular', badge:null },
+    { id:15, nombre:'Crystal Palace Tercera Equipación 25/26',       liga:'premier',     categoria:['premier'],            imgs:[CDN+'LXFf/60958f59.jpg',CDN+'Y0pU/a86c7a2b.jpg',CDN+'wwpK/b0b65ff2.jpg',CDN+'0rJb/6aad09fc.jpg'], tipo:'regular', badge:null },
+    { id:16, nombre:'West Ham United Segunda Equipación 25/26',      liga:'premier',     categoria:['premier'],            imgs:[CDN+'zjQ1/80462317.jpg',CDN+'YWZc/191dc3ad.jpg',CDN+'RMCh/cee4cd34.jpg',CDN+'YBRJ/679bd272.jpg'], tipo:'regular', badge:null },
+    { id:17, nombre:'Wolverhampton Primera Equipación 25/26',        liga:'premier',     categoria:['premier'],            imgs:[CDN+'Pg2x/e25c3fae.jpg',CDN+'aYpI/ece27259.jpg',CDN+'qKmO/fc2d071d.jpg',CDN+'DuHm/8d0b65d0.jpg'], tipo:'regular', badge:null },
+    // ── TEMPORADA 25/26 · CHAMPIONS ──
+    { id:18, nombre:'Bayern München Segunda Equipación 25/26',       liga:'bundesliga',  categoria:['bundesliga'],         imgs:[CDN+'Qce1/f72ddf89.jpg',CDN+'iRtt/620d00f2.jpg',CDN+'z7JK/05a3568a.jpg'], tipo:'regular', badge:null },
+    { id:19, nombre:'Bayern München Edición Especial 25/26',         liga:'bundesliga',  categoria:['bundesliga'],         imgs:[CDN+'anDo/4a0ab168.jpg',CDN+'l2Mn/14b72647.jpg',CDN+'dQY9/4cd93dbf.jpg',CDN+'vP3x/5717197e.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:20, nombre:'Inter de Milán Segunda Equipación 25/26',       liga:'seriea',      categoria:['seriea'],             imgs:[CDN+'4g25/823d62cb.jpg',CDN+'KIAm/fafd0fa8.jpg',CDN+'rREI/1de89fa1.jpg'], tipo:'regular', badge:null },
+    { id:21, nombre:'Inter de Milán Tercera Equipación 25/26',       liga:'seriea',      categoria:['seriea'],             imgs:[CDN+'HAHJ/3d1718cc.jpg',CDN+'O0HC/acd84b65.jpg',CDN+'46GG/569471bc.jpg',CDN+'yUDy/5b93208c.jpg'], tipo:'regular', badge:null },
+    { id:22, nombre:'PSG Edición Especial 25/26',                    liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'xfWz/c795a5a1.jpg',CDN+'MI6a/2d567fe0.jpg',CDN+'iRZy/7b3bceef.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:23, nombre:'Ajax Edición Especial 25/26',                   liga:'eredivisie',  categoria:['eredivisie'],         imgs:[CDN+'mmZB/66f31489.jpg',CDN+'B12A/e5ed9bd4.jpg',CDN+'bC0X/eb1751bf.jpg',CDN+'t0gH/45d4c938.jpg'], tipo:'regular', badge:null },
+    { id:24, nombre:'Ajax Edición Especial 25/26 (II)',              liga:'eredivisie',  categoria:['eredivisie'],         imgs:[CDN+'mwtX/82779660.jpg',CDN+'Y09X/f2a49c7a.jpg',CDN+'zPVc/d80c07db.jpg'], tipo:'regular', badge:null },
+    { id:25, nombre:'Ajax Edición Especial 25/26 (III)',             liga:'eredivisie',  categoria:['eredivisie'],         imgs:[CDN+'LXSJ/05b664e3.jpg'], tipo:'regular', badge:null },
+    { id:26, nombre:'Ajax Segunda Equipación 25/26',                 liga:'eredivisie',  categoria:['eredivisie'],         imgs:[CDN+'fDmG/3c76a3c3.jpg',CDN+'MdZP/5a7cf913.jpg',CDN+'kbhZ/2277cd21.jpg',CDN+'AWKu/4f3877f7.jpg'], tipo:'regular', badge:null },
+    { id:27, nombre:'AS Roma Segunda Equipación 25/26',              liga:'seriea',      categoria:['seriea'],             imgs:[CDN+'evBH/8d6f5a9b.jpg',CDN+'nGBI/0c86423f.jpg',CDN+'qx0p/a38cc48c.jpg',CDN+'pIaP/9aad3b3c.jpg'], tipo:'regular', badge:null },
+    { id:28, nombre:'Bayer Leverkusen Segunda Equipación 25/26',     liga:'bundesliga',  categoria:['bundesliga'],         imgs:[CDN+'VNO2/9baa7282.jpg',CDN+'RZ0j/1134ce27.jpg'], tipo:'regular', badge:null },
+    { id:29, nombre:'Galatasaray Primera Equipación 25/26',          liga:'superlig',    categoria:['superlig'],           imgs:[CDN+'QC39/3c629cc5.jpg',CDN+'Vtcw/d5670415.jpg',CDN+'60mC/57d54217.jpg',CDN+'KhxN/2f9daf53.jpg'], tipo:'regular', badge:null },
+    { id:30, nombre:'Galatasaray Segunda Equipación 25/26',          liga:'superlig',    categoria:['superlig'],           imgs:[CDN+'5PXs/02637fe7.jpg'], tipo:'regular', badge:null },
+    { id:31, nombre:'Napoli Tercera Equipación 25/26',               liga:'seriea',      categoria:['seriea'],             imgs:[CDN+'7z4k/75caf422.jpg',CDN+'qe3X/48486a69.jpg',CDN+'XIVM/21efda70.jpg',CDN+'4k68/3c27754a.jpg'], tipo:'regular', badge:null },
+    { id:32, nombre:'Lille Primera Equipación 25/26',                liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'eR2Y/503f1d7c.jpg',CDN+'ApiO/fc19fecd.jpg',CDN+'Vepd/8b2016e8.jpg',CDN+'R5nn/bda3823e.jpg'], tipo:'regular', badge:null },
+    { id:33, nombre:'Lille Segunda Equipación 25/26',                liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'4LMl/b1eb956f.jpg',CDN+'vnWo/47c07c62.jpg',CDN+'9D5d/3efd5554.jpg'], tipo:'regular', badge:null },
+    { id:34, nombre:'Monaco Tercera Equipación 25/26',               liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'J3pt/f8c7633c.jpg',CDN+'0bEV/019275f8.jpg',CDN+'YvuY/31c5f00d.jpg',CDN+'qTx5/6af00062.jpg'], tipo:'regular', badge:null },
+    { id:35, nombre:'Marsella Tercera Equipación 25/26',             liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'ODgk/f7f87fc4.jpg',CDN+'6rzM/704b2250.jpg',CDN+'g8AW/3bfc5b52.jpg',CDN+'V4pw/c341b93b.jpg'], tipo:'regular', badge:null },
+    { id:36, nombre:'Sporting de Portugal Tercera Equipación 25/26', liga:'primeiraliga',categoria:['primeiraliga'],        imgs:[CDN+'wurg/bca0eb86.jpg',CDN+'XyzY/61d1de04.jpg',CDN+'t0UQ/d22d7fd5.jpg',CDN+'0332/33d2270b.jpg'], tipo:'regular', badge:null },
+    // ── TEMPORADA 25/26 · SELECCIONES ──
+    { id:37, nombre:'Italia Primera Equipación Mundial 2026',        liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'IE8f/607e7b45.jpg',CDN+'PdMI/cdc80e68.jpg',CDN+'h3X0/c9f55977.jpg',CDN+'LqJZ/ee2925b7.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:38, nombre:'Colombia Primera Equipación Mundial 2026',      liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'Qbxg/f0ae4fd1.jpg',CDN+'g49L/0339ed75.jpg',CDN+'3y44/9f6a45c6.jpg',CDN+'GDYB/5138bb0a.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:39, nombre:'México Primera Equipación Mundial 2026',        liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'BM12/076cf136.jpg',CDN+'EUbM/e4ea20f0.jpg',CDN+'euFU/78d63d2d.jpg',CDN+'dHXq/7b984258.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:40, nombre:'Marruecos Primera Equipación 2025',             liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'w5AT/6325674c.jpg',CDN+'bjQi/2ea2d170.jpg',CDN+'udGx/8127cedf.jpg',CDN+'vVNI/441f06da.jpg'], tipo:'regular', badge:null },
+    { id:41, nombre:'Marruecos Segunda Equipación 2025',             liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'cGr7/bbd5a253.jpg',CDN+'O1jW/28e0416c.jpg',CDN+'0P2L/e9513628.jpg',CDN+'iozm/d81048f6.jpg'], tipo:'regular', badge:null },
+    { id:42, nombre:'Portugal Segunda Equipación 2025',              liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'hTnx/31c7d7e1.jpg',CDN+'zEuO/4955826e.jpg',CDN+'F63d/56dc2e43.jpg',CDN+'f869/c144ab13.jpg'], tipo:'regular', badge:null },
+    { id:43, nombre:'Portugal Prepartido 2025',                      liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'TpLb/a3f5d642.jpg',CDN+'rP9a/46ced123.jpg',CDN+'dH0g/c0e867e2.jpg',CDN+'MBVH/a0429c14.jpg'], tipo:'regular', badge:null },
+    // ── TEMPORADA 25/26 · SAUDI PRO LEAGUE ──
+    { id:44, nombre:'Al Hilal Tercera Equipación 25/26',             liga:'saudi',       categoria:['saudi'],              imgs:[CDN+'7fvJ/14d78e4b.jpg',CDN+'Ry4t/6546ea66.jpg',CDN+'7D2P/451aa957.jpg'], tipo:'regular', badge:null },
+    { id:45, nombre:'Al Nassr Segunda Equipación 25/26',             liga:'saudi',       categoria:['saudi'],              imgs:[CDN+'VG7p/b55e6aa4.jpg',CDN+'UmYD/c7e0e5ee.jpg',CDN+'Ayia/8d7a31f3.jpg',CDN+'U4Rt/6149b6c5.jpg'], tipo:'regular', badge:null },
+    { id:46, nombre:'Al Ittihad Segunda Equipación 25/26',           liga:'saudi',       categoria:['saudi'],              imgs:[CDN+'uSSV/152b8c35.jpg'], tipo:'regular', badge:null },
+    // ── TEMPORADA 25/26 · OTROS ──
+    { id:47, nombre:'Flamengo Tercera Equipación 25/26',             liga:'otros',       categoria:['otros'],              imgs:[CDN+'PyU9/555de64b.jpg',CDN+'8w02/f70b508e.jpg',CDN+'DFwy/bf083742.jpg',CDN+'JwYx/d4666ee1.jpg'], tipo:'regular', badge:null },
+    // ════════════════════════════════════════════════════════
+    // ── RETRO ──
+    // ════════════════════════════════════════════════════════
+    { id:101, nombre:'Real Madrid 02/03 Primera Equipación',                 liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'E7ed/e6908738.jpeg',CDN+'mRlG/5e902d8c.jpeg',CDN+'6QdU/d11afc34.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:102, nombre:'Rayo Vallecano 01/02 Primera Equipación',              liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'INlT/12d6c9df.jpeg',CDN+'OeO3/a6ac1585.jpeg',CDN+'x9Jh/e759c66d.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:103, nombre:'PSV 94/95 Primera Equipación',                         liga:'retro', categoria:['retro','eredivisie'],  imgs:[CDN+'d0gq/c3f28f21.jpeg',CDN+'vPYo/7064644a.jpeg',CDN+'1LgE/d806082d.jpeg',CDN+'ixXb/3efad366.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:104, nombre:'Portugal 2004 Segunda Equipación',                     liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'zDmj/f480da02.jpg',CDN+'2TGy/11c494ce.jpg',CDN+'v6ie/5b35f4e9.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:105, nombre:'Países Bajos 2014 Primera Equipación',                 liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'fZ0Q/c7c3d5a9.jpg',CDN+'lzoi/e566b1d2.jpg',CDN+'zNQR/228de161.jpg',CDN+'wlk0/4260402b.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:106, nombre:'Oviedo 96/97 Primera Equipación',                      liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'pMZr/929a4043.jpg',CDN+'M4iN/6fa1e455.jpg',CDN+'NUPr/7e064f63.jpg',CDN+'lPvw/748ceeef.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:107, nombre:'Osasuna 95/97 Primera Equipación',                     liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'RSD5/8f105dc6.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:108, nombre:'AC Milan 125 Aniversario Primera Equipación',          liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'uUAj/d7992dbc.jpeg',CDN+'EhOZ/de8e7de0.jpeg',CDN+'5uAd/d384a287.jpeg',CDN+'QfgB/f5ccb3d5.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:109, nombre:'Inter Milan 94/95 Segunda Equipación',                 liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'moxp/7dc0a7ec.jpeg',CDN+'wgAI/caf126b5.jpeg',CDN+'XwNX/52494ebd.jpeg',CDN+'Iwdw/a7eb7cd8.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:110, nombre:'AC Milan 99/00 Segunda Equipación',                    liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'AzXq/13c63def.jpeg',CDN+'RoEQ/b57745ff.jpeg',CDN+'5Xcx/80d2cd69.jpeg',CDN+'8fjY/47c35204.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:111, nombre:'Manchester United 98/99 Tercera Equipación',           liga:'retro', categoria:['retro','premier'],     imgs:[CDN+'YK7r/95d82686.jpeg',CDN+'nbM3/91f15671.jpeg',CDN+'XWd5/2f535c8d.jpeg',CDN+'tiNw/d824c8ab.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:112, nombre:'Manchester United 03/05 Segunda Equipación',           liga:'retro', categoria:['retro','premier'],     imgs:[CDN+'lD4E/854792b4.jpeg',CDN+'Q04n/10522cf1.jpeg',CDN+'Auj2/e2de9492.jpeg',CDN+'hjcE/f6297c5f.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:113, nombre:'Manchester City 13/14 Segunda Equipación',             liga:'retro', categoria:['retro','premier'],     imgs:[CDN+'lD4E/854792b4.jpeg',CDN+'Q04n/10522cf1.jpeg',CDN+'Auj2/e2de9492.jpeg',CDN+'hjcE/f6297c5f.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:114, nombre:'Málaga 12/13 Segunda Equipación',                      liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'YyaC/8168cf26.jpeg',CDN+'Zxhb/3fb8968d.jpeg',CDN+'qQqt/0cdd579a.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:115, nombre:'Málaga 05/06 Primera Equipación',                      liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'zMpL/2373aee3.jpeg',CDN+'rGoe/645af5eb.jpeg',CDN+'QcZ0/dd7d1e7f.jpeg',CDN+'frhj/e65fc413.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:116, nombre:'Lyon 10/11 Primera Equipación',                        liga:'retro', categoria:['retro','ligue1'],   imgs:[CDN+'muGE/ce3b2773.jpeg',CDN+'3Ob4/7ccd83e1.jpeg',CDN+'ZAQJ/88e43abc.jpeg',CDN+'Y8VA/127fafd9.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:117, nombre:'Inter de Milán 04/05 Primera Equipación',              liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'TxgE/d8ea4c23.jpeg',CDN+'zyPa/db1eda42.jpeg',CDN+'Vdpg/d0c04530.jpeg',CDN+'x2k7/1e338e91.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:118, nombre:'Inter de Milán 95/96 Primera Equipación',              liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'xn6l/82109876.jpeg',CDN+'gCbE/9f349868.jpeg',CDN+'glFd/3953b8b7.jpeg',CDN+'W8Kf/5b90df7c.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:119, nombre:'Inter de Milán 02/03 Primera Equipación',              liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'AYKh/4aabd8c5.jpeg',CDN+'Q5Ra/509d8096.jpeg',CDN+'zlnU/59de4b7c.jpeg',CDN+'miBJ/c3222459.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:120, nombre:'Granada 97/98 Primera Equipación',                     liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'bBbE/5ddcb9aa.jpeg',CDN+'QL5I/c8c50e79.jpeg',CDN+'JpVv/8d42aad5.jpeg',CDN+'vzX6/da9e67b0.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:121, nombre:'Getafe 98/99 Primera Equipación',                      liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'ZgTx/be45bbcc.jpeg',CDN+'XRiX/14e73bdb.jpeg',CDN+'T7cM/25b9630c.jpeg',CDN+'OlgZ/32be9ef9.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:122, nombre:'Francia 2006 Segunda Equipación',                      liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'LXSx/b70be590.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:123, nombre:'Fiorentina 95/96 Tercera Equipación',                  liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'u89H/6f828320.jpg',CDN+'BLm7/af73c064.jpg',CDN+'dmcB/593f3e76.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:124, nombre:'FC Barcelona 2002 Segunda Equipación',                 liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'g4GO/c6f34e51.jpeg',CDN+'Bw3M/5082bfca.jpeg',CDN+'Tdyh/710c90ae.jpeg',CDN+'zp5t/4fe7c2b1.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:125, nombre:'FC Barcelona 98/99 Tercera Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'lduZ/27064009.jpeg',CDN+'FwYa/c3bd97f9.jpeg',CDN+'jo0a/92140080.jpeg',CDN+'IDdU/c3c3e8c9_1.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:126, nombre:'FC Barcelona 13/14 Tercera Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'g3MQ/35dde3b5.jpg',CDN+'E0XA/1bea333f.jpg',CDN+'Eirn/9573a345.jpg',CDN+'2rML/a5b5b538.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:127, nombre:'FC Barcelona 82/84 Segunda Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'vjXE/ca40be39.jpeg',CDN+'pQR7/aa6010af.jpeg',CDN+'t0V5/440c5184.jpeg',CDN+'jCRn/7efa9ffc.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:128, nombre:'FC Barcelona 07/08 Segunda Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'FdnW/3a5bcd9e.jpg',CDN+'4QJo/3985e9d0.jpg',CDN+'H4H7/77537b74.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:129, nombre:'FC Barcelona 03/04 Segunda Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'Vkao/433125f6.jpeg',CDN+'choP/cd5475d5.jpeg',CDN+'7Q3R/ec7e5327.jpeg',CDN+'liWo/4df9226a.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:130, nombre:'FC Barcelona 96/97 Primera Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'LZJn/c69b9942.jpeg',CDN+'pLvt/707e5872.jpeg',CDN+'pNYQ/2c362639.jpeg',CDN+'Yj0l/51decf61.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:131, nombre:'FC Barcelona 91/92 Primera Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'5USs/32543de8.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:132, nombre:'FC Barcelona 09/10 Primera Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'aEeS/bee40eb8.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:133, nombre:'FC Barcelona 08/09 Final Champions',                   liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'wiq9/c82ba79b.jpeg',CDN+'iCt6/b3eccafc.jpeg',CDN+'WRQB/678cba2b.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:134, nombre:'FC Barcelona 05/06 Primera Equipación',                liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'i0i2/89cfacfc.jpeg',CDN+'fqFb/f493627d.jpeg',CDN+'yxoV/583cc8c7.jpeg',CDN+'rT82/177cf4d5.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:135, nombre:'España 2000 Segunda Equipación',                       liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'ixyt/55cef3e5.jpeg',CDN+'0xBC/9d7de6a2.jpeg',CDN+'xWvo/51e2f324.jpeg',CDN+'NtU3/2da31b85.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:136, nombre:'España 2000 Primera Equipación',                       liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'Mnyq/fc90a84d.jpeg',CDN+'J3C3/479ed808.jpeg',CDN+'Lptd/085a1214.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:137, nombre:'Deportivo De La Coruña 99/00 Segunda Equipación',      liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'gsBT/b7945518.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:138, nombre:'Deportivo De La Coruña 97/98 Primera Equipación',      liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'RZq6/3504270a.jpeg',CDN+'E9Zh/485b2c11.jpeg',CDN+'oZti/5334dabe.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:139, nombre:'Celta de Vigo 99/00 Primera Equipación',               liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'Vr1T/f33f3d64.jpeg',CDN+'rEqc/d68532f5.jpeg',CDN+'8i9K/285e548a.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:140, nombre:'Cádiz 83/84 Primera Equipación',                       liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'2Exy/8ab6cc4f.jpeg',CDN+'t1lg/e769571b.jpeg',CDN+'CQBA/3d22c924.jpeg',CDN+'Dmfx/12de8fd1.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:141, nombre:'Brasil 2004 Primera Equipación',                       liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'Gp72/969ed866.jpg',CDN+'iWau/85ce6d3c.jpg',CDN+'nKB0/97a96da0.jpg',CDN+'2iF4/a7423cff.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:142, nombre:'Boca Juniors 06/07 Primera Equipación',                liga:'retro', categoria:['retro'],               imgs:[CDN+'mh28/ba8c8c85.jpg',CDN+'Wb2W/1bd1841c.jpg',CDN+'uMUH/a0eb6d7c.jpg',CDN+'deKq/6b4be19c.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:143, nombre:'Betis 1993 Primera Equipación',                        liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'swUg/2ee7a44c.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:144, nombre:'Betis 88/89 Primera Equipación',                       liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'ydZb/6b5e4e1d.jpeg',CDN+'dHK6/2eb2049e.jpeg',CDN+'f3Vj/ac08bcbd.jpeg',CDN+'7Avg/870a6d8c.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:145, nombre:'Betis 95/96 Primera Equipación',                       liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'QtVq/63d40db9.jpeg',CDN+'PcZ9/b4ac992f.jpeg',CDN+'1JMk/c0b85352.jpeg',CDN+'TLnt/b0cea0a9.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:146, nombre:'Benfica 97/99 Segunda Equipación',                     liga:'retro', categoria:['retro','primeiraliga'],   imgs:[CDN+'JNEI/57bd3d37.jpeg',CDN+'cLf8/53a87ff5.jpeg',CDN+'mMhM/c80ac0be.jpeg',CDN+'11CM/ef4bbc65.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:147, nombre:'Bayern München 14/15 Primera Equipación',              liga:'retro', categoria:['retro','bundesliga'],   imgs:[CDN+'HELW/dd90e61b.jpg',CDN+'2G0k/b49ee3af.jpg',CDN+'OLtg/389c65a7.jpg',CDN+'kMeR/27f2f198.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:148, nombre:'Bayern München 07/08 Primera Equipación',              liga:'retro', categoria:['retro','bundesliga'],   imgs:[CDN+'Lq4M/56aafb38.jpeg',CDN+'Gb5X/ed156d6e.jpeg',CDN+'Go73/74a7b016.jpeg',CDN+'ZDJX/62ff82c4.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:149, nombre:'Bayern München 05/06 Primera Equipación',              liga:'retro', categoria:['retro','bundesliga'],   imgs:[CDN+'jFjK/ca8b54af.jpg',CDN+'oXOq/337f0f60.jpg',CDN+'fVGi/f38abc2e.jpg',CDN+'6KWe/a04a3fc0.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:150, nombre:'Bayern München 01/02 Primera Equipación',              liga:'retro', categoria:['retro','bundesliga'],   imgs:[CDN+'uErZ/7d17c3e9.jpg',CDN+'dDcH/4781b322.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:151, nombre:'Bayern München 00/01 Primera Equipación',              liga:'retro', categoria:['retro','bundesliga'],   imgs:[CDN+'Mgkn/25742108.jpeg',CDN+'E5dq/f23340ad.jpeg',CDN+'f7AI/cf0e4259.jpeg',CDN+'1IcC/c4f531b7.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:152, nombre:'Bayer Leverkusen 01/02 Primera Equipación',            liga:'retro', categoria:['retro','bundesliga'],   imgs:[CDN+'WoV8/029dc4cd.jpeg',CDN+'twVN/e5a590b5.jpeg',CDN+'GdBn/06e96752.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:153, nombre:'Atlético de Madrid 97/98 Segunda Equipación',          liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'SpwW/b79e0d6d.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:154, nombre:'Atlético de Madrid 96/97 Segunda Equipación',          liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'cFRD/3b972921.jpg',CDN+'7lvl/4c243795.jpg',CDN+'KkQG/519e0e44.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:155, nombre:'Atlético de Madrid 99/00 Primera Equipación',          liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'M8lq/84406d33.jpeg',CDN+'aLzK/27a65021.jpeg',CDN+'yCGK/04fbf03e.jpeg',CDN+'eM9l/9f4cf38e.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:156, nombre:'Atlético de Madrid 98/99 Primera Equipación',          liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'dnWz/b002f81f.jpeg',CDN+'rU6d/f9e9629c.jpeg',CDN+'8WWz/b21b8c93.jpeg',CDN+'5JTR/36afdd13.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:157, nombre:'Atlético de Madrid 12/13 Primera Equipación',          liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'x6HE/4c07a71f.jpg',CDN+'fY0f/63aaf819.jpg',CDN+'uPv6/8070e7a5.jpg',CDN+'BRy7/624d6fc0.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:158, nombre:'Atlético de Madrid 04/05 Primera Equipación M/L',      liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'ADyT/8d8268ab.jpg',CDN+'71pt/d35dd711.jpg',CDN+'NOYW/50e5f21a.jpg',CDN+'BhXk/379b5725.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:159, nombre:'Athletic Club Bilbao Edición Centenario',              liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'uCvd/528c19b8.jpeg',CDN+'X2tJ/097760d1.jpeg',CDN+'JpLo/61ea2ca9.jpeg',CDN+'WEfm/292218ed.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:160, nombre:'AS Roma 92/94 Tercera Equipación',                     liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'3eck/ed7768b3.jpeg',CDN+'N6mJ/74158581.jpeg',CDN+'nRyb/2921470b.jpeg',CDN+'NKyh/5bfadf32.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:161, nombre:'AS Roma 91/92 Tercera Equipación',                     liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'JSzw/d70b2863.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:162, nombre:'AS Roma 92/94 Segunda Equipación',                     liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'gt8e/673fd756.jpeg',CDN+'bejx/5434ad39.jpeg',CDN+'nzn2/92b186af.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:163, nombre:'AS Roma 99/00 Primera Equipación',                     liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'8X76/39fe33c8.jpeg',CDN+'6qm3/81ff15c6.jpeg',CDN+'WiMP/63b66cc9.jpeg',CDN+'AM5Z/b1d37df2.jpeg',CDN+'uf4T/0d8d432b.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:164, nombre:'Arsenal 94/95 Segunda Equipación',                     liga:'retro', categoria:['retro','premier'],     imgs:[CDN+'lJIF/f11b13b5.jpg',CDN+'otm8/884476ec.jpg',CDN+'2xrJ/3913b0ae.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:165, nombre:'Arsenal 93/94 Segunda Equipación',                     liga:'retro', categoria:['retro','premier'],     imgs:[CDN+'gBf9/3b132605.jpeg',CDN+'bfz7/17c72fb1.jpeg',CDN+'rBDn/e9b753f7.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:166, nombre:'Arsenal 02/04 Primera Equipación M/L',                 liga:'retro', categoria:['retro','premier'],     imgs:[CDN+'P9dr/0502cd5e.jpeg',CDN+'XbXy/9e9783cf.jpeg',CDN+'IqUD/cde261d1.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:167, nombre:'Alemania 1986 Primera Equipación',                     liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'Iz59/a103996b.jpeg',CDN+'hIO8/ab211cc5.jpeg',CDN+'nNMz/962ac2e8.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:168, nombre:'Alemania 02/03 Primera Equipación',                    liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'kxC4/7ca869d1.jpeg',CDN+'PKua/81a7a8b2.jpeg',CDN+'Bpt1/c26afb6e.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:169, nombre:'AC Milan 03/04 Primera Equipación',                    liga:'retro', categoria:['retro','seriea'],   imgs:[CDN+'Qqik/ac_milan_1a_03_04.jpg',CDN+'yt3E/7f39ef3b.jpeg',CDN+'1IMg/43b63df0.jpeg',CDN+'ub53/ae71a7d1.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+  ];
+
+  const LIGA_NOMBRES = {
+    laliga:'LaLiga', premier:'Premier League', seriea:'Serie A',
+    bundesliga:'Bundesliga', ligue1:'Ligue 1', eredivisie:'Eredivisie',
+    superlig:'Süper Lig', primeiraliga:'Primeira Liga',
+    selecciones:'Selecciones', saudi:'Saudi Pro League', retro:'Retro', otros:'Otros'
+  };
+
+  /* ─── RESEÑAS ─── */
+  const RESEÑAS = [
+    { nombre:'Carlos M.',   ciudad:'Madrid',        avatar:'🧔', estrellas:5, texto:'Increíble calidad, llegó en 2 días. La tela es igual a la original. Ya he comprado 3 camisetas y repito seguro.', producto:'FC Barcelona 25/26', fecha:'hace 1 día' },
+    { nombre:'Laura P.',    ciudad:'Barcelona',     avatar:'👩', estrellas:5, texto:'Pedí la versión Jugador del Arsenal y es espectacular. El acabado termosellado es perfecto, parece la auténtica.', producto:'Arsenal 25/26', fecha:'hace 3 días' },
+    { nombre:'Sergio R.',   ciudad:'Valencia',      avatar:'👦', estrellas:5, texto:'Las retros son una pasada. Me pillé la del Barça 98/99 y tiene una calidad increíble para ser una edición vintage.', producto:'FC Barcelona 98/99', fecha:'hace 4 días' },
+    { nombre:'Ana G.',      ciudad:'Sevilla',       avatar:'👩‍🦰', estrellas:5, texto:'Servicio al cliente excelente. Tuve un problema con la talla y lo solucionaron en 24h. Muy recomendable.', producto:'Liverpool 25/26', fecha:'hace 5 días' },
+    { nombre:'Miguel T.',   ciudad:'Bilbao',        avatar:'👨‍💼', estrellas:5, texto:'La camiseta de Italia para el Mundial llegó perfecta. Bien empaquetada y con los detalles exactos. Un 10.', producto:'Italia Mundial 2026', fecha:'hace 1 semana' },
+    { nombre:'Javier L.',   ciudad:'Zaragoza',      avatar:'🧑', estrellas:4, texto:'Muy buena relación calidad-precio. La versión Fan está muy bien para el día a día. La recomiendo.', producto:'Bayern München 25/26', fecha:'hace 1 semana' },
+    { nombre:'Marta F.',    ciudad:'Málaga',        avatar:'👧', estrellas:5, texto:'Llevo años buscando la camiseta retro del Atleti 97/98 y aquí la encontré. Calidad brutal, totalmente fiel al original.', producto:'Atlético de Madrid 97/98', fecha:'hace 1 semana' },
+    { nombre:'Roberto C.',  ciudad:'Murcia',        avatar:'🧑‍🦱', estrellas:5, texto:'Compré dos camisetas del PSG para regalo. Las dos llegaron en perfecto estado y en tiempo récord. Muy contento.', producto:'PSG 25/26', fecha:'hace 2 semanas' },
+    { nombre:'Elena V.',    ciudad:'San Sebastián', avatar:'👩‍🦳', estrellas:5, texto:'Pedí la de Colombia para el Mundial 2026 y es preciosa. Los colores son vibrantes y el tejido muy ligero.', producto:'Colombia Mundial 2026', fecha:'hace 2 semanas' },
+    { nombre:'Pablo S.',    ciudad:'Pamplona',      avatar:'🧔‍♂️', estrellas:5, texto:'Mi hijo flipó con la camiseta del Inter 94/95 retro. Dijo que era igual que la que tenía su abuelo. Muy auténtica.', producto:'Inter Milan 94/95', fecha:'hace 2 semanas' },
+    { nombre:'Cristina R.', ciudad:'Granada',       avatar:'👩‍🦱', estrellas:4, texto:'Buena experiencia de compra. El proceso fue sencillo y la camiseta llegó bien. Solo le doy 4 porque tardó 3 días.', producto:'Ajax 25/26', fecha:'hace 3 semanas' },
+    { nombre:'David H.',    ciudad:'Alicante',      avatar:'👨‍🦲', estrellas:5, texto:'La camiseta del Ajax edición especial es una obra de arte. Diseño único, tela de primera y llegó súper rápido.', producto:'Ajax Edición Especial', fecha:'hace 3 semanas' },
+    { nombre:'Nuria B.',    ciudad:'Santander',     avatar:'👩‍💼', estrellas:5, texto:'Encargué la camiseta del Celta retro y es perfecta. Recuerdos de niñez en tela. Calidad y envío impecables.', producto:'Celta de Vigo 99/00', fecha:'hace 3 semanas' },
+    { nombre:'Fernando A.', ciudad:'Cádiz',         avatar:'🧑‍🦰', estrellas:5, texto:'Las fotos en la web son fieles al producto real. Compré el Bayern Múnich y es exactamente lo que se ve. Top.', producto:'Bayern München Retro', fecha:'hace 1 mes' },
+    { nombre:'Sofía M.',    ciudad:'Logroño',       avatar:'👱‍♀️', estrellas:5, texto:'Soy muy exigente con la calidad y GoalStore no me ha defraudado. Mejor que otras tiendas que he probado.', producto:'Real Madrid Retro', fecha:'hace 1 mes' },
+    { nombre:'Tomás K.',    ciudad:'Las Palmas',    avatar:'🧒', estrellas:5, texto:'Pedido para mi cumple: tres camisetas retro distintas. Todas perfectas y bien empaquetadas. Repetiré sin duda.', producto:'AC Milan Retro', fecha:'hace 1 mes' },
+  ];
+
+  function renderReseñas() {
+    const cont = document.getElementById('reseñasScroll');
+    if (!cont) return;
+    const stars = n => '★'.repeat(n) + '☆'.repeat(5-n);
+    // Duplicate for seamless loop
+    const todas = [...RESEÑAS, ...RESEÑAS];
+    cont.innerHTML = todas.map(r => `
+      <div class="reseña-card">
+        <div class="reseña-top">
+          <div class="reseña-avatar">${r.avatar}</div>
+          <div class="reseña-info">
+            <div class="reseña-nombre">${r.nombre}</div>
+            <div class="reseña-ciudad">📍 ${r.ciudad}</div>
+          </div>
+        </div>
+        <div class="reseña-estrellas">${stars(r.estrellas)}</div>
+        <div class="reseña-texto">"${r.texto}"</div>
+        <span class="reseña-prod">👕 ${r.producto}</span>
+        <div class="reseña-fecha">${r.fecha}</div>
+      </div>`).join('');
+  }
+
+  function reseñasParaModal(esRetro) {
+    const pool = esRetro
+      ? RESEÑAS.filter(r => r.producto.includes('Retro') || r.producto.includes('9') || r.producto.includes('0'))
+      : RESEÑAS.filter(r => r.producto.includes('25/26') || r.producto.includes('Mundial') || r.producto.includes('2025'));
+    const base = pool.length >= 3 ? pool : RESEÑAS;
+    // Pick 3 pseudo-random
+    return [base[0], base[Math.floor(base.length/3)], base[Math.floor(base.length*2/3)]];
+  }
+
+  /* ─── ESTADO CATÁLOGO ─── */
+  let filtroActual = 'todos';
+  let busqueda = '';
+
+  /* ─── CARRITO ─── */
+  let carrito = [];
+
+  function carritoKey(id, version, talla) { return `${id}||${version}||${talla}`; }
+
+  function anadirAlCarrito(id, version, talla) {
+    const prod  = CAMISETAS.find(c => c.id === id);
+    if (!prod) return;
+    const precio = prod.tipo === 'retro' ? PRECIO_RETRO
+                 : version === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN;
+    const key    = carritoKey(id, version, talla);
+    const existe = carrito.find(i => i.key === key);
+    if (existe) { existe.cantidad++; }
+    else {
+      carrito.push({ key, id, nombre: prod.nombre, img: prod.imgs[0],
+                     tipo: prod.tipo, version, talla, precio, cantidad: 1 });
+    }
+    actualizarCarrito();
+    const vLabel = prod.tipo === 'retro' ? 'Retro' : version === 'jugador' ? 'Jugador' : 'Fan';
+    mostrarToast(`✅ ${prod.nombre} · ${vLabel} · Talla ${talla}`);
+  }
+
+  function cambiarCantidad(key, delta) {
+    const item = carrito.find(i => i.key === key);
+    if (!item) return;
+    item.cantidad += delta;
+    if (item.cantidad <= 0) carrito = carrito.filter(i => i.key !== key);
+    actualizarCarrito();
+  }
+
+  function eliminarItem(key) {
+    carrito = carrito.filter(i => i.key !== key);
+    actualizarCarrito();
+  }
+
+  function actualizarCarrito() {
+    const total  = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const cuenta = carrito.reduce((s, i) => s + i.cantidad, 0);
+    document.getElementById('carritoContador').textContent = cuenta;
+    document.getElementById('subtotalPrecio').textContent  = fmt(total);
+    document.getElementById('totalPrecio').textContent     = fmt(total);
+    document.getElementById('envioPrecio').textContent     = total > 0 ? 'Gratis 🎉' : '—';
+    document.getElementById('btnFinalizar').disabled       = carrito.length === 0;
+    renderCarritoItems();
+  }
+
+  function renderCarritoItems() {
+    const cont  = document.getElementById('carritoItems');
+    const vacio = document.getElementById('carritoVacio');
+    cont.querySelectorAll('.carrito-item').forEach(e => e.remove());
+
+    if (carrito.length === 0) { vacio.style.display = 'flex'; return; }
+    vacio.style.display = 'none';
+
+    carrito.forEach(item => {
+      const vLabel  = item.tipo === 'retro' ? 'Retro' : item.version === 'jugador' ? 'Jugador' : 'Fan';
+      const vClass  = item.tipo === 'retro' ? 'retro' : item.version === 'jugador' ? 'jugador' : 'fan';
+      const safeKey = encodeURIComponent(item.key);
+      const div = document.createElement('div');
+      div.className = 'carrito-item';
+      div.innerHTML = `
+        <img class="item-thumb" src="${item.img}?w=120" alt="${item.nombre}">
+        <div class="item-detalles">
+          <div class="item-nombre">${item.nombre}</div>
+          <div class="item-meta">
+            <span class="item-meta-tag ${vClass}">${vLabel}</span>
+            <span class="item-meta-tag">Talla ${item.talla}</span>
+          </div>
+          <div class="item-controles">
+            <button class="qty-btn" onclick="cambiarCantidad(decodeURIComponent('${safeKey}'), -1)">−</button>
+            <span class="qty-num">${item.cantidad}</span>
+            <button class="qty-btn" onclick="cambiarCantidad(decodeURIComponent('${safeKey}'), 1)">+</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="item-precio">${fmt(item.precio * item.cantidad)}</span>
+          <button class="btn-eliminar-item" onclick="eliminarItem(decodeURIComponent('${safeKey}'))" title="Eliminar">🗑️</button>
+        </div>`;
+      cont.insertBefore(div, vacio);
+    });
+  }
+
+  /* ─── MODAL PRODUCTO ─── */
+  function abrirProducto(id) {
+    const prod = CAMISETAS.find(c => c.id === id);
+    if (!prod) return;
+    const esRetro = prod.tipo === 'retro';
+
+    const versionesHTML = esRetro ? '' : `
+      <div class="prod-seccion">
+        <div class="prod-seccion-titulo">Versión</div>
+        <div class="version-opciones">
+          <div class="version-opcion">
+            <input type="radio" name="pv" id="pv_jugador" value="jugador">
+            <label class="version-label" for="pv_jugador">
+              <span class="version-nombre">⚡ Versión Jugador</span>
+              <span class="version-precio">${fmt(PRECIO_JUGADOR)}</span>
+              <span class="version-desc">Tejido técnico termosellado · Corte ajustado</span>
+            </label>
+          </div>
+          <div class="version-opcion">
+            <input type="radio" name="pv" id="pv_fan" value="fan">
+            <label class="version-label" for="pv_fan">
+              <span class="version-nombre">⭐ Versión Fan</span>
+              <span class="version-precio">${fmt(PRECIO_FAN)}</span>
+              <span class="version-desc">Tejido transpirable · Corte regular</span>
+            </label>
+          </div>
+        </div>
+      </div>`;
+
+    const precioRetroHTML = esRetro ? `
+      <div style="background:linear-gradient(135deg,#f8f0e0,#f0e0c0);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:1.4rem;">🏺</span>
+        <div>
+          <div style="font-size:0.78rem;color:#7b5e2a;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Edición única</div>
+          <div style="font-size:0.85rem;color:#a07830;">Pieza de coleccionista · Diseño histórico</div>
+        </div>
+      </div>` : '';
+
+    document.getElementById('prodModal').innerHTML = `
+      <div class="prod-cabecera">
+        <div class="prod-cabecera-info">
+          <div class="prod-emoji-mini">
+            <img class="prod-mini-img" src="${prod.imgs[0]}?w=100" alt="${prod.nombre}">
+          </div>
+          <div>
+            <div class="prod-cabecera-liga">${LIGA_NOMBRES[prod.liga] || prod.liga}</div>
+            <div class="prod-cabecera-nombre">${prod.nombre}</div>
+          </div>
+        </div>
+        <button class="btn-cerrar" onclick="cerrarProducto()">✕</button>
+      </div>
+      <div class="prod-cuerpo">
+        <div class="prod-galeria">
+          <div class="prod-galeria-main">
+            ${esRetro ? '<div class="prod-retro-tag">🏺 Edición Retro</div>' : ''}
+            ${prod.imgs.length > 1 ? '<button class="gal-arrow gal-prev" onclick="galeriaNav(-1)">&#8249;</button>' : ''}
+            <img class="prod-img-grande" id="galMainImg" src="${prod.imgs[0]}?w=600" alt="${prod.nombre}">
+            ${prod.imgs.length > 1 ? '<button class="gal-arrow gal-next" onclick="galeriaNav(1)">&#8250;</button>' : ''}
+          </div>
+          ${prod.imgs.length > 1 ? `<div class="prod-galeria-thumbs">${prod.imgs.map((img,i)=>`<img class="gal-thumb${i===0?' activo':''}" src="${img}?w=120" onclick="galeriaSetImg(${i})" alt="Vista ${i+1}">`).join('')}</div>` : ''}
+        </div>
+        ${precioRetroHTML}
+        ${versionesHTML}
+        <div class="prod-seccion">
+          <div class="prod-seccion-titulo">Talla</div>
+          <div class="talla-grid">
+            ${TALLAS.map((t,i) => `
+              <div class="talla-opcion">
+                <input type="radio" name="pt" id="pt_${t}" value="${t}">
+                <label class="talla-label" for="pt_${t}">${t}</label>
+              </div>`).join('')}
+          </div>
+          <div class="talla-guia">
+            <span>S = 46/48</span><span>M = 48/50</span><span>L = 52/54</span>
+            <span>XL = 56/58</span><span>XXL = 60/62</span><span>2XL = 64/66</span>
+          </div>
+        </div>
+        <div class="prod-precio-total">
+          <div>
+            <div class="prod-precio-label">Precio unitario</div>
+            <div class="prod-precio-valor ${esRetro ? 'prod-precio-retro' : ''}" id="prodPrecioValor">
+              ${esRetro ? fmt(PRECIO_RETRO) : '—'}
+            </div>
+          </div>
+          <img src="${prod.imgs[0]}?w=80" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:10px;opacity:0.8;">
+        </div>
+        <button class="btn-anadir-prod" id="btnAnadirProd" disabled
+          onclick="confirmarAnadirProducto(${prod.id})">
+          🛒 Añadir al carrito
+        </button>
+        ${(()=>{
+          const rs = reseñasParaModal(esRetro);
+          const stars = n => '★'.repeat(n)+'☆'.repeat(5-n);
+          return `<div class="modal-reseñas">
+            <div class="modal-reseñas-titulo">⭐ Opiniones de compradores
+              <span style="background:var(--dorado);color:white;font-size:0.7rem;padding:2px 8px;border-radius:50px;font-weight:700;">4,9 / 5</span>
+            </div>
+            ${rs.map(r=>`<div class="modal-reseña">
+              <div class="modal-reseña-top">
+                <span class="modal-reseña-nombre">${r.avatar} ${r.nombre}</span>
+                <span class="modal-reseña-estrellas">${stars(r.estrellas)}</span>
+              </div>
+              <div class="modal-reseña-texto">"${r.texto}"</div>
+              <div class="modal-reseña-meta">📍 ${r.ciudad} · ${r.fecha}</div>
+            </div>`).join('')}
+          </div>`;
+        })()}
+      </div>`;
+
+    if (!esRetro) {
+      document.querySelectorAll('input[name="pv"]').forEach(r =>
+        r.addEventListener('change', actualizarPrecioModal));
+    }
+    document.querySelectorAll('input[name="pt"]').forEach(r =>
+      r.addEventListener('change', actualizarPrecioModal));
+
+    galeria = prod.imgs;
+    galeriaIdx = 0;
+    document.getElementById('prodOverlay').classList.add('abierto');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function actualizarPrecioModal() {
+    const prod   = CAMISETAS.find(c => c.id === productoAbierto);
+    if (!prod) return;
+    const esRetro = prod.tipo === 'retro';
+    const versionOk = esRetro || document.querySelector('input[name="pv"]:checked');
+    const tallaOk   = document.querySelector('input[name="pt"]:checked');
+
+    const precioEl = document.getElementById('prodPrecioValor');
+    const btnEl    = document.getElementById('btnAnadirProd');
+
+    if (versionOk && !esRetro) {
+      const v = document.querySelector('input[name="pv"]:checked').value;
+      precioEl.textContent = fmt(v === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN);
+    }
+
+    if (versionOk && tallaOk) {
+      btnEl.disabled = false;
+      btnEl.textContent = '🛒 Añadir al carrito';
+    } else {
+      btnEl.disabled = true;
+    }
+  }
+
+  let productoAbierto = null;
+  let galeria = [];
+  let galeriaIdx = 0;
+
+  function galeriaSetImg(idx) {
+    galeriaIdx = idx;
+    const mainImg = document.getElementById('galMainImg');
+    if (mainImg) { mainImg.style.opacity='0'; setTimeout(()=>{ mainImg.src = galeria[idx]+'?w=600'; mainImg.style.opacity='1'; }, 150); }
+    document.querySelectorAll('.gal-thumb').forEach((t, i) => t.classList.toggle('activo', i === idx));
+  }
+
+  function galeriaNav(delta) {
+    if (galeria.length < 2) return;
+    galeriaSetImg((galeriaIdx + delta + galeria.length) % galeria.length);
+  }
+
+  function abrirProductoConId(id) {
+    productoAbierto = id;
+    abrirProducto(id);
+  }
+
+  function confirmarAnadirProducto(id) {
+    const prod    = CAMISETAS.find(c => c.id === id);
+    const esRetro = prod.tipo === 'retro';
+    const version = esRetro ? 'retro' : document.querySelector('input[name="pv"]:checked')?.value;
+    const talla   = document.querySelector('input[name="pt"]:checked')?.value;
+    if (!version || !talla) return;
+    anadirAlCarrito(id, version, talla);
+    cerrarProducto();
+    abrirCarrito();
+  }
+
+  function cerrarProducto() {
+    document.getElementById('prodOverlay').classList.remove('abierto');
+    document.body.style.overflow = '';
+    productoAbierto = null;
+  }
+
+  document.getElementById('prodOverlay').addEventListener('click', function(e) {
+    if (e.target === this) cerrarProducto();
+  });
+
+  /* ─── CATÁLOGO ─── */
+  function renderCamisetas(filtro = filtroActual) {
+    filtroActual = filtro;
+    const grid = document.getElementById('camisetasGrid');
+    grid.innerHTML = '';
+    const q = busqueda.toLowerCase().trim();
+    let filtradas = filtro === 'todos' ? CAMISETAS : CAMISETAS.filter(c => c.categoria.includes(filtro));
+    if (q) filtradas = filtradas.filter(c => c.nombre.toLowerCase().includes(q));
+    document.getElementById('resultadosTexto').textContent =
+      `Mostrando ${filtradas.length} camiseta${filtradas.length !== 1 ? 's' : ''}`;
+
+    if (filtradas.length === 0) {
+      grid.innerHTML = `<div class="sin-resultados">
+        <div class="sr-icono">🔍</div>
+        <p>Sin resultados para "${busqueda}"</p>
+        <span>Prueba con otro nombre o <a href="#" onclick="limpiarBusqueda();return false;" style="color:var(--verde-claro);">limpia el buscador</a></span>
+      </div>`;
+      return;
+    }
+
+    filtradas.forEach((c, i) => {
+      const esRetro  = c.tipo === 'retro';
+      const precioTag = esRetro
+        ? `<span class="camiseta-precio retro-precio">${fmt(PRECIO_RETRO)}</span>`
+        : `<span class="precio-desde">Desde</span><span class="camiseta-precio">${fmt(PRECIO_FAN)}</span>`;
+      const div = document.createElement('div');
+      div.className = 'camiseta-card';
+      div.style.animationDelay = `${i * 0.05}s`;
+      div.onclick = () => abrirProductoConId(c.id);
+      div.innerHTML = `
+        <div class="camiseta-imagen">
+          ${c.badge ? `<div class="camiseta-badge ${c.badge}">${c.badgeTexto}</div>` : ''}
+          <div class="ver-mas-hover"><span>👁️</span>Ver opciones</div>
+          <img class="camiseta-img" src="${c.imgs[0]}?w=460" alt="${c.nombre}" loading="lazy">
+        </div>
+        <div class="camiseta-info">
+          <div class="camiseta-liga">${LIGA_NOMBRES[c.liga] || c.liga}</div>
+          <div class="camiseta-nombre">${c.nombre}</div>
+          <div style="display:flex;align-items:center;gap:6px;margin:4px 0 2px;">
+            <span class="camiseta-rating"><span class="camiseta-rating-star">★★★★★</span> <span>4,9</span></span>
+            <span style="font-size:0.72rem;color:#bbb;">(${Math.floor(Math.random()*80)+20})</span>
+          </div>
+          <div class="camiseta-footer">
+            <div>${precioTag}</div>
+            <button class="btn-ver" onclick="event.stopPropagation();abrirProductoConId(${c.id})">Ver →</button>
+          </div>
+        </div>`;
+      grid.appendChild(div);
+    });
+  }
+
+  const NAV_IDS = {
+    todos:'navTodos', laliga:'navLaliga', premier:'navPremier',
+    seriea:'navSeriea', bundesliga:'navBundesliga', ligue1:'navLigue1',
+    eredivisie:'navEredivisie', superlig:'navSuperlig', primeiraliga:'navPrimeiraliga',
+    selecciones:'navSelecciones', saudi:'navSaudi', retro:'navRetro'
+  };
+
+  function filtrar(tipo, btn, scroll) {
+    filtroActual = tipo;
+    renderCamisetas(tipo);
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('activo'));
+    if (btn) btn.classList.add('activo');
+    if (NAV_IDS[tipo]) document.getElementById(NAV_IDS[tipo])?.classList.add('activo');
+    if (scroll) document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ─── CARRITO UI ─── */
+  function abrirCarrito() {
+    document.getElementById('carritoPanel').classList.add('abierto');
+    document.getElementById('carritoOverlay').classList.add('abierto');
+    document.body.style.overflow = 'hidden';
+  }
+  function cerrarCarrito() {
+    document.getElementById('carritoPanel').classList.remove('abierto');
+    document.getElementById('carritoOverlay').classList.remove('abierto');
+    document.body.style.overflow = '';
+  }
+
+  /* ─── PASARELA DE PAGO ─── */
+  let pasoActual = 1;
+  let metodoSeleccionado = 'paypal';
+  let refPedido = '';
+
+  function abrirModal() {
+    cerrarCarrito();
+    irPaso(1);
+    actualizarResumenCheckout();
+    document.getElementById('modalOverlay').classList.add('abierto');
+    document.body.style.overflow = 'hidden';
+  }
+  function cerrarModal() {
+    document.getElementById('modalOverlay').classList.remove('abierto');
+    document.body.style.overflow = '';
+  }
+
+  function irPaso(n) {
+    pasoActual = n;
+    // Ocultar todos los pasos
+    document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('activo'));
+    document.getElementById('procesando').classList.remove('visible');
+    document.getElementById('confirmacion').classList.remove('visible');
+    if (n >= 1 && n <= 2) document.getElementById('paso' + n).classList.add('activo');
+    // Actualizar indicadores
+    [1, 2, 3].forEach(i => {
+      const ind = document.getElementById('ind' + i);
+      ind.classList.remove('activo', 'hecho');
+      if (i < n) ind.classList.add('hecho');
+      else if (i === n) ind.classList.add('activo');
+    });
+    // Actualizar importes en botones
+    const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    ['btnPagarImporte', 'bizumImporte'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.textContent = fmt(total);
+    });
+  }
+
+  function actualizarResumenCheckout() {
+    const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const itemsHtml = carrito.map(i => {
+      const v = i.tipo === 'retro' ? 'Retro' : i.version === 'jugador' ? 'Jugador' : 'Fan';
+      return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span>${fmt(i.precio * i.cantidad)}</span></div>`;
+    }).join('');
+    ['ck_totalPaso1','ck_totalPaso2'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
+    const cont = document.getElementById('ck_items1'); if (cont) cont.innerHTML = itemsHtml;
+    ['btnPagarImporte','bizumImporte'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
+  }
+
+  function irPaso2() {
+    const nombre = document.getElementById('ck_nombre').value.trim();
+    const email  = document.getElementById('ck_email').value.trim();
+    if (!nombre || !email) { mostrarToast('⚠️ Por favor, rellena nombre y email'); return; }
+    if (!refPedido) refPedido = 'GS-' + Date.now().toString(36).toUpperCase().slice(-6);
+    irPaso(2);
+    actualizarResumenCheckout();
+    selMetodo(metodoSeleccionado);
+  }
+
+  function selMetodo(m) {
+    metodoSeleccionado = m;
+    ['paypal','transferencia'].forEach(x => {
+      document.getElementById('tab'   + x.charAt(0).toUpperCase() + x.slice(1))?.classList.toggle('activo', x === m);
+      document.getElementById('panel' + x.charAt(0).toUpperCase() + x.slice(1))?.classList.toggle('activo', x === m);
+    });
+    if (m === 'paypal')        iniciarPayPal();
+    if (m === 'transferencia') mostrarDatosTransferencia();
+  }
+
+  function procesarPago() {
+    document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('activo'));
+    document.getElementById('procesando').classList.add('visible');
+    setTimeout(finalizarPago, 1800);
+  }
+
+  function finalizarPago() {
+    document.getElementById('procesando').classList.remove('visible');
+    document.getElementById('numPedido').textContent = refPedido;
+    const nombre = document.getElementById('ck_nombre').value || 'Cliente';
+    const email  = document.getElementById('ck_email').value || '';
+    const total  = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const esTransferencia = metodoSeleccionado === 'transferencia';
+    const fecha  = new Date(); fecha.setDate(fecha.getDate() + 3);
+    const entrega = fecha.toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'long'});
+
+    // Icono y título según método
+    const checkEl = document.querySelector('.confirmacion-check');
+    const h2El    = document.querySelector('.confirmacion h2');
+    if (esTransferencia) {
+      checkEl.textContent = '⏳';
+      checkEl.style.background = 'linear-gradient(135deg,#ff9800,#f57c00)';
+      h2El.textContent = '¡Pedido recibido!';
+    } else {
+      checkEl.textContent = '✓';
+      checkEl.style.background = 'linear-gradient(135deg,#4caf50,#45a049)';
+      h2El.textContent = '¡Pago completado!';
+    }
+
+    document.getElementById('confirmDetalles').innerHTML = `
+      <strong>Hola, ${nombre}!</strong><br>
+      ${esTransferencia
+        ? `Importe a transferir: <strong>${fmt(total)}</strong><br>
+           Referencia: <strong>${refPedido}</strong><br>
+           Procesaremos tu pedido en <strong>24–48h</strong> al confirmar el ingreso.<br>`
+        : `Importe cobrado: <strong>${fmt(total)}</strong> via PayPal<br>
+           Entrega estimada: <strong>${entrega}</strong><br>`}
+      Confirmación enviada a: <strong>${email}</strong><br>
+      ${carrito.map(i => `• ${i.nombre} (${i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan'} · T.${i.talla})`).join('<br>')}`;
+
+    document.getElementById('ind3').classList.add('activo');
+    document.getElementById('confirmacion').classList.add('visible');
+  }
+
+  function cerrarTodo() {
+    carrito = [];
+    refPedido = '';
+    metodoSeleccionado = 'paypal';
+    actualizarCarrito();
+    cerrarModal();
+    irPaso(1);
+    ['ck_nombre','ck_email','ck_telefono','ck_direccion','ck_ciudad','ck_cp'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    // Reset PayPal container para la próxima compra
+    const ppCont = document.getElementById('paypal-button-container');
+    if (ppCont) ppCont.innerHTML = '';
+    // Reset confirmación
+    const checkEl = document.querySelector('.confirmacion-check');
+    const h2El    = document.querySelector('.confirmacion h2');
+    if (checkEl) { checkEl.textContent = '✓'; checkEl.style.background = 'linear-gradient(135deg,#4caf50,#45a049)'; }
+    if (h2El)    h2El.textContent = '¡Pago completado!';
+    mostrarToast('🎉 ¡Gracias por tu compra en GoalStore!');
+  }
+
+  /* ── Lógica tarjeta visual ── */
+  function initCardInputs() {
+    const cardNum  = document.getElementById('cardNum');
+    const cardName = document.getElementById('cardName');
+    const cardExp  = document.getElementById('cardExp');
+    const cardCvv  = document.getElementById('cardCvv');
+    if (!cardNum) return;
+
+    const types = [
+      { re:/^4/, logo:'💳', label:'VISA',   color:'#1a1f71' },
+      { re:/^5[1-5]|^2[2-7]/, logo:'💳', label:'MC', color:'#eb001b' },
+      { re:/^3[47]/, logo:'💳', label:'AMEX', color:'#007BC1' },
+    ];
+
+    cardNum.addEventListener('input', e => {
+      let v = e.target.value.replace(/\D/g,'').slice(0,16);
+      e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+      const disp = v.padEnd(16,'•').replace(/(.{4})/g,'$1 ').trim();
+      document.getElementById('cardNumDisplay').textContent = disp;
+      const t = types.find(t => t.re.test(v));
+      document.getElementById('cardLogo').textContent = t ? t.logo : '💳';
+      document.getElementById('cardTypeIcon').textContent = t ? t.logo : '💳';
+    });
+    cardName.addEventListener('input', e => {
+      const v = e.target.value.toUpperCase().slice(0,22);
+      document.getElementById('cardNameDisplay').textContent = v || 'NOMBRE APELLIDO';
+    });
+    cardExp.addEventListener('input', e => {
+      let v = e.target.value.replace(/\D/g,'');
+      if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2,4);
+      e.target.value = v;
+      document.getElementById('cardExpDisplay').textContent = v || 'MM/AA';
+    });
+    cardCvv.addEventListener('focus', () => document.getElementById('tarjetaFlip').classList.add('girada'));
+    cardCvv.addEventListener('blur',  () => document.getElementById('tarjetaFlip').classList.remove('girada'));
+    cardCvv.addEventListener('input', e => {
+      const v = e.target.value.replace(/\D/g,'').slice(0,4);
+      e.target.value = v;
+      document.getElementById('cardCvvDisplay').textContent = v || '•••';
+    });
+  }
+
+  /* ── PayPal ── */
+  function iniciarPayPal() {
+    const cont = document.getElementById('paypal-button-container');
+    if (!cont || cont.children.length > 0) return;
+
+    const renderBotones = () => {
+      if (typeof paypal === 'undefined') {
+        cont.innerHTML = '<p style="color:var(--gris);text-align:center;padding:20px;font-size:0.85rem;">PayPal no disponible.</p>';
+        return;
+      }
+      const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+      paypal.Buttons({
+        style: { layout:'vertical', color:'blue', shape:'rect', label:'pay' },
+        createOrder: (data, actions) => actions.order.create({
+          purchase_units: [{ amount: { value: total.toFixed(2), currency_code: 'EUR' } }]
+        }),
+        onApprove: (data, actions) => actions.order.capture().then(() => {
+          document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('activo'));
+          document.getElementById('procesando').classList.add('visible');
+          setTimeout(finalizarPago, 1500);
+        }),
+        onError: () => mostrarToast('❌ Error en PayPal. Inténtalo de nuevo.')
+      }).render('#paypal-button-container');
+    };
+
+    if (typeof paypal !== 'undefined') { renderBotones(); return; }
+
+    cont.innerHTML = '<p style="text-align:center;color:var(--gris);padding:20px;">Cargando PayPal…</p>';
+    const s = document.createElement('script');
+    s.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=EUR&locale=es_ES`;
+    s.onload  = () => { cont.innerHTML = ''; renderBotones(); };
+    s.onerror = () => { cont.innerHTML = '<p style="color:var(--gris);text-align:center;padding:20px;font-size:0.85rem;">PayPal no disponible.</p>'; };
+    document.body.appendChild(s);
+  }
+
+  /* ── Transferencia bancaria ── */
+  function mostrarDatosTransferencia() {
+    const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const cont  = document.getElementById('transferenciaDatos');
+    if (!cont) return;
+    const fila = (label, valor, cls = '') =>
+      `<div class="transferencia-fila">
+        <span class="transferencia-fila-label">${label}</span>
+        <span class="transferencia-fila-valor ${cls}">${valor}</span>
+      </div>`;
+    cont.innerHTML =
+      fila('Titular', BANK_DETAILS.titular) +
+      fila('IBAN', `${BANK_DETAILS.iban} <button class="btn-copiar" onclick="copiar('${BANK_DETAILS.iban.replace(/\s/g,'')}')">Copiar</button>`, 'iban') +
+      fila('BIC / SWIFT', BANK_DETAILS.bic) +
+      fila('Banco', BANK_DETAILS.banco) +
+      fila('Importe', `<strong>${fmt(total)}</strong>`) +
+      fila('Referencia', `${refPedido} <button class="btn-copiar" onclick="copiar('${refPedido}')">Copiar</button>`, 'ref');
+  }
+
+  function copiar(texto) {
+    navigator.clipboard?.writeText(texto)
+      .then(() => mostrarToast('📋 Copiado al portapapeles'))
+      .catch(() => mostrarToast('No se pudo copiar'));
+  }
+
+  /* ─── UTILIDADES ─── */
+  function fmt(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
+
+  let toastTimeout;
+  function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('visible');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => t.classList.remove('visible'), 3000);
+  }
+  function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+  function sincronizarBuscadores(q) {
+    ['buscadorInput', 'headerBuscador'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = q;
+    });
+    document.getElementById('buscadorClear')?.classList.toggle('visible', q.length > 0);
+    document.getElementById('headerBuscadorClear')?.classList.toggle('visible', q.length > 0);
+  }
+
+  function limpiarBusqueda() {
+    busqueda = '';
+    sincronizarBuscadores('');
+    renderCamisetas(filtroActual);
+  }
+
+  function initBuscador() {
+    const catalogInput = document.getElementById('buscadorInput');
+    const headerInput  = document.getElementById('headerBuscador');
+
+    if (catalogInput) {
+      catalogInput.addEventListener('input', e => {
+        busqueda = e.target.value;
+        sincronizarBuscadores(busqueda);
+        renderCamisetas(filtroActual);
+      });
+    }
+
+    if (headerInput) {
+      headerInput.addEventListener('input', e => {
+        busqueda = e.target.value;
+        sincronizarBuscadores(busqueda);
+        renderCamisetas(filtroActual);
+        if (busqueda.length === 1) {
+          document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    }
+  }
+
+  // Init
+  renderCamisetas();
+  renderReseñas();
+  initBuscador();
+  // Inicializar inputs de tarjeta cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', initCardInputs);
+  // Por si ya cargó
+  if (document.readyState !== 'loading') initCardInputs();
+</script>
+
+</body>
+</html>
