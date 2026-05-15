@@ -1227,7 +1227,10 @@
 
 <script>
   /* ─── CONFIGURACIÓN DE PAGO ─── */
-  const PAYPAL_CLIENT_ID = 'AcASgvUkoCxD98BlmSPoMOew9YmZAesFCVXhVLE6sxiXXZyPwNxnziQjE50HRNUK99-1fPmLpYTdp7EW';
+  const PAYPAL_CLIENT_ID    = 'AcASgvUkoCxD98BlmSPoMOew9YmZAesFCVXhVLE6sxiXXZyPwNxnziQjE50HRNUK99-1fPmLpYTdp7EW';
+  const EMAILJS_PUBLIC_KEY  = 'PENDIENTE';   // <-- reemplazar tras configurar EmailJS
+  const EMAILJS_SERVICE_ID  = 'PENDIENTE';   // <-- ID del servicio Gmail en EmailJS
+  const EMAILJS_TEMPLATE_ID = 'PENDIENTE';   // <-- ID de la plantilla en EmailJS
   const BANK_DETAILS = {
     titular: 'Antoni Mateo Berrocal',
     iban:    'ES96 1583 0001 1290 7961 4773',
@@ -1878,6 +1881,21 @@
     setTimeout(finalizarPago, 1800);
   }
 
+  // Carga EmailJS SDK una sola vez
+  (function cargarEmailJS() {
+    if (typeof emailjs !== 'undefined') return;
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    s.onload = () => emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    document.head.appendChild(s);
+  })();
+
+  function enviarEmailPedido(datos) {
+    if (EMAILJS_PUBLIC_KEY === 'PENDIENTE') return; // no configurado aún
+    if (typeof emailjs === 'undefined') return;
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, datos).catch(() => {});
+  }
+
   function finalizarPago() {
     document.getElementById('procesando').classList.remove('visible');
     document.getElementById('numPedido').textContent = refPedido;
@@ -1914,6 +1932,32 @@
 
     document.getElementById('ind3').classList.add('activo');
     document.getElementById('confirmacion').classList.add('visible');
+
+    // Enviar email de notificación
+    const telefono   = document.getElementById('ck_telefono')?.value  || '—';
+    const direccion  = document.getElementById('ck_direccion')?.value || '—';
+    const ciudad     = document.getElementById('ck_ciudad')?.value    || '—';
+    const cp         = document.getElementById('ck_cp')?.value        || '—';
+    const paisSel    = document.getElementById('ck_pais');
+    const pais       = paisSel ? (paisSel.options[paisSel.selectedIndex]?.text || '—') : '—';
+    const subtotal   = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const envio      = calcEnvio();
+    const lineasPedido = carrito.map(i =>
+      `• ${i.nombre} | ${i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan'} | Talla ${i.talla} | x${i.cantidad} | ${fmt(i.precio * i.cantidad)}`
+    ).join('\n');
+
+    enviarEmailPedido({
+      pedido_ref:    refPedido,
+      metodo_pago:   esTransferencia ? 'Transferencia bancaria' : 'PayPal',
+      cliente_nombre: nombre,
+      cliente_email:  email,
+      cliente_telefono: telefono,
+      cliente_direccion: `${direccion}, ${cp} ${ciudad}, ${pais}`,
+      lineas_pedido:  lineasPedido,
+      subtotal:       fmt(subtotal),
+      envio:          envio === 0 ? 'Gratis' : fmt(envio),
+      total:          fmt(total),
+    });
   }
 
   function cerrarTodo() {
