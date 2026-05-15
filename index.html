@@ -635,6 +635,23 @@
   .confirmacion-detalles strong { color: var(--texto); }
 
   /* ── TOAST ── */
+  /* ── BOTÓN WHATSAPP ── */
+  .whatsapp-btn {
+    position: fixed; bottom: 28px; right: 28px; z-index: 9998;
+    display: flex; align-items: center; gap: 10px;
+    background: #25D366; color: #fff;
+    padding: 13px 20px 13px 16px; border-radius: 50px;
+    text-decoration: none; font-weight: 700; font-size: 0.95rem;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+  }
+  .whatsapp-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 32px rgba(37,211,102,0.55);
+  }
+  .whatsapp-btn svg { width: 24px; height: 24px; flex-shrink: 0; }
+
   .toast {
     position: fixed; bottom: 30px; left: 50%;
     transform: translateX(-50%) translateY(100px);
@@ -853,6 +870,15 @@
 </style>
 </head>
 <body>
+
+<!-- WHATSAPP -->
+<a class="whatsapp-btn" href="https://wa.me/34667061342" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.832 6.5L4 29l7.7-1.807A12.94 12.94 0 0016 28c6.627 0 12-5.373 12-12S22.627 3 16 3z" fill="#fff"/>
+    <path d="M16 5.5c-5.247 0-9.5 4.253-9.5 9.5 0 2.01.627 3.874 1.696 5.41l.195.288-1.04 3.79 3.902-1.02.276.163A9.46 9.46 0 0016 24.5c5.247 0 9.5-4.253 9.5-9.5S21.247 5.5 16 5.5zm4.73 13.44c-.198.558-1.155 1.07-1.596 1.136-.408.06-.924.085-1.49-.094-.344-.108-.785-.252-1.35-.494-2.37-1.023-3.92-3.41-4.04-3.568-.12-.158-.98-1.304-.98-2.488 0-1.184.62-1.768.84-2.008.218-.24.476-.3.634-.3l.456.008c.146.006.342-.055.536.41.198.475.672 1.642.73 1.76.06.12.1.26.02.42-.08.158-.12.256-.238.394-.12.14-.252.312-.36.42-.12.118-.245.246-.105.482.14.238.622 1.026 1.336 1.662.918.816 1.692 1.068 1.93 1.188.238.12.378.1.518-.06.14-.16.598-.698.758-.938.158-.24.316-.2.534-.12.218.08 1.386.654 1.624.774.238.12.396.178.456.278.058.1.058.578-.14 1.136z" fill="#25D366"/>
+  </svg>
+  ¿Dudas? Escríbenos
+</a>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
