@@ -38,3 +38,4 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`GoalStore corriendo en http://0.0.0.0:${PORT}`);
 });
+
