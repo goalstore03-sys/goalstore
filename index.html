@@ -840,6 +840,16 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
+    .carrito-panel {
+      height: 100dvh;       /* excluye la barra del navegador en movil */
+      height: 100vh;        /* fallback para navegadores sin soporte dvh */
+      height: 100dvh;
+    }
+    .carrito-pie { padding: 12px 16px; }
+    .total-precio { font-size: 1.3rem; }
+    .total-linea { margin-bottom: 12px; padding-top: 8px; }
+    .subtotal-linea { margin-bottom: 5px; }
+    .btn-finalizar { padding: 13px; }
     nav { display: none; }
     .hero h1 { font-size: 2rem; }
     .hero p { font-size: 1rem; }
