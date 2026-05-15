@@ -905,6 +905,9 @@
     </div>
   </div>
   <div class="carrito-pie">
+    <div id="envioPromo" style="display:none;background:#e8f5e9;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:0.82rem;color:#2d7a3d;font-weight:600;text-align:center;">
+      🎁 ¡Añade 1 camiseta más y el envío es gratis!
+    </div>
     <div class="subtotal-linea"><span>Subtotal</span><span id="subtotalPrecio">0,00 €</span></div>
     <div class="subtotal-linea"><span>Envío</span><span id="envioPrecio">—</span></div>
     <div class="total-linea">
@@ -1220,6 +1223,7 @@
   /* ─── DATOS ─── */
   const PRECIO_JUGADOR = 29.99;
   const PRECIO_FAN     = 24.99;
+  const GASTOS_ENVIO   = 5.00; // gratis si se compran 2+ unidades
   const PRECIO_RETRO   = 39.99;
 
   const TALLAS = ['S','M','L','XL','XXL','2XL'];
@@ -1450,14 +1454,31 @@
     actualizarCarrito();
   }
 
+  function calcEnvio() {
+    const unidades = carrito.reduce((s, i) => s + i.cantidad, 0);
+    if (unidades === 0) return 0;
+    return unidades >= 2 ? 0 : GASTOS_ENVIO;
+  }
+
   function actualizarCarrito() {
-    const total  = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    const cuenta = carrito.reduce((s, i) => s + i.cantidad, 0);
-    document.getElementById('carritoContador').textContent = cuenta;
-    document.getElementById('subtotalPrecio').textContent  = fmt(total);
+    const subtotal = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const unidades = carrito.reduce((s, i) => s + i.cantidad, 0);
+    const envio    = calcEnvio();
+    const total    = subtotal + envio;
+    document.getElementById('carritoContador').textContent = unidades;
+    document.getElementById('subtotalPrecio').textContent  = fmt(subtotal);
     document.getElementById('totalPrecio').textContent     = fmt(total);
-    document.getElementById('envioPrecio').textContent     = total > 0 ? 'Gratis 🎉' : '—';
-    document.getElementById('btnFinalizar').disabled       = carrito.length === 0;
+    if (unidades === 0) {
+      document.getElementById('envioPrecio').textContent = '—';
+    } else if (envio === 0) {
+      document.getElementById('envioPrecio').textContent = 'Gratis 🎉';
+    } else {
+      document.getElementById('envioPrecio').textContent = fmt(envio);
+    }
+    // Mensaje promo envío gratis
+    const promoEl = document.getElementById('envioPromo');
+    if (promoEl) promoEl.style.display = (unidades === 1) ? 'block' : 'none';
+    document.getElementById('btnFinalizar').disabled = carrito.length === 0;
     renderCarritoItems();
   }
 
@@ -1796,18 +1817,21 @@
       else if (i === n) ind.classList.add('activo');
     });
     // Actualizar importes en botones
-    const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0) + calcEnvio();
     ['btnPagarImporte', 'bizumImporte'].forEach(id => {
       const el = document.getElementById(id); if (el) el.textContent = fmt(total);
     });
   }
 
   function actualizarResumenCheckout() {
-    const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const subtotal = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const envio    = calcEnvio();
+    const total    = subtotal + envio;
+    const envioTxt = envio === 0 ? 'Gratis 🎉' : fmt(envio);
     const itemsHtml = carrito.map(i => {
       const v = i.tipo === 'retro' ? 'Retro' : i.version === 'jugador' ? 'Jugador' : 'Fan';
       return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span>${fmt(i.precio * i.cantidad)}</span></div>`;
-    }).join('');
+    }).join('') + `<div class="resumen-item" style="border-top:1px solid #eee;margin-top:6px;padding-top:6px;"><span>Envío</span><span>${envioTxt}</span></div>`;
     ['ck_totalPaso1','ck_totalPaso2'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
     const cont = document.getElementById('ck_items1'); if (cont) cont.innerHTML = itemsHtml;
     ['btnPagarImporte','bizumImporte'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
@@ -1844,7 +1868,7 @@
     document.getElementById('numPedido').textContent = refPedido;
     const nombre = document.getElementById('ck_nombre').value || 'Cliente';
     const email  = document.getElementById('ck_email').value || '';
-    const total  = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const total  = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0) + calcEnvio();
     const esTransferencia = metodoSeleccionado === 'transferencia';
     const fecha  = new Date(); fecha.setDate(fecha.getDate() + 3);
     const entrega = fecha.toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'long'});
@@ -1950,7 +1974,7 @@
         cont.innerHTML = '<p style="color:var(--gris);text-align:center;padding:20px;font-size:0.85rem;">PayPal no disponible.</p>';
         return;
       }
-      const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+      const total = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0) + calcEnvio();
       paypal.Buttons({
         style: { layout:'vertical', color:'blue', shape:'rect', label:'pay' },
         createOrder: (data, actions) => actions.order.create({
