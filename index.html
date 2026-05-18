@@ -4,6 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GoalStore - Camisetas de Fútbol Premium</title>
+<meta name="description" content="Tienda de camisetas de fútbol premium. LaLiga, Premier League, Champions, Selecciones y ediciones Retro. Versión Jugador y Fan. Envío mundial.">
+<!-- Open Graph / Facebook / WhatsApp -->
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://www.goalstore.es/">
+<meta property="og:title"       content="GoalStore — Camisetas de Fútbol Premium">
+<meta property="og:description" content="+500 modelos: LaLiga, Premier, Champions, Retro y Selecciones. Versión Jugador y Fan. Envío mundial desde 4,99€.">
+<meta property="og:image"       content="https://www.goalstore.es/logo.png">
+<!-- Twitter/X -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="GoalStore — Camisetas de Fútbol Premium">
+<meta name="twitter:description" content="+500 modelos: LaLiga, Premier, Champions, Retro y Selecciones. Envío mundial.">
+<meta name="twitter:image"       content="https://www.goalstore.es/logo.png">
+<!-- Google Analytics 4 — reemplaza G-XXXXXXXXXX con tu Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { analytics_storage: 'denied' });
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 <style>
   :root {
     --verde: #1a3a2a;
@@ -241,6 +262,14 @@
     font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: var(--transicion); white-space: nowrap;
   }
   .btn-ver:hover { background: linear-gradient(135deg, var(--verde-claro), var(--dorado-oscuro)); transform: scale(1.05); }
+  .stock-badge {
+    font-size: 0.7rem; font-weight: 700; color: #c0392b;
+    display: flex; align-items: center; gap: 3px; margin-top: 4px;
+  }
+  .stock-badge.mirando { color: var(--verde-claro); }
+  .stock-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+    animation: blink 1.2s infinite; display: inline-block; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
   /* ── QUICK ADD ── */
   .quick-add-overlay {
@@ -353,7 +382,19 @@
   }
   .prod-img-grande {
     width: 100%; height: 100%; object-fit: cover; border-radius: 16px;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease; cursor: zoom-in;
+  }
+  /* Lightbox zoom */
+  .zoom-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.92); display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transition: opacity 0.25s ease; cursor: zoom-out;
+  }
+  .zoom-overlay.visible { opacity: 1; visibility: visible; }
+  .zoom-overlay img { max-width: 92vw; max-height: 92vh; object-fit: contain; border-radius: 8px; }
+  .zoom-overlay .zoom-cerrar {
+    position: absolute; top: 16px; right: 20px; color: white; font-size: 2rem;
+    background: none; border: none; cursor: pointer; line-height: 1;
   }
   /* ── GALERÍA ── */
   .prod-galeria { display: flex; flex-direction: column; gap: 12px; margin-bottom: 4px; }
@@ -434,9 +475,30 @@
   /* Guía tallas */
   .talla-guia {
     margin-top: 10px; font-size: 0.78rem; color: var(--gris);
-    display: flex; gap: 16px; flex-wrap: wrap;
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
   }
   .talla-guia span { opacity: 0.7; }
+  .btn-guia-tallas {
+    background: none; border: none; color: var(--verde-claro); font-size: 0.78rem;
+    font-weight: 700; cursor: pointer; text-decoration: underline; padding: 0;
+  }
+  /* Modal guía tallas */
+  .guia-tallas-overlay {
+    position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transition: opacity 0.25s;
+  }
+  .guia-tallas-overlay.visible { opacity: 1; visibility: visible; }
+  .guia-tallas-box {
+    background: white; border-radius: 16px; padding: 28px; max-width: 400px; width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative;
+  }
+  .guia-tallas-box h3 { color: var(--verde); margin-bottom: 16px; font-size: 1.1rem; }
+  .guia-tallas-box table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  .guia-tallas-box th { background: var(--verde); color: white; padding: 8px 12px; text-align: left; }
+  .guia-tallas-box td { padding: 8px 12px; border-bottom: 1px solid var(--gris-claro); }
+  .guia-tallas-box tr:nth-child(even) td { background: #f8f9fa; }
+  .guia-tallas-cerrar { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gris); }
 
   /* Precio total en modal */
   .prod-precio-total {
@@ -1048,6 +1110,37 @@
     border-radius: 50px; margin-top: 3px;
   }
 
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Cookie banner */
+  .cookie-banner {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9000;
+    background: var(--verde); color: white;
+    padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap; font-size: 0.85rem;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+    transform: translateY(100%); transition: transform 0.4s ease;
+  }
+  .cookie-banner.visible { transform: translateY(0); }
+  .cookie-banner a { color: var(--dorado-claro); }
+  .cookie-btns { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn-cookie-ok {
+    background: var(--dorado); color: var(--verde); border: none;
+    padding: 8px 20px; border-radius: 50px; font-weight: 700; cursor: pointer; font-size: 0.85rem;
+  }
+  .btn-cookie-no {
+    background: transparent; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 16px; border-radius: 50px; font-weight: 600; cursor: pointer; font-size: 0.85rem;
+  }
+
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -1068,6 +1161,41 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <span>🍪 Usamos cookies propias y de terceros (Google Analytics) para mejorar tu experiencia. <a href="#" onclick="return false;">Más info</a></span>
+  <div class="cookie-btns">
+    <button class="btn-cookie-no" onclick="rechazarCookies()">Solo esenciales</button>
+    <button class="btn-cookie-ok" onclick="aceptarCookies()">Aceptar todo</button>
+  </div>
+</div>
+
+<!-- ZOOM LIGHTBOX -->
+<div class="zoom-overlay" id="zoomOverlay" onclick="cerrarZoom()">
+  <button class="zoom-cerrar" onclick="cerrarZoom()">✕</button>
+  <img id="zoomImg" src="" alt="Zoom">
+</div>
+
+<!-- GUÍA DE TALLAS -->
+<div class="guia-tallas-overlay" id="guiaTallasOverlay" onclick="if(event.target===this)cerrarGuiaTallas()">
+  <div class="guia-tallas-box">
+    <button class="guia-tallas-cerrar" onclick="cerrarGuiaTallas()">✕</button>
+    <h3>📏 Guía de tallas</h3>
+    <table>
+      <thead><tr><th>Talla</th><th>Pecho (cm)</th><th>Largo (cm)</th><th>Equivalencia</th></tr></thead>
+      <tbody>
+        <tr><td>S</td><td>88–92</td><td>68</td><td>46/48</td></tr>
+        <tr><td>M</td><td>96–100</td><td>71</td><td>48/50</td></tr>
+        <tr><td>L</td><td>104–108</td><td>74</td><td>52/54</td></tr>
+        <tr><td>XL</td><td>112–116</td><td>77</td><td>56/58</td></tr>
+        <tr><td>XXL</td><td>120–124</td><td>80</td><td>60/62</td></tr>
+        <tr><td>2XL</td><td>128–132</td><td>83</td><td>64/66</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px;font-size:0.8rem;color:var(--gris);">💡 Si estás entre dos tallas, elige la mayor para un ajuste más cómodo.</p>
+  </div>
+</div>
 
 <!-- QUICK ADD -->
 <div class="quick-add-overlay" id="quickAddOverlay" onclick="cerrarQuickAdd()"></div>
@@ -1391,7 +1519,7 @@
 </section>
 
 <!-- STATS -->
-<div class="stats">
+<div class="stats reveal">
   <div class="stat"><span class="stat-num">+500</span><span class="stat-label">Modelos</span></div>
   <div class="stat"><span class="stat-num">🌍</span><span class="stat-label">Envío mundial</span></div>
   <div class="stat"><span class="stat-num">30d</span><span class="stat-label">Devolución</span></div>
@@ -1426,19 +1554,27 @@
   </div>
   <div class="catalogo-top">
     <p id="resultadosTexto" style="color:var(--gris);font-size:0.92rem;"></p>
-    <select class="orden-select" id="ordenSelect" onchange="cambiarOrden(this.value)">
-      <option value="relevancia">⭐ Relevancia</option>
-      <option value="nuevo">🆕 Novedades primero</option>
-      <option value="precio-asc">💰 Precio: menor a mayor</option>
-      <option value="precio-desc">💰 Precio: mayor a menor</option>
-      <option value="nombre">🔤 Nombre A–Z</option>
-    </select>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <select class="orden-select" id="filtroPrecio" onchange="cambiarFiltroPrecio(this.value)">
+        <option value="todos">💶 Todos los precios</option>
+        <option value="fan">Hasta 24,99 €</option>
+        <option value="jugador">Hasta 29,99 €</option>
+        <option value="retro">Retro (39,99 €)</option>
+      </select>
+      <select class="orden-select" id="ordenSelect" onchange="cambiarOrden(this.value)">
+        <option value="relevancia">⭐ Relevancia</option>
+        <option value="nuevo">🆕 Novedades primero</option>
+        <option value="precio-asc">💰 Precio: menor a mayor</option>
+        <option value="precio-desc">💰 Precio: mayor a menor</option>
+        <option value="nombre">🔤 Nombre A–Z</option>
+      </select>
+    </div>
   </div>
   <div class="camisetas-grid" id="camisetasGrid"></div>
 </section>
 
 <!-- RESEÑAS -->
-<section class="reseñas-section">
+<section class="reseñas-section reveal">
   <div class="reseñas-header">
     <h2>Lo que dicen nuestros clientes</h2>
     <div class="reseñas-agg">
@@ -1453,7 +1589,7 @@
 </section>
 
 <!-- POLÍTICA DE ENVÍOS -->
-<section class="envios-seccion">
+<section class="envios-seccion reveal">
   <div class="envios-inner">
     <div class="envios-titulo">🌍 Política de envíos</div>
     <div class="envios-subtitulo">Enviamos a todo el mundo de forma segura y con seguimiento</div>
@@ -1706,6 +1842,7 @@
   let filtroActual = 'todos';
   let busqueda = '';
   let ordenActual = 'relevancia';
+  let filtroPrecioActual = 'todos';
 
   function precioBase(c) {
     return c.tipo === 'retro' ? PRECIO_RETRO : PRECIO_FAN;
@@ -1739,6 +1876,11 @@
     renderCamisetas();
   }
 
+  function cambiarFiltroPrecio(valor) {
+    filtroPrecioActual = valor;
+    renderCamisetas();
+  }
+
   /* ─── LAZY LOAD IMÁGENES ─── */
   const imgObserver = ('IntersectionObserver' in window)
     ? new IntersectionObserver((entries) => {
@@ -1755,7 +1897,17 @@
     : null;
 
   /* ─── CARRITO ─── */
+  function guardarCarrito() {
+    try { localStorage.setItem('gs_carrito', JSON.stringify(carrito)); } catch(e) {}
+  }
+  function cargarCarrito() {
+    try {
+      const saved = localStorage.getItem('gs_carrito');
+      if (saved) carrito = JSON.parse(saved);
+    } catch(e) { carrito = []; }
+  }
   let carrito = [];
+  cargarCarrito();
 
   function carritoKey(id, version, talla, dorsal, parche) {
     const d = dorsal ? `${dorsal.nombre}_${dorsal.numero}` : 'nodorsal';
@@ -1834,6 +1986,7 @@
     if (promoEl) promoEl.style.display = (unidades === 1) ? 'block' : 'none';
     document.getElementById('btnFinalizar').disabled = carrito.length === 0;
     renderCarritoItems();
+    guardarCarrito();
   }
 
   function renderCarritoItems() {
@@ -1930,12 +2083,13 @@
           <div class="prod-galeria-main">
             ${esRetro ? '<div class="prod-retro-tag">🏺 Edición Retro</div>' : ''}
             ${prod.imgs.length > 1 ? '<button class="gal-arrow gal-prev" onclick="galeriaNav(-1)">&#8249;</button>' : ''}
-            <img class="prod-img-grande" id="galMainImg" src="${prod.imgs[0]}?w=600" alt="${prod.nombre}">
+            <img class="prod-img-grande" id="galMainImg" src="${prod.imgs[0]}?w=600" alt="${prod.nombre}" onclick="abrirZoom(this.src)">
             ${prod.imgs.length > 1 ? '<button class="gal-arrow gal-next" onclick="galeriaNav(1)">&#8250;</button>' : ''}
           </div>
           ${prod.imgs.length > 1 ? `<div class="prod-galeria-thumbs">${prod.imgs.map((img,i)=>`<img class="gal-thumb${i===0?' activo':''}" src="${img}?w=120" onclick="galeriaSetImg(${i})" alt="Vista ${i+1}">`).join('')}</div>` : ''}
         </div>
         ${precioRetroHTML}
+        ${stockBadgeHTML(prod.id) ? `<div style="margin-bottom:12px;">${stockBadgeHTML(prod.id)}</div>` : ''}
         ${versionesHTML}
         <div class="prod-seccion">
           <div class="prod-seccion-titulo">Talla</div>
@@ -1947,8 +2101,7 @@
               </div>`).join('')}
           </div>
           <div class="talla-guia">
-            <span>S = 46/48</span><span>M = 48/50</span><span>L = 52/54</span>
-            <span>XL = 56/58</span><span>XXL = 60/62</span><span>2XL = 64/66</span>
+            <button class="btn-guia-tallas" onclick="abrirGuiaTallas()">📏 ¿Qué talla soy?</button>
           </div>
         </div>
         <div class="prod-seccion">
@@ -2123,6 +2276,22 @@
     if (e.target === this) cerrarProducto();
   });
 
+  /* ─── STOCK / URGENCIA ─── */
+  // Valores pseudo-aleatorios estables por ID (no cambian al re-renderizar)
+  function stockInfo(id) {
+    const seed = (id * 137 + 42) % 100;
+    if (seed < 30) return { tipo: 'stock', n: (id % 5) + 2 };       // "Solo quedan N"
+    if (seed < 60) return { tipo: 'mirando', n: (id % 18) + 5 };    // "N personas mirando"
+    return null;
+  }
+  function stockBadgeHTML(id) {
+    const info = stockInfo(id);
+    if (!info) return '';
+    if (info.tipo === 'stock')
+      return `<div class="stock-badge"><span class="stock-dot"></span> Solo quedan ${info.n}</div>`;
+    return `<div class="stock-badge mirando"><span class="stock-dot"></span> ${info.n} personas mirando</div>`;
+  }
+
   /* ─── CATÁLOGO ─── */
   function renderCamisetas(filtro = filtroActual) {
     filtroActual = filtro;
@@ -2131,6 +2300,9 @@
     const q = busqueda.toLowerCase().trim();
     let filtradas = filtro === 'todos' ? CAMISETAS : CAMISETAS.filter(c => c.categoria.includes(filtro));
     if (q) filtradas = filtradas.filter(c => c.nombre.toLowerCase().includes(q));
+    if (filtroPrecioActual === 'fan')     filtradas = filtradas.filter(c => c.tipo !== 'retro');
+    if (filtroPrecioActual === 'jugador') filtradas = filtradas.filter(c => c.tipo !== 'retro');
+    if (filtroPrecioActual === 'retro')   filtradas = filtradas.filter(c => c.tipo === 'retro');
     filtradas = ordenarCamisetas(filtradas);
     document.getElementById('resultadosTexto').textContent =
       `Mostrando ${filtradas.length} camiseta${filtradas.length !== 1 ? 's' : ''}`;
@@ -2164,8 +2336,9 @@
           <div class="camiseta-nombre">${c.nombre}</div>
           <div style="display:flex;align-items:center;gap:6px;margin:4px 0 2px;">
             <span class="camiseta-rating"><span class="camiseta-rating-star">★★★★★</span> <span>4,9</span></span>
-            <span style="font-size:0.72rem;color:#bbb;">(${Math.floor(Math.random()*80)+20})</span>
+            <span style="font-size:0.72rem;color:#bbb;">(${(c.id * 31 + 20) % 80 + 20})</span>
           </div>
+          ${stockBadgeHTML(c.id)}
           <div class="camiseta-footer">
             <div>${precioTag}</div>
             <div style="display:flex;gap:6px;align-items:center;">
@@ -2519,6 +2692,7 @@
 
   function cerrarTodo() {
     carrito = [];
+    try { localStorage.removeItem('gs_carrito'); } catch(e) {}
     refPedido = '';
     metodoSeleccionado = 'paypal';
     actualizarCarrito();
@@ -2640,6 +2814,26 @@
       .catch(() => mostrarToast('No se pudo copiar'));
   }
 
+  /* ─── GUÍA DE TALLAS ─── */
+  function abrirGuiaTallas() {
+    document.getElementById('guiaTallasOverlay').classList.add('visible');
+  }
+  function cerrarGuiaTallas() {
+    document.getElementById('guiaTallasOverlay').classList.remove('visible');
+  }
+
+  /* ─── ZOOM LIGHTBOX ─── */
+  function abrirZoom(src) {
+    document.getElementById('zoomImg').src = src.replace('?w=600','');
+    document.getElementById('zoomOverlay').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function cerrarZoom() {
+    document.getElementById('zoomOverlay').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarZoom(); });
+
   /* ─── UTILIDADES ─── */
   function fmt(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
 
@@ -2690,6 +2884,29 @@
       });
     }
   }
+
+  /* ─── COOKIES ─── */
+  function aceptarCookies() {
+    localStorage.setItem('gs_cookies', 'ok');
+    document.getElementById('cookieBanner').classList.remove('visible');
+    // Activar Google Analytics
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+  }
+  function rechazarCookies() {
+    localStorage.setItem('gs_cookies', 'no');
+    document.getElementById('cookieBanner').classList.remove('visible');
+  }
+  (function initCookieBanner() {
+    const pref = localStorage.getItem('gs_cookies');
+    if (!pref) setTimeout(() => document.getElementById('cookieBanner').classList.add('visible'), 1500);
+    if (pref === 'ok') gtag('consent', 'update', { analytics_storage: 'granted' });
+  })();
+
+  /* ─── REVEAL ON SCROLL ─── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
   // Init
   renderCamisetas();
