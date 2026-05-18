@@ -1074,6 +1074,26 @@
     <div class="quick-add-seccion-titulo">Talla</div>
     <div class="quick-talla-grid" id="qaTallas"></div>
   </div>
+  <div class="quick-add-seccion">
+    <div class="quick-add-seccion-titulo">Personalización</div>
+    <label class="dorsal-toggle-label" style="margin-bottom:8px;">
+      <input type="checkbox" id="qaDorsalCheck" onchange="toggleQaDorsal()">
+      <span class="dorsal-toggle-texto">Dorsal personalizado</span>
+      <span class="dorsal-precio-badge">+${fmt(PRECIO_DORSAL)}</span>
+    </label>
+    <div class="dorsal-campos" id="qaDorsalCampos" style="display:none;margin-bottom:8px;">
+      <input type="text" id="qaDorsalNombre" placeholder="Nombre (ej: MESSI)" maxlength="15" oninput="this.value=this.value.toUpperCase();actualizarBtnQuickAdd()">
+      <input type="number" id="qaDorsalNumero" class="dorsal-num-input" placeholder="Nº" min="1" max="99" oninput="actualizarBtnQuickAdd()">
+    </div>
+    <label class="dorsal-toggle-label">
+      <input type="checkbox" id="qaParcheCheck" onchange="toggleQaParche()">
+      <span class="dorsal-toggle-texto">Añadir parche</span>
+      <span class="dorsal-precio-badge" style="background:#e65100;">+${fmt(PRECIO_PARCHE)}</span>
+    </label>
+    <div class="dorsal-campos" id="qaParcheCampos" style="display:none;margin-top:8px;">
+      <input type="text" id="qaParcheDescripcion" placeholder="Describe el parche" maxlength="40" oninput="actualizarBtnQuickAdd()">
+    </div>
+  </div>
   <button class="btn-quick-add" id="btnQuickAdd" onclick="confirmarQuickAdd()" disabled>
     🛒 Añadir al carrito
   </button>
@@ -2123,6 +2143,15 @@
       `<button class="quick-talla-btn" onclick="selQuickTalla('${t}')">${t}</button>`
     ).join('');
 
+    // Reset personalización
+    document.getElementById('qaDorsalCheck').checked = false;
+    document.getElementById('qaDorsalCampos').style.display = 'none';
+    document.getElementById('qaDorsalNombre').value = '';
+    document.getElementById('qaDorsalNumero').value = '';
+    document.getElementById('qaParcheCheck').checked = false;
+    document.getElementById('qaParcheCampos').style.display = 'none';
+    document.getElementById('qaParcheDescripcion').value = '';
+
     document.getElementById('btnQuickAdd').disabled = true;
     document.getElementById('btnQuickAdd').textContent = '🛒 Añadir al carrito';
     document.getElementById('quickAddOverlay').classList.add('abierto');
@@ -2135,6 +2164,18 @@
     document.getElementById('quickAddSheet').classList.remove('abierto');
     document.body.style.overflow = '';
     quickAddId = null; quickAddVersion = null; quickAddTalla = null;
+  }
+
+  function toggleQaDorsal() {
+    const checked = document.getElementById('qaDorsalCheck').checked;
+    document.getElementById('qaDorsalCampos').style.display = checked ? 'flex' : 'none';
+    actualizarBtnQuickAdd();
+  }
+
+  function toggleQaParche() {
+    const checked = document.getElementById('qaParcheCheck').checked;
+    document.getElementById('qaParcheCampos').style.display = checked ? 'flex' : 'none';
+    actualizarBtnQuickAdd();
   }
 
   function selQuickVersion(v) {
@@ -2158,15 +2199,33 @@
     const btn = document.getElementById('btnQuickAdd');
     btn.disabled = !listo;
     if (listo) {
-      const precio = prod.tipo === 'retro' ? PRECIO_RETRO
+      const precioBase = prod.tipo === 'retro' ? PRECIO_RETRO
         : quickAddVersion === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN;
-      btn.textContent = `🛒 Añadir — ${fmt(precio)}`;
+      const conDorsal = document.getElementById('qaDorsalCheck')?.checked || false;
+      const conParche = document.getElementById('qaParcheCheck')?.checked || false;
+      const total = precioBase + (conDorsal ? PRECIO_DORSAL : 0) + (conParche ? PRECIO_PARCHE : 0);
+      btn.textContent = `🛒 Añadir — ${fmt(total)}`;
     }
   }
 
   function confirmarQuickAdd() {
     if (!quickAddId || !quickAddTalla) return;
-    anadirAlCarrito(quickAddId, quickAddVersion, quickAddTalla, null, null);
+    const conDorsal = document.getElementById('qaDorsalCheck')?.checked || false;
+    let dorsal = null;
+    if (conDorsal) {
+      const nombre = (document.getElementById('qaDorsalNombre')?.value || '').trim().toUpperCase();
+      const numero = (document.getElementById('qaDorsalNumero')?.value || '').trim();
+      if (!nombre && !numero) { mostrarToast('⚠️ Escribe el nombre o número del dorsal'); return; }
+      dorsal = { nombre, numero };
+    }
+    const conParche = document.getElementById('qaParcheCheck')?.checked || false;
+    let parche = null;
+    if (conParche) {
+      const descripcion = (document.getElementById('qaParcheDescripcion')?.value || '').trim();
+      if (!descripcion) { mostrarToast('⚠️ Describe el parche que quieres añadir'); return; }
+      parche = { descripcion };
+    }
+    anadirAlCarrito(quickAddId, quickAddVersion, quickAddTalla, dorsal, parche);
     cerrarQuickAdd();
     abrirCarrito();
   }
