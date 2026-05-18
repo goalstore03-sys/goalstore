@@ -222,6 +222,73 @@
   }
   .btn-ver:hover { background: linear-gradient(135deg, var(--verde-claro), var(--dorado-oscuro)); transform: scale(1.05); }
 
+  /* ── QUICK ADD ── */
+  .quick-add-overlay {
+    position: fixed; inset: 0; z-index: 1400;
+    background: rgba(0,0,0,0.45); opacity: 0; visibility: hidden;
+    transition: var(--transicion);
+  }
+  .quick-add-overlay.abierto { opacity: 1; visibility: visible; }
+  .quick-add-sheet {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 1401;
+    background: white; border-radius: 20px 20px 0 0;
+    padding: 24px 20px 32px; box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
+    transform: translateY(100%); transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  }
+  .quick-add-sheet.abierto { transform: translateY(0); }
+  @media (min-width: 769px) {
+    .quick-add-sheet {
+      left: 50%; right: auto; bottom: 50%; width: 380px;
+      border-radius: 20px;
+      transform: translateX(-50%) translateY(60%) scale(0.9);
+      opacity: 0; visibility: hidden;
+      transition: var(--transicion);
+    }
+    .quick-add-sheet.abierto {
+      transform: translateX(-50%) translateY(50%) scale(1);
+      opacity: 1; visibility: visible;
+    }
+  }
+  .quick-add-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 12px; margin-bottom: 16px;
+  }
+  .quick-add-nombre { font-size: 0.95rem; font-weight: 700; color: var(--texto); line-height: 1.3; }
+  .quick-add-liga { font-size: 0.72rem; color: var(--verde-claro); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+  .quick-add-seccion { margin-bottom: 16px; }
+  .quick-add-seccion-titulo { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gris); margin-bottom: 8px; }
+  .quick-version-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .quick-version-btn {
+    padding: 10px; border: 2px solid var(--gris-claro); border-radius: 10px;
+    background: white; cursor: pointer; text-align: center; transition: var(--transicion);
+  }
+  .quick-version-btn.activo { border-color: var(--verde-claro); background: #e8f4ed; }
+  .quick-version-btn .qv-nombre { font-size: 0.85rem; font-weight: 700; color: var(--texto); }
+  .quick-version-btn .qv-precio { font-size: 0.78rem; color: var(--gris); }
+  .quick-talla-grid { display: flex; gap: 8px; flex-wrap: wrap; }
+  .quick-talla-btn {
+    width: 44px; height: 44px; border: 2px solid var(--gris-claro); border-radius: 8px;
+    background: white; cursor: pointer; font-size: 0.85rem; font-weight: 700;
+    color: var(--texto); transition: var(--transicion); display: flex; align-items: center; justify-content: center;
+  }
+  .quick-talla-btn.activo { border-color: var(--verde-claro); background: #e8f4ed; color: var(--verde); }
+  .btn-quick-add {
+    width: 100%; background: linear-gradient(135deg, var(--dorado), var(--dorado-oscuro));
+    color: var(--verde); border: none; padding: 14px; border-radius: var(--radio);
+    font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: var(--transicion);
+    margin-top: 4px;
+  }
+  .btn-quick-add:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-quick-add:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,168,76,0.4); }
+  .btn-quick-carrito {
+    background: var(--verde); color: white; border: none;
+    width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+    font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    transition: var(--transicion); flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  .btn-quick-carrito:hover { background: var(--verde-claro); transform: scale(1.1); }
+
   /* ── MODAL PRODUCTO ── */
   .prod-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.6);
@@ -979,6 +1046,38 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- QUICK ADD -->
+<div class="quick-add-overlay" id="quickAddOverlay" onclick="cerrarQuickAdd()"></div>
+<div class="quick-add-sheet" id="quickAddSheet">
+  <div class="quick-add-header">
+    <div>
+      <div class="quick-add-liga" id="qaLiga"></div>
+      <div class="quick-add-nombre" id="qaNombre"></div>
+    </div>
+    <button class="btn-cerrar" onclick="cerrarQuickAdd()" style="flex-shrink:0;">✕</button>
+  </div>
+  <div class="quick-add-seccion" id="qaVersionSeccion" style="display:none">
+    <div class="quick-add-seccion-titulo">Versión</div>
+    <div class="quick-version-grid">
+      <button class="quick-version-btn" id="qaJugador" onclick="selQuickVersion('jugador')">
+        <div class="qv-nombre">⚡ Jugador</div>
+        <div class="qv-precio" id="qaJugadorPrecio"></div>
+      </button>
+      <button class="quick-version-btn" id="qaFan" onclick="selQuickVersion('fan')">
+        <div class="qv-nombre">⭐ Fan</div>
+        <div class="qv-precio" id="qaFanPrecio"></div>
+      </button>
+    </div>
+  </div>
+  <div class="quick-add-seccion">
+    <div class="quick-add-seccion-titulo">Talla</div>
+    <div class="quick-talla-grid" id="qaTallas"></div>
+  </div>
+  <button class="btn-quick-add" id="btnQuickAdd" onclick="confirmarQuickAdd()" disabled>
+    🛒 Añadir al carrito
+  </button>
+</div>
 
 <!-- OVERLAY CARRITO -->
 <div class="carrito-overlay" id="carritoOverlay" onclick="cerrarCarrito()"></div>
@@ -1967,7 +2066,10 @@
           </div>
           <div class="camiseta-footer">
             <div>${precioTag}</div>
-            <button class="btn-ver" onclick="event.stopPropagation();abrirProductoConId(${c.id})">Ver →</button>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button class="btn-quick-carrito" onclick="event.stopPropagation();abrirQuickAdd(${c.id})" title="Añadir al carrito">🛒</button>
+              <button class="btn-ver" onclick="event.stopPropagation();abrirProductoConId(${c.id})">Ver →</button>
+            </div>
           </div>
         </div>`;
       grid.appendChild(div);
@@ -1989,6 +2091,84 @@
     if (btn) btn.classList.add('activo');
     if (NAV_IDS[tipo]) document.getElementById(NAV_IDS[tipo])?.classList.add('activo');
     if (scroll) document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ─── QUICK ADD ─── */
+  let quickAddId = null;
+  let quickAddVersion = null;
+  let quickAddTalla = null;
+
+  function abrirQuickAdd(id) {
+    const prod = CAMISETAS.find(c => c.id === id);
+    if (!prod) return;
+    quickAddId = id;
+    quickAddVersion = prod.tipo === 'retro' ? 'retro' : null;
+    quickAddTalla = null;
+
+    document.getElementById('qaLiga').textContent = LIGA_NOMBRES[prod.liga] || prod.liga;
+    document.getElementById('qaNombre').textContent = prod.nombre;
+
+    const esRetro = prod.tipo === 'retro';
+    const vSec = document.getElementById('qaVersionSeccion');
+    vSec.style.display = esRetro ? 'none' : 'block';
+    if (!esRetro) {
+      document.getElementById('qaJugadorPrecio').textContent = fmt(PRECIO_JUGADOR);
+      document.getElementById('qaFanPrecio').textContent = fmt(PRECIO_FAN);
+      document.getElementById('qaJugador').classList.remove('activo');
+      document.getElementById('qaFan').classList.remove('activo');
+    }
+
+    const tallasDiv = document.getElementById('qaTallas');
+    tallasDiv.innerHTML = TALLAS.map(t =>
+      `<button class="quick-talla-btn" onclick="selQuickTalla('${t}')">${t}</button>`
+    ).join('');
+
+    document.getElementById('btnQuickAdd').disabled = true;
+    document.getElementById('btnQuickAdd').textContent = '🛒 Añadir al carrito';
+    document.getElementById('quickAddOverlay').classList.add('abierto');
+    document.getElementById('quickAddSheet').classList.add('abierto');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function cerrarQuickAdd() {
+    document.getElementById('quickAddOverlay').classList.remove('abierto');
+    document.getElementById('quickAddSheet').classList.remove('abierto');
+    document.body.style.overflow = '';
+    quickAddId = null; quickAddVersion = null; quickAddTalla = null;
+  }
+
+  function selQuickVersion(v) {
+    quickAddVersion = v;
+    document.getElementById('qaJugador').classList.toggle('activo', v === 'jugador');
+    document.getElementById('qaFan').classList.toggle('activo', v === 'fan');
+    actualizarBtnQuickAdd();
+  }
+
+  function selQuickTalla(t) {
+    quickAddTalla = t;
+    document.querySelectorAll('.quick-talla-btn').forEach(b =>
+      b.classList.toggle('activo', b.textContent === t));
+    actualizarBtnQuickAdd();
+  }
+
+  function actualizarBtnQuickAdd() {
+    const prod = CAMISETAS.find(c => c.id === quickAddId);
+    if (!prod) return;
+    const listo = quickAddTalla && (prod.tipo === 'retro' || quickAddVersion);
+    const btn = document.getElementById('btnQuickAdd');
+    btn.disabled = !listo;
+    if (listo) {
+      const precio = prod.tipo === 'retro' ? PRECIO_RETRO
+        : quickAddVersion === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN;
+      btn.textContent = `🛒 Añadir — ${fmt(precio)}`;
+    }
+  }
+
+  function confirmarQuickAdd() {
+    if (!quickAddId || !quickAddTalla) return;
+    anadirAlCarrito(quickAddId, quickAddVersion, quickAddTalla, null, null);
+    cerrarQuickAdd();
+    abrirCarrito();
   }
 
   /* ─── CARRITO UI ─── */
