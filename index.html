@@ -162,7 +162,18 @@
   }
   .catalogo-titulo h2 { font-size: 2rem; font-weight: 800; color: var(--verde); margin-bottom: 4px; }
   .catalogo-titulo p { color: var(--gris); font-size: 0.95rem; }
+  .catalogo-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+  .orden-select {
+    appearance: none; -webkit-appearance: none;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232d5a3d' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+    border: 2px solid var(--gris-claro); border-radius: 50px;
+    padding: 7px 36px 7px 14px; font-size: 0.82rem; font-weight: 600;
+    color: var(--gris); cursor: pointer; transition: var(--transicion);
+    white-space: nowrap;
+  }
+  .orden-select:hover, .orden-select:focus { border-color: var(--verde-claro); color: var(--verde); outline: none; }
   .filtros { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filtros::-webkit-scrollbar { display: none; }
   .filtro-btn {
     padding: 8px 20px; border-radius: 50px; border: 2px solid var(--gris-claro);
     background: white; color: var(--gris); font-size: 0.85rem; font-weight: 600;
@@ -191,6 +202,15 @@
   .camiseta-img {
     width: 100%; height: 100%; object-fit: cover;
     transition: transform 0.4s ease;
+  }
+  .camiseta-img[data-src] {
+    background: linear-gradient(90deg, #e8ede9 25%, #d4e0d6 50%, #e8ede9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
   .camiseta-card:hover .camiseta-img { transform: scale(1.07); }
   .camiseta-badge {
@@ -967,7 +987,9 @@
     .catalogo { padding: 40px 12px; }
     .catalogo-header { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
     .catalogo-titulo { text-align: center; }
-    .filtros { justify-content: center; }
+    .catalogo-top { flex-direction: row; justify-content: space-between; }
+    .orden-select { font-size: 0.78rem; padding: 6px 30px 6px 11px; }
+    .filtros { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 4px; }
     .camisetas-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .camiseta-imagen { height: 160px; font-size: 3.5rem; }
     .camiseta-info { padding: 12px; }
@@ -1380,7 +1402,6 @@
   <div class="catalogo-header">
     <div class="catalogo-titulo">
       <h2>Nuestra colección</h2>
-      <p id="resultadosTexto">Mostrando 116 camisetas</p>
     </div>
     <div class="filtros">
       <button class="filtro-btn activo" onclick="filtrar('todos', this)">Todos</button>
@@ -1402,6 +1423,16 @@
     <input type="text" id="buscadorInput" class="buscador-input"
            placeholder="Buscar equipo, liga o edición...">
     <button class="buscador-clear" id="buscadorClear" onclick="limpiarBusqueda()" title="Limpiar">✕</button>
+  </div>
+  <div class="catalogo-top">
+    <p id="resultadosTexto" style="color:var(--gris);font-size:0.92rem;"></p>
+    <select class="orden-select" id="ordenSelect" onchange="cambiarOrden(this.value)">
+      <option value="relevancia">⭐ Relevancia</option>
+      <option value="nuevo">🆕 Novedades primero</option>
+      <option value="precio-asc">💰 Precio: menor a mayor</option>
+      <option value="precio-desc">💰 Precio: mayor a menor</option>
+      <option value="nombre">🔤 Nombre A–Z</option>
+    </select>
   </div>
   <div class="camisetas-grid" id="camisetasGrid"></div>
 </section>
@@ -1461,10 +1492,12 @@
 
 <script>
   /* ─── CONFIGURACIÓN DE PAGO ─── */
-  const PAYPAL_CLIENT_ID    = 'AcASgvUkoCxD98BlmSPoMOew9YmZAesFCVXhVLE6sxiXXZyPwNxnziQjE50HRNUK99-1fPmLpYTdp7EW';
-  const EMAILJS_PUBLIC_KEY  = 'PENDIENTE';   // <-- reemplazar tras configurar EmailJS
-  const EMAILJS_SERVICE_ID  = 'PENDIENTE';   // <-- ID del servicio Gmail en EmailJS
-  const EMAILJS_TEMPLATE_ID = 'PENDIENTE';   // <-- ID de la plantilla en EmailJS
+  const PAYPAL_CLIENT_ID           = 'AcASgvUkoCxD98BlmSPoMOew9YmZAesFCVXhVLE6sxiXXZyPwNxnziQjE50HRNUK99-1fPmLpYTdp7EW';
+  const EMAILJS_PUBLIC_KEY         = 'xT79rGCthozHEPEwb';
+  const EMAILJS_SERVICE_ID         = 'service_cxnax49';
+  const EMAILJS_TEMPLATE_DUENO     = 'template_3vxanag';
+  const EMAILJS_TEMPLATE_CLIENTE   = 'template_ak05r2f';
+  const EMAIL_DUENO                = 'goalstore03@gmail.com';
   const BANK_DETAILS = {
     titular: 'Antoni Mateo Berrocal',
     iban:    'ES96 1583 0001 1290 7961 4773',
@@ -1672,6 +1705,54 @@
   /* ─── ESTADO CATÁLOGO ─── */
   let filtroActual = 'todos';
   let busqueda = '';
+  let ordenActual = 'relevancia';
+
+  function precioBase(c) {
+    return c.tipo === 'retro' ? PRECIO_RETRO : PRECIO_FAN;
+  }
+
+  function ordenarCamisetas(lista) {
+    const arr = [...lista];
+    switch (ordenActual) {
+      case 'nuevo':
+        return arr.sort((a, b) => {
+          const aN = a.badge === 'nuevo' ? 0 : 1;
+          const bN = b.badge === 'nuevo' ? 0 : 1;
+          return aN - bN;
+        });
+      case 'precio-asc':
+        return arr.sort((a, b) => precioBase(a) - precioBase(b));
+      case 'precio-desc':
+        return arr.sort((a, b) => precioBase(b) - precioBase(a));
+      case 'nombre':
+        return arr.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+      default: // relevancia: novedades > temporada > retro
+        return arr.sort((a, b) => {
+          const peso = c => c.badge === 'nuevo' ? 0 : c.tipo === 'retro' ? 2 : 1;
+          return peso(a) - peso(b);
+        });
+    }
+  }
+
+  function cambiarOrden(valor) {
+    ordenActual = valor;
+    renderCamisetas();
+  }
+
+  /* ─── LAZY LOAD IMÁGENES ─── */
+  const imgObserver = ('IntersectionObserver' in window)
+    ? new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          imgObserver.unobserve(img);
+        });
+      }, { rootMargin: '300px 0px' })   // precarga 300px antes de entrar en pantalla
+    : null;
 
   /* ─── CARRITO ─── */
   let carrito = [];
@@ -2050,6 +2131,7 @@
     const q = busqueda.toLowerCase().trim();
     let filtradas = filtro === 'todos' ? CAMISETAS : CAMISETAS.filter(c => c.categoria.includes(filtro));
     if (q) filtradas = filtradas.filter(c => c.nombre.toLowerCase().includes(q));
+    filtradas = ordenarCamisetas(filtradas);
     document.getElementById('resultadosTexto').textContent =
       `Mostrando ${filtradas.length} camiseta${filtradas.length !== 1 ? 's' : ''}`;
 
@@ -2075,7 +2157,7 @@
         <div class="camiseta-imagen">
           ${c.badge ? `<div class="camiseta-badge ${c.badge}">${c.badgeTexto}</div>` : ''}
           <div class="ver-mas-hover"><span>👁️</span>Ver opciones</div>
-          <img class="camiseta-img" src="${c.imgs[0]}?w=460" alt="${c.nombre}" loading="lazy">
+          <img class="camiseta-img" data-src="${c.imgs[0]}?w=460" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="${c.nombre}">
         </div>
         <div class="camiseta-info">
           <div class="camiseta-liga">${LIGA_NOMBRES[c.liga] || c.liga}</div>
@@ -2093,6 +2175,7 @@
           </div>
         </div>`;
       grid.appendChild(div);
+      if (imgObserver) imgObserver.observe(div.querySelector('.camiseta-img'));
     });
   }
 
@@ -2330,9 +2413,23 @@
   })();
 
   function enviarEmailPedido(datos) {
-    if (EMAILJS_PUBLIC_KEY === 'PENDIENTE') return; // no configurado aún
+    if (EMAILJS_PUBLIC_KEY === 'PENDIENTE') return;
     if (typeof emailjs === 'undefined') return;
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, datos).catch(() => {});
+
+    // 1) Email al dueño con todos los detalles del pedido
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_DUENO, {
+      ...datos,
+      to_email: EMAIL_DUENO,
+    }).catch(() => {});
+
+    // 2) Email de confirmación al cliente
+    if (datos.cliente_email) {
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENTE, {
+        ...datos,
+        to_email:   datos.cliente_email,
+        to_name:    datos.cliente_nombre,
+      }).catch(() => {});
+    }
   }
 
   function finalizarPago() {
@@ -2393,17 +2490,30 @@
       return `• ${i.nombre} | ${v} | Talla ${i.talla}${d}${p} | x${i.cantidad} | ${fmt(i.precio * i.cantidad)}`;
     }).join('\n');
 
+    const fechaPedido = new Date().toLocaleDateString('es-ES', {
+      weekday:'long', day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'
+    });
+    const fechaEntregaEst = (() => {
+      const d = new Date(); d.setDate(d.getDate() + 14);
+      return d.toLocaleDateString('es-ES', { day:'numeric', month:'long', year:'numeric' });
+    })();
+
     enviarEmailPedido({
-      pedido_ref:    refPedido,
-      metodo_pago:   esTransferencia ? 'Transferencia bancaria' : 'PayPal',
-      cliente_nombre: nombre,
-      cliente_email:  email,
-      cliente_telefono: telefono,
-      cliente_direccion: `${direccion}, ${cp} ${ciudad}, ${pais}`,
-      lineas_pedido:  lineasPedido,
-      subtotal:       fmt(subtotal),
-      envio:          envio === 0 ? 'Gratis' : fmt(envio),
-      total:          fmt(total),
+      pedido_ref:         refPedido,
+      fecha_pedido:       fechaPedido,
+      metodo_pago:        esTransferencia ? 'Transferencia bancaria' : 'PayPal',
+      cliente_nombre:     nombre,
+      cliente_email:      email,
+      cliente_telefono:   telefono,
+      cliente_direccion:  `${direccion}, ${cp} ${ciudad}, ${pais}`,
+      lineas_pedido:      lineasPedido,
+      num_articulos:      String(carrito.reduce((s,i)=>s+i.cantidad,0)),
+      subtotal:           fmt(subtotal),
+      envio:              envio === 0 ? 'Gratis 🎉' : fmt(envio),
+      total:              fmt(total),
+      entrega_estimada:   fechaEntregaEst,
+      iban:               esTransferencia ? `${BANK_DETAILS.iban} (${BANK_DETAILS.banco})` : '—',
+      referencia_pago:    esTransferencia ? refPedido : '—',
     });
   }
 
