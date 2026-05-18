@@ -914,6 +914,11 @@
     font-size: 0.72rem; font-weight: 700; padding: 2px 8px;
     border-radius: 50px; margin-top: 3px;
   }
+  .parche-tag {
+    display: inline-block; background: #fff3e0; color: #e65100;
+    font-size: 0.72rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 50px; margin-top: 3px;
+  }
 
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -1276,6 +1281,7 @@
   const PRECIO_FAN     = 24.99;
   const GASTOS_ENVIO   = 5.00; // gratis si se compran 2+ unidades
   const PRECIO_DORSAL  = 2.99;
+  const PRECIO_PARCHE  = 1.99;
   const PRECIO_RETRO   = 39.99;
 
   const TALLAS = ['S','M','L','XL','XXL','2XL'];
@@ -1474,28 +1480,30 @@
   /* ─── CARRITO ─── */
   let carrito = [];
 
-  function carritoKey(id, version, talla, dorsal) {
+  function carritoKey(id, version, talla, dorsal, parche) {
     const d = dorsal ? `${dorsal.nombre}_${dorsal.numero}` : 'nodorsal';
-    return `${id}||${version}||${talla}||${d}`;
+    const p = parche ? parche.descripcion.replace(/\s+/g,'_') : 'noparche';
+    return `${id}||${version}||${talla}||${d}||${p}`;
   }
 
-  function anadirAlCarrito(id, version, talla, dorsal) {
+  function anadirAlCarrito(id, version, talla, dorsal, parche) {
     const prod  = CAMISETAS.find(c => c.id === id);
     if (!prod) return;
     const precioBase = prod.tipo === 'retro' ? PRECIO_RETRO
                      : version === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN;
-    const precio = precioBase + (dorsal ? PRECIO_DORSAL : 0);
-    const key    = carritoKey(id, version, talla, dorsal);
+    const precio = precioBase + (dorsal ? PRECIO_DORSAL : 0) + (parche ? PRECIO_PARCHE : 0);
+    const key    = carritoKey(id, version, talla, dorsal, parche);
     const existe = carrito.find(i => i.key === key);
     if (existe) { existe.cantidad++; }
     else {
       carrito.push({ key, id, nombre: prod.nombre, img: prod.imgs[0],
-                     tipo: prod.tipo, version, talla, dorsal, precio, cantidad: 1 });
+                     tipo: prod.tipo, version, talla, dorsal, parche, precio, cantidad: 1 });
     }
     actualizarCarrito();
     const vLabel = prod.tipo === 'retro' ? 'Retro' : version === 'jugador' ? 'Jugador' : 'Fan';
-    const dLabel = dorsal ? ` · Dorsal ${dorsal.nombre} ${dorsal.numero}` : '';
-    mostrarToast(`✅ ${prod.nombre} · ${vLabel} · Talla ${talla}${dLabel}`);
+    const dLabel = dorsal ? ` · ✏️ ${dorsal.nombre} ${dorsal.numero}` : '';
+    const pLabel = parche ? ` · 🎽 ${parche.descripcion}` : '';
+    mostrarToast(`✅ ${prod.nombre} · ${vLabel} · Talla ${talla}${dLabel}${pLabel}`);
   }
 
   function cambiarCantidad(key, delta) {
@@ -1561,6 +1569,7 @@
             <span class="item-meta-tag ${vClass}">${vLabel}</span>
             <span class="item-meta-tag">Talla ${item.talla}</span>
             ${item.dorsal ? `<span class="dorsal-tag">✏️ ${item.dorsal.nombre} ${item.dorsal.numero}</span>` : ''}
+            ${item.parche ? `<span class="parche-tag">🎽 ${item.parche.descripcion}</span>` : ''}
           </div>
           <div class="item-controles">
             <button class="qty-btn" onclick="cambiarCantidad(decodeURIComponent('${safeKey}'), -1)">−</button>
@@ -1666,6 +1675,16 @@
               <input type="number" id="dorsalNumero" class="dorsal-num-input" placeholder="Nº" min="1" max="99" oninput="actualizarPrecioModal()">
             </div>
           </div>
+          <div style="margin-top:10px;">
+            <label class="dorsal-toggle-label">
+              <input type="checkbox" id="parcheCheck" onchange="toggleParche()">
+              <span class="dorsal-toggle-texto">Añadir parche</span>
+              <span class="dorsal-precio-badge" style="background:#e65100;">+${fmt(PRECIO_PARCHE)}</span>
+            </label>
+            <div class="dorsal-campos" id="parcheCampos" style="display:none">
+              <input type="text" id="parcheDescripcion" placeholder="Describe el parche (ej: Liga de Campeones)" maxlength="40" oninput="actualizarPrecioModal()">
+            </div>
+          </div>
         </div>
         <div class="prod-precio-total">
           <div>
@@ -1719,6 +1738,13 @@
     actualizarPrecioModal();
   }
 
+  function toggleParche() {
+    const checked = document.getElementById('parcheCheck')?.checked;
+    const campos  = document.getElementById('parcheCampos');
+    if (campos) campos.style.display = checked ? 'flex' : 'none';
+    actualizarPrecioModal();
+  }
+
   function actualizarPrecioModal() {
     const prod   = CAMISETAS.find(c => c.id === productoAbierto);
     if (!prod) return;
@@ -1726,6 +1752,7 @@
     const versionOk = esRetro || document.querySelector('input[name="pv"]:checked');
     const tallaOk   = document.querySelector('input[name="pt"]:checked');
     const conDorsal = document.getElementById('dorsalCheck')?.checked || false;
+    const conParche = document.getElementById('parcheCheck')?.checked || false;
 
     const precioEl = document.getElementById('prodPrecioValor');
     const btnEl    = document.getElementById('btnAnadirProd');
@@ -1735,7 +1762,7 @@
       : null;
 
     if (precioBase !== null) {
-      precioEl.textContent = fmt(precioBase + (conDorsal ? PRECIO_DORSAL : 0));
+      precioEl.textContent = fmt(precioBase + (conDorsal ? PRECIO_DORSAL : 0) + (conParche ? PRECIO_PARCHE : 0));
     }
 
     if (versionOk && tallaOk) {
@@ -1783,7 +1810,16 @@
       }
       dorsal = { nombre, numero };
     }
-    anadirAlCarrito(id, version, talla, dorsal);
+    const conParche = document.getElementById('parcheCheck')?.checked || false;
+    let parche = null;
+    if (conParche) {
+      const descripcion = (document.getElementById('parcheDescripcion')?.value || '').trim();
+      if (!descripcion) {
+        mostrarToast('⚠️ Describe el parche que quieres añadir'); return;
+      }
+      parche = { descripcion };
+    }
+    anadirAlCarrito(id, version, talla, dorsal, parche);
     cerrarProducto();
     abrirCarrito();
   }
@@ -2006,7 +2042,8 @@
       ${carrito.map(i => {
         const v = i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan';
         const d = i.dorsal ? ` · ✏️ ${i.dorsal.nombre} ${i.dorsal.numero}` : '';
-        return `• ${i.nombre} (${v} · T.${i.talla}${d})`;
+        const p = i.parche ? ` · 🎽 ${i.parche.descripcion}` : '';
+        return `• ${i.nombre} (${v} · T.${i.talla}${d}${p})`;
       }).join('<br>')}`;
 
     document.getElementById('ind3').classList.add('activo');
@@ -2024,7 +2061,8 @@
     const lineasPedido = carrito.map(i => {
       const v = i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan';
       const d = i.dorsal ? ` | Dorsal: ${i.dorsal.nombre} ${i.dorsal.numero}` : '';
-      return `• ${i.nombre} | ${v} | Talla ${i.talla}${d} | x${i.cantidad} | ${fmt(i.precio * i.cantidad)}`;
+      const p = i.parche ? ` | Parche: ${i.parche.descripcion}` : '';
+      return `• ${i.nombre} | ${v} | Talla ${i.talla}${d}${p} | x${i.cantidad} | ${fmt(i.precio * i.cantidad)}`;
     }).join('\n');
 
     enviarEmailPedido({
