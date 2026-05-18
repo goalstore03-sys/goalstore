@@ -831,6 +831,45 @@
   .sin-resultados p { font-size: 1rem; font-weight: 600; margin-bottom: 6px; color: var(--texto); }
   .sin-resultados span { font-size: 0.88rem; }
 
+  /* ── POLÍTICA DE ENVÍOS ── */
+  .envios-seccion {
+    background: linear-gradient(135deg, #f0f7f3 0%, #e8f4ed 100%);
+    padding: 60px 24px; border-top: 2px solid #d0e8da;
+  }
+  .envios-inner { max-width: 960px; margin: 0 auto; }
+  .envios-titulo {
+    text-align: center; font-size: 1.6rem; font-weight: 800;
+    color: var(--verde); margin-bottom: 8px;
+  }
+  .envios-subtitulo {
+    text-align: center; color: var(--gris); font-size: 0.95rem; margin-bottom: 40px;
+  }
+  .envios-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .envio-card {
+    background: white; border-radius: 16px; padding: 28px 24px;
+    text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid #e0ede6;
+  }
+  .envio-card-icon { font-size: 2.4rem; margin-bottom: 12px; }
+  .envio-card-titulo { font-size: 1rem; font-weight: 700; color: var(--texto); margin-bottom: 8px; }
+  .envio-card-texto { font-size: 0.88rem; color: var(--gris); line-height: 1.6; }
+  .envio-card-precio {
+    display: inline-block; margin-top: 10px;
+    background: var(--verde); color: white;
+    font-size: 0.85rem; font-weight: 700; padding: 4px 14px; border-radius: 50px;
+  }
+  .envio-card-gratis {
+    display: inline-block; margin-top: 10px;
+    background: #25a244; color: white;
+    font-size: 0.85rem; font-weight: 700; padding: 4px 14px; border-radius: 50px;
+  }
+  @media (max-width: 768px) {
+    .envios-grid { grid-template-columns: 1fr; gap: 14px; }
+    .envios-seccion { padding: 40px 16px; }
+  }
+
   /* ── FOOTER ── */
   footer { background: var(--verde); color: rgba(255,255,255,0.7); text-align: center; padding: 40px 24px; margin-top: 60px; }
   .footer-logo { margin-bottom: 16px; display: flex; justify-content: center; }
@@ -1252,6 +1291,33 @@
   </div>
 </section>
 
+<!-- POLÍTICA DE ENVÍOS -->
+<section class="envios-seccion">
+  <div class="envios-inner">
+    <div class="envios-titulo">🌍 Política de envíos</div>
+    <div class="envios-subtitulo">Enviamos a todo el mundo de forma segura y con seguimiento</div>
+    <div class="envios-grid">
+      <div class="envio-card">
+        <div class="envio-card-icon">📦</div>
+        <div class="envio-card-titulo">Envío internacional</div>
+        <div class="envio-card-texto">Enviamos a cualquier país del mundo. Tu pedido llega a casa sin complicaciones.</div>
+        <span class="envio-card-precio">4,99 €</span>
+      </div>
+      <div class="envio-card">
+        <div class="envio-card-icon">🎁</div>
+        <div class="envio-card-titulo">Envío gratis</div>
+        <div class="envio-card-texto">¿Compras 2 o más camisetas? El envío es completamente gratuito, sin mínimo de importe.</div>
+        <span class="envio-card-gratis">Gratis con 2+</span>
+      </div>
+      <div class="envio-card">
+        <div class="envio-card-icon">🗓️</div>
+        <div class="envio-card-titulo">Plazo de entrega</div>
+        <div class="envio-card-texto">Los pedidos se entregan en aproximadamente <strong>2 semanas</strong> desde la confirmación del pago.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">
@@ -1259,7 +1325,7 @@
          onerror="this.outerHTML='<span class=\'footer-logo-text\'>⚽ GoalStore</span>'">
   </div>
   <p>Tu tienda de confianza para camisetas de fútbol premium.<br>
-  Versión Jugador · Versión Fan · Edición Retro · Envío gratis</p>
+  Versión Jugador · Versión Fan · Edición Retro · Envío mundial 4,99 €</p>
   <p style="margin-top:16px; font-size:0.8rem; opacity:0.5;">© 2026 GoalStore. Todos los derechos reservados.</p>
 </footer>
 
@@ -1279,7 +1345,7 @@
   /* ─── DATOS ─── */
   const PRECIO_JUGADOR = 29.99;
   const PRECIO_FAN     = 24.99;
-  const GASTOS_ENVIO   = 5.00; // gratis si se compran 2+ unidades
+  const GASTOS_ENVIO   = 4.99; // gratis si se compran 2+ unidades
   const PRECIO_DORSAL  = 2.99;
   const PRECIO_PARCHE  = 1.99;
   const PRECIO_RETRO   = 39.99;
