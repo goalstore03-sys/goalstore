@@ -882,6 +882,39 @@
     .filtro-btn { font-size: 0.8rem; padding: 7px 14px; }
   }
 
+  /* ── DORSAL ── */
+  .dorsal-wrap { margin-top: 4px; }
+  .dorsal-toggle-label {
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    background: #f4f8f5; border: 2px solid var(--gris-claro);
+    border-radius: 12px; padding: 13px 16px; transition: var(--transicion);
+  }
+  .dorsal-toggle-label:has(input:checked) {
+    border-color: var(--verde-claro); background: #e8f4ed;
+  }
+  .dorsal-toggle-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--verde-claro); flex-shrink: 0; }
+  .dorsal-toggle-texto { flex: 1; font-size: 0.92rem; font-weight: 600; color: var(--texto); }
+  .dorsal-precio-badge {
+    background: var(--verde-claro); color: white; font-size: 0.78rem;
+    font-weight: 700; padding: 3px 9px; border-radius: 50px;
+  }
+  .dorsal-campos {
+    margin-top: 10px; display: flex; gap: 10px;
+  }
+  .dorsal-campos input {
+    flex: 1; padding: 10px 14px; border: 2px solid var(--gris-claro);
+    border-radius: 10px; font-size: 0.9rem; font-family: inherit;
+    text-transform: uppercase; transition: var(--transicion);
+  }
+  .dorsal-campos input:focus { outline: none; border-color: var(--verde-claro); }
+  .dorsal-campos input::placeholder { text-transform: none; color: #aaa; }
+  .dorsal-num-input { max-width: 90px; }
+  .dorsal-tag {
+    display: inline-block; background: #e8f4ed; color: var(--verde-claro);
+    font-size: 0.72rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 50px; margin-top: 3px;
+  }
+
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -1242,6 +1275,7 @@
   const PRECIO_JUGADOR = 29.99;
   const PRECIO_FAN     = 24.99;
   const GASTOS_ENVIO   = 5.00; // gratis si se compran 2+ unidades
+  const PRECIO_DORSAL  = 3.00;
   const PRECIO_RETRO   = 39.99;
 
   const TALLAS = ['S','M','L','XL','XXL','2XL'];
@@ -1440,23 +1474,28 @@
   /* ─── CARRITO ─── */
   let carrito = [];
 
-  function carritoKey(id, version, talla) { return `${id}||${version}||${talla}`; }
+  function carritoKey(id, version, talla, dorsal) {
+    const d = dorsal ? `${dorsal.nombre}_${dorsal.numero}` : 'nodorsal';
+    return `${id}||${version}||${talla}||${d}`;
+  }
 
-  function anadirAlCarrito(id, version, talla) {
+  function anadirAlCarrito(id, version, talla, dorsal) {
     const prod  = CAMISETAS.find(c => c.id === id);
     if (!prod) return;
-    const precio = prod.tipo === 'retro' ? PRECIO_RETRO
-                 : version === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN;
-    const key    = carritoKey(id, version, talla);
+    const precioBase = prod.tipo === 'retro' ? PRECIO_RETRO
+                     : version === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN;
+    const precio = precioBase + (dorsal ? PRECIO_DORSAL : 0);
+    const key    = carritoKey(id, version, talla, dorsal);
     const existe = carrito.find(i => i.key === key);
     if (existe) { existe.cantidad++; }
     else {
       carrito.push({ key, id, nombre: prod.nombre, img: prod.imgs[0],
-                     tipo: prod.tipo, version, talla, precio, cantidad: 1 });
+                     tipo: prod.tipo, version, talla, dorsal, precio, cantidad: 1 });
     }
     actualizarCarrito();
     const vLabel = prod.tipo === 'retro' ? 'Retro' : version === 'jugador' ? 'Jugador' : 'Fan';
-    mostrarToast(`✅ ${prod.nombre} · ${vLabel} · Talla ${talla}`);
+    const dLabel = dorsal ? ` · Dorsal ${dorsal.nombre} ${dorsal.numero}` : '';
+    mostrarToast(`✅ ${prod.nombre} · ${vLabel} · Talla ${talla}${dLabel}`);
   }
 
   function cambiarCantidad(key, delta) {
@@ -1521,6 +1560,7 @@
           <div class="item-meta">
             <span class="item-meta-tag ${vClass}">${vLabel}</span>
             <span class="item-meta-tag">Talla ${item.talla}</span>
+            ${item.dorsal ? `<span class="dorsal-tag">✏️ ${item.dorsal.nombre} ${item.dorsal.numero}</span>` : ''}
           </div>
           <div class="item-controles">
             <button class="qty-btn" onclick="cambiarCantidad(decodeURIComponent('${safeKey}'), -1)">−</button>
@@ -1613,6 +1653,20 @@
             <span>XL = 56/58</span><span>XXL = 60/62</span><span>2XL = 64/66</span>
           </div>
         </div>
+        <div class="prod-seccion">
+          <div class="prod-seccion-titulo">Personalización</div>
+          <div class="dorsal-wrap">
+            <label class="dorsal-toggle-label">
+              <input type="checkbox" id="dorsalCheck" onchange="toggleDorsal()">
+              <span class="dorsal-toggle-texto">Añadir dorsal personalizado</span>
+              <span class="dorsal-precio-badge">+${fmt(PRECIO_DORSAL)}</span>
+            </label>
+            <div class="dorsal-campos" id="dorsalCampos" style="display:none">
+              <input type="text" id="dorsalNombre" placeholder="Nombre (ej: MESSI)" maxlength="15" oninput="this.value=this.value.toUpperCase(); actualizarPrecioModal()">
+              <input type="number" id="dorsalNumero" class="dorsal-num-input" placeholder="Nº" min="1" max="99" oninput="actualizarPrecioModal()">
+            </div>
+          </div>
+        </div>
         <div class="prod-precio-total">
           <div>
             <div class="prod-precio-label">Precio unitario</div>
@@ -1658,19 +1712,30 @@
     document.body.style.overflow = 'hidden';
   }
 
+  function toggleDorsal() {
+    const checked = document.getElementById('dorsalCheck')?.checked;
+    const campos  = document.getElementById('dorsalCampos');
+    if (campos) campos.style.display = checked ? 'flex' : 'none';
+    actualizarPrecioModal();
+  }
+
   function actualizarPrecioModal() {
     const prod   = CAMISETAS.find(c => c.id === productoAbierto);
     if (!prod) return;
-    const esRetro = prod.tipo === 'retro';
+    const esRetro  = prod.tipo === 'retro';
     const versionOk = esRetro || document.querySelector('input[name="pv"]:checked');
     const tallaOk   = document.querySelector('input[name="pt"]:checked');
+    const conDorsal = document.getElementById('dorsalCheck')?.checked || false;
 
     const precioEl = document.getElementById('prodPrecioValor');
     const btnEl    = document.getElementById('btnAnadirProd');
 
-    if (versionOk && !esRetro) {
-      const v = document.querySelector('input[name="pv"]:checked').value;
-      precioEl.textContent = fmt(v === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN);
+    let precioBase = esRetro ? PRECIO_RETRO
+      : versionOk ? (document.querySelector('input[name="pv"]:checked').value === 'jugador' ? PRECIO_JUGADOR : PRECIO_FAN)
+      : null;
+
+    if (precioBase !== null) {
+      precioEl.textContent = fmt(precioBase + (conDorsal ? PRECIO_DORSAL : 0));
     }
 
     if (versionOk && tallaOk) {
@@ -1708,7 +1773,17 @@
     const version = esRetro ? 'retro' : document.querySelector('input[name="pv"]:checked')?.value;
     const talla   = document.querySelector('input[name="pt"]:checked')?.value;
     if (!version || !talla) return;
-    anadirAlCarrito(id, version, talla);
+    const conDorsal = document.getElementById('dorsalCheck')?.checked || false;
+    let dorsal = null;
+    if (conDorsal) {
+      const nombre = (document.getElementById('dorsalNombre')?.value || '').trim().toUpperCase();
+      const numero = (document.getElementById('dorsalNumero')?.value || '').trim();
+      if (!nombre && !numero) {
+        mostrarToast('⚠️ Escribe el nombre o número del dorsal'); return;
+      }
+      dorsal = { nombre, numero };
+    }
+    anadirAlCarrito(id, version, talla, dorsal);
     cerrarProducto();
     abrirCarrito();
   }
@@ -1928,7 +2003,11 @@
         : `Importe cobrado: <strong>${fmt(total)}</strong> via PayPal<br>
            Entrega estimada: <strong>${entrega}</strong><br>`}
       Confirmación enviada a: <strong>${email}</strong><br>
-      ${carrito.map(i => `• ${i.nombre} (${i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan'} · T.${i.talla})`).join('<br>')}`;
+      ${carrito.map(i => {
+        const v = i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan';
+        const d = i.dorsal ? ` · ✏️ ${i.dorsal.nombre} ${i.dorsal.numero}` : '';
+        return `• ${i.nombre} (${v} · T.${i.talla}${d})`;
+      }).join('<br>')}`;
 
     document.getElementById('ind3').classList.add('activo');
     document.getElementById('confirmacion').classList.add('visible');
@@ -1942,9 +2021,11 @@
     const pais       = paisSel ? (paisSel.options[paisSel.selectedIndex]?.text || '—') : '—';
     const subtotal   = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
     const envio      = calcEnvio();
-    const lineasPedido = carrito.map(i =>
-      `• ${i.nombre} | ${i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan'} | Talla ${i.talla} | x${i.cantidad} | ${fmt(i.precio * i.cantidad)}`
-    ).join('\n');
+    const lineasPedido = carrito.map(i => {
+      const v = i.tipo==='retro'?'Retro':i.version==='jugador'?'Jugador':'Fan';
+      const d = i.dorsal ? ` | Dorsal: ${i.dorsal.nombre} ${i.dorsal.numero}` : '';
+      return `• ${i.nombre} | ${v} | Talla ${i.talla}${d} | x${i.cantidad} | ${fmt(i.precio * i.cantidad)}`;
+    }).join('\n');
 
     enviarEmailPedido({
       pedido_ref:    refPedido,
