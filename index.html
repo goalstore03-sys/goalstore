@@ -1243,6 +1243,109 @@
   .reciente-card-nombre { font-size: 0.72rem; font-weight: 700; color: var(--texto); line-height: 1.3; }
   .reciente-card-precio { font-size: 0.75rem; color: var(--verde); font-weight: 800; margin-top: 3px; }
 
+  /* ── 7. AUTOCOMPLETE BUSCADOR ── */
+  .buscador-wrap { position: relative; }
+  .autocomplete-dropdown {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 500;
+    background: white; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border: 1px solid var(--gris-claro); overflow: hidden; display: none;
+  }
+  .autocomplete-dropdown.visible { display: block; }
+  .autocomplete-item {
+    padding: 10px 16px; cursor: pointer; font-size: 0.88rem; display: flex; align-items: center; gap: 10px;
+    transition: background 0.15s; border-bottom: 1px solid #f5f5f5;
+  }
+  .autocomplete-item:last-child { border-bottom: none; }
+  .autocomplete-item:hover, .autocomplete-item.activo { background: #f0f8f3; }
+  .autocomplete-item img { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+  .autocomplete-item-info { flex: 1; min-width: 0; }
+  .autocomplete-item-nombre { font-weight: 600; color: var(--texto); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .autocomplete-item-precio { font-size: 0.75rem; color: var(--verde-claro); font-weight: 700; }
+  .autocomplete-item-liga { font-size: 0.75rem; color: var(--gris); }
+
+  /* ── 8. BOTÓN SCROLL TOP ── */
+  .btn-scroll-top {
+    position: fixed; bottom: 90px; right: 20px; z-index: 800;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--verde); color: white; border: none;
+    font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    opacity: 0; visibility: hidden; transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-scroll-top.visible { opacity: 1; visibility: visible; }
+  .btn-scroll-top:hover { background: var(--verde-claro); transform: translateY(-2px); }
+
+  /* ── NOTIF VENTA RECIENTE ── */
+  .notif-venta {
+    position: fixed; bottom: 90px; left: 16px; z-index: 850;
+    background: white; border-radius: 14px; padding: 12px 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18); display: flex; align-items: center; gap: 10px;
+    max-width: 280px; transform: translateX(-120%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    border-left: 4px solid var(--verde);
+  }
+  .notif-venta.visible { transform: translateX(0); }
+  .notif-venta img { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+  .notif-venta-texto { font-size: 0.78rem; line-height: 1.4; }
+  .notif-venta-nombre { font-weight: 700; color: var(--texto); }
+  .notif-venta-accion { color: var(--gris); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+  .notif-venta-tiempo { font-size: 0.7rem; color: var(--gris); opacity: 0.75; }
+
+  /* ── FAQ ── */
+  .faq-seccion { max-width: 760px; margin: 0 auto; padding: 60px 24px; }
+  .faq-titulo { font-size: 1.8rem; font-weight: 800; color: var(--verde); margin-bottom: 8px; }
+  .faq-subtitulo { color: var(--gris); margin-bottom: 32px; }
+  .faq-item { border: 1px solid var(--gris-claro); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  .faq-pregunta {
+    padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    font-weight: 600; font-size: 0.95rem; background: white; transition: background 0.2s;
+    user-select: none;
+  }
+  .faq-pregunta:hover { background: #f8faf9; }
+  .faq-pregunta .faq-icon { transition: transform 0.3s; font-style: normal; flex-shrink: 0; }
+  .faq-item.abierto .faq-pregunta .faq-icon { transform: rotate(180deg); }
+  .faq-respuesta {
+    max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.3s;
+    padding: 0 20px; font-size: 0.9rem; color: var(--gris); line-height: 1.7; background: #fafcfb;
+  }
+  .faq-item.abierto .faq-respuesta { max-height: 300px; padding: 14px 20px; }
+
+  /* ── AVISO LEGAL ── */
+  .legal-overlay {
+    position: fixed; inset: 0; z-index: 9990; background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transition: opacity 0.25s;
+  }
+  .legal-overlay.visible { opacity: 1; visibility: visible; }
+  .legal-box {
+    background: white; border-radius: 16px; padding: 32px; max-width: 600px; width: 94%;
+    max-height: 85vh; overflow-y: auto; position: relative;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+  }
+  .legal-box h2 { color: var(--verde); margin-bottom: 16px; }
+  .legal-box h3 { color: var(--verde-medio); margin: 20px 0 8px; font-size: 0.95rem; }
+  .legal-box p, .legal-box li { font-size: 0.88rem; color: #555; line-height: 1.7; margin-bottom: 8px; }
+  .legal-box ul { padding-left: 20px; }
+  .legal-cerrar { position: absolute; top: 14px; right: 18px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gris); }
+  .footer-legal { display: flex; gap: 16px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+  .footer-legal a { color: rgba(255,255,255,0.5); font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
+
+  /* ── UPSELL CARRITO ── */
+  .upsell-carrito {
+    margin: 0 16px 12px; background: linear-gradient(135deg, #f0f8f3, #e8f5ed);
+    border: 2px solid var(--verde-claro); border-radius: 12px; padding: 12px;
+    display: none;
+  }
+  .upsell-carrito.visible { display: block; }
+  .upsell-titulo { font-size: 0.78rem; font-weight: 700; color: var(--verde); margin-bottom: 8px; }
+  .upsell-card {
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    background: white; border-radius: 8px; padding: 8px; transition: var(--transicion);
+  }
+  .upsell-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .upsell-card img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+  .upsell-card-nombre { font-size: 0.78rem; font-weight: 600; flex: 1; line-height: 1.3; }
+  .upsell-card-precio { font-size: 0.82rem; font-weight: 800; color: var(--verde); white-space: nowrap; }
+
   /* ── 9. ERROR 404 ── */
   .error-404 {
     display: none; min-height: 60vh; align-items: center; justify-content: center;
@@ -1397,10 +1500,14 @@
       </div>
     </div>
   </div>
+  <!-- UPSELL -->
+  <div class="upsell-carrito" id="upsellCarrito">
+    <div class="upsell-titulo">🎁 ¡Añade 1 más y el envío es GRATIS!</div>
+    <div class="upsell-card" id="upsellCard" onclick="cerrarCarrito()"></div>
+  </div>
+
   <div class="carrito-pie">
-    <div id="envioPromo" style="display:none;background:#e8f5e9;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:0.82rem;color:#2d7a3d;font-weight:600;text-align:center;">
-      🎁 ¡Añade 1 camiseta más y el envío es gratis!
-    </div>
+    <div id="envioPromo" style="display:none;"></div>
     <div class="subtotal-linea"><span>Subtotal</span><span id="subtotalPrecio">0,00 €</span></div>
     <div class="subtotal-linea" id="envioLinea">
       <span>Envío <span id="envioDescripcion" style="font-size:0.75rem;color:#aaa;"></span></span>
@@ -1408,6 +1515,9 @@
     </div>
     <div id="envioAhorro" style="display:none;text-align:right;font-size:0.78rem;color:#25a244;font-weight:700;margin-top:-4px;margin-bottom:6px;">
       ✅ ¡Ahorraste 4,99 € en envío!
+    </div>
+    <div class="subtotal-linea" id="descuentoLinea" style="display:none;color:#25a244;font-weight:700;">
+      <span>🏷️ Descuento 10%</span><span id="descuentoPrecio">−0,00 €</span>
     </div>
     <div class="total-linea">
       <span class="total-label">Total</span>
@@ -1764,6 +1874,49 @@
   </div>
 </section>
 
+<!-- FAQ -->
+<section class="faq-seccion reveal">
+  <h2 class="faq-titulo">❓ Preguntas frecuentes</h2>
+  <p class="faq-subtitulo">Todo lo que necesitas saber antes de comprar</p>
+  <div class="faq-item">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">¿Cuánto tarda en llegar mi pedido?<i class="faq-icon">▼</i></div>
+    <div class="faq-respuesta">Los pedidos se entregan en aproximadamente 2 semanas desde la confirmación del pago. Enviamos a todo el mundo con número de seguimiento.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">¿Cuál es el coste de envío?<i class="faq-icon">▼</i></div>
+    <div class="faq-respuesta">El envío tiene un coste de 4,99 € para cualquier país del mundo. Si compras 2 o más camisetas en el mismo pedido, el envío es completamente gratuito.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">¿Qué diferencia hay entre Versión Jugador y Versión Fan?<i class="faq-icon">▼</i></div>
+    <div class="faq-respuesta">La Versión Jugador (29,99 €) usa tejido técnico termosellado con corte ajustado, igual al que llevan los jugadores en el campo. La Versión Fan (24,99 €) usa tejido transpirable con corte regular, perfecta para el día a día.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">¿Puedo devolver una camiseta?<i class="faq-icon">▼</i></div>
+    <div class="faq-respuesta">Sí, aceptamos devoluciones en los 30 días siguientes a la recepción del pedido. El artículo debe estar sin usar y con el embalaje original. Escríbenos por WhatsApp para gestionar la devolución.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">¿Cómo funciona el dorsal personalizado?<i class="faq-icon">▼</i></div>
+    <div class="faq-respuesta">Al añadir una camiseta al carrito puedes elegir añadir un dorsal personalizado por 2,99 € adicionales. Escribe el nombre y número que quieres y lo imprimimos antes de enviar. Los dorsales personalizados no admiten devolución.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">¿Qué métodos de pago aceptáis?<i class="faq-icon">▼</i></div>
+    <div class="faq-respuesta">Aceptamos PayPal (también permite pagar con tarjeta sin tener cuenta PayPal) y transferencia bancaria. En transferencia, el pedido se procesa en 24-48h al confirmar el ingreso.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-pregunta" onclick="toggleFaq(this)">¿Cómo sé qué talla elegir?<i class="faq-icon">▼</i></div>
+    <div class="faq-respuesta">En el modal de cada producto encontrarás el botón 📏 "¿Qué talla soy?" con una tabla de medidas completa. Si estás entre dos tallas, te recomendamos elegir la mayor para mayor comodidad.</div>
+  </div>
+</section>
+
+<!-- AVISO LEGAL / PRIVACIDAD -->
+<div class="legal-overlay" id="legalOverlay" onclick="if(event.target===this)cerrarLegal()">
+  <div class="legal-box" id="legalBox">
+    <button class="legal-cerrar" onclick="cerrarLegal()">✕</button>
+    <h2 id="legalTitulo">Aviso Legal</h2>
+    <div id="legalContenido"></div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">
@@ -1772,8 +1925,29 @@
   </div>
   <p>Tu tienda de confianza para camisetas de fútbol premium.<br>
   Versión Jugador · Versión Fan · Edición Retro · Envío mundial 4,99 €</p>
-  <p style="margin-top:16px; font-size:0.8rem; opacity:0.5;">© 2026 GoalStore. Todos los derechos reservados.</p>
+  <div class="footer-legal">
+    <a onclick="abrirLegal('aviso')">Aviso legal</a>
+    <a onclick="abrirLegal('privacidad')">Política de privacidad</a>
+    <a onclick="abrirLegal('cookies')">Política de cookies</a>
+  </div>
+  <p style="margin-top:12px; font-size:0.8rem; opacity:0.5;">© 2026 GoalStore. Todos los derechos reservados.</p>
 </footer>
+
+<!-- NOTIFICACIÓN VENTA RECIENTE -->
+<div class="notif-venta" id="notifVenta">
+  <img id="notifImg" src="" alt="">
+  <div class="notif-venta-texto">
+    <div class="notif-venta-nombre" id="notifNombre"></div>
+    <div class="notif-venta-accion" id="notifProducto"></div>
+    <div class="notif-venta-tiempo" id="notifTiempo"></div>
+  </div>
+</div>
+
+<!-- BOTÓN SCROLL TOP -->
+<button class="btn-scroll-top" id="btnScrollTop" onclick="scrollTop()" title="Volver arriba">↑</button>
+
+<!-- AUTOCOMPLETE (dropdown del buscador) -->
+<div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
 
 <script>
   /* ─── CONFIGURACIÓN DE PAGO ─── */
@@ -2107,7 +2281,20 @@
     const subtotal = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
     const unidades = carrito.reduce((s, i) => s + i.cantidad, 0);
     const envio    = calcEnvio();
-    const total    = subtotal + envio;
+
+    // Cupón descuento
+    const descuentoLinea = document.getElementById('descuentoLinea');
+    const descuentoPrecioEl = document.getElementById('descuentoPrecio');
+    let descuento = 0;
+    if (cuponActivo && subtotal > 0) {
+      descuento = subtotal * 0.10;
+      if (descuentoLinea) { descuentoLinea.style.display = 'flex'; }
+      if (descuentoPrecioEl) { descuentoPrecioEl.textContent = '−' + fmt(descuento); }
+    } else {
+      if (descuentoLinea) { descuentoLinea.style.display = 'none'; }
+    }
+
+    const total = subtotal - descuento + envio;
     document.getElementById('carritoContador').textContent = unidades;
     document.getElementById('subtotalPrecio').textContent  = fmt(subtotal);
     document.getElementById('totalPrecio').textContent     = fmt(total);
@@ -2133,6 +2320,10 @@
     // Mensaje promo envío gratis
     const promoEl = document.getElementById('envioPromo');
     if (promoEl) promoEl.style.display = (unidades === 1) ? 'block' : 'none';
+
+    // Upsell: sugerir producto cuando hay 1 unidad
+    actualizarUpsell(unidades);
+
     document.getElementById('btnFinalizar').disabled = carrito.length === 0;
     renderCarritoItems();
     guardarCarrito();
@@ -3167,11 +3358,208 @@
     }
   })();
 
+  /* ─── FAQ ACORDEÓN ─── */
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    const estaAbierto = item.classList.contains('abierto');
+    document.querySelectorAll('.faq-item.abierto').forEach(i => i.classList.remove('abierto'));
+    if (!estaAbierto) item.classList.add('abierto');
+  }
+
+  /* ─── AVISO LEGAL / PRIVACIDAD / COOKIES ─── */
+  const LEGAL_CONTENIDO = {
+    aviso: {
+      titulo: '📄 Aviso Legal',
+      html: `<p><strong>Titular:</strong> GoalStore · CIF: B-XXXXXXXX<br>
+      <strong>Domicilio:</strong> Calle Ejemplo 1, 28001 Madrid, España<br>
+      <strong>Email:</strong> goalstore03@gmail.com</p>
+      <p>Este sitio web es propiedad de GoalStore. El acceso y uso de este sitio implica la aceptación de los presentes términos legales.</p>
+      <p>GoalStore se reserva el derecho de modificar, suspender o interrumpir el acceso al sitio sin previo aviso. No nos hacemos responsables de los daños derivados del uso del sitio.</p>
+      <p>Todo el contenido (textos, imágenes, logotipos) es propiedad de GoalStore o de terceros licenciantes. Queda prohibida su reproducción sin autorización expresa.</p>`
+    },
+    privacidad: {
+      titulo: '🔒 Política de Privacidad',
+      html: `<p>GoalStore trata los datos personales con arreglo al <strong>Reglamento (UE) 2016/679</strong> (RGPD) y la normativa española de protección de datos.</p>
+      <p><strong>¿Qué datos recogemos?</strong><br>Nombre, email, dirección de envío y teléfono facilitados durante el proceso de compra.</p>
+      <p><strong>¿Para qué los usamos?</strong><br>Exclusivamente para gestionar tu pedido, enviarte la confirmación y tramitar posibles devoluciones.</p>
+      <p><strong>¿Cedemos tus datos a terceros?</strong><br>Solo a la empresa de mensajería para entregar tu pedido. Nunca los vendemos ni los usamos para publicidad.</p>
+      <p><strong>Tus derechos:</strong> Puedes acceder, rectificar o suprimir tus datos escribiendo a goalstore03@gmail.com.</p>`
+    },
+    cookies: {
+      titulo: '🍪 Política de Cookies',
+      html: `<p>GoalStore utiliza cookies para mejorar la experiencia de navegación.</p>
+      <p><strong>Cookies técnicas (necesarias):</strong> Guardan el contenido del carrito y tus preferencias de idioma. No requieren consentimiento.</p>
+      <p><strong>Cookies analíticas (Google Analytics):</strong> Nos permiten saber qué secciones son más visitadas para mejorar la tienda. Solo se activan con tu consentimiento.</p>
+      <p><strong>¿Cómo desactivarlas?</strong><br>Puedes configurar tu navegador para bloquear las cookies o eliminar las existentes. Ten en cuenta que algunas funciones del sitio pueden dejar de funcionar.</p>
+      <p>Para más información: <a href="https://policies.google.com/privacy" target="_blank">Política de privacidad de Google</a>.</p>`
+    }
+  };
+
+  function abrirLegal(tipo) {
+    const contenido = LEGAL_CONTENIDO[tipo];
+    if (!contenido) return;
+    document.getElementById('legalTitulo').textContent = contenido.titulo;
+    document.getElementById('legalContenido').innerHTML = contenido.html;
+    document.getElementById('legalOverlay').classList.add('visible');
+  }
+  function cerrarLegal() {
+    document.getElementById('legalOverlay').classList.remove('visible');
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarLegal(); });
+
+  /* ─── NOTIFICACIONES VENTA RECIENTE ─── */
+  const VENTAS_RECIENTES = [
+    { nombre: 'Carlos M.', ciudad: 'Madrid', prodId: 1 },
+    { nombre: 'Laura G.', ciudad: 'Barcelona', prodId: 5 },
+    { nombre: 'Javier P.', ciudad: 'Sevilla', prodId: 12 },
+    { nombre: 'María R.', ciudad: 'Valencia', prodId: 20 },
+    { nombre: 'Alejandro T.', ciudad: 'Bilbao', prodId: 8 },
+    { nombre: 'Sofía L.', ciudad: 'Málaga', prodId: 33 },
+    { nombre: 'Pablo C.', ciudad: 'Zaragoza', prodId: 45 },
+    { nombre: 'Ana B.', ciudad: 'Murcia', prodId: 101 },
+    { nombre: 'Diego F.', ciudad: 'Granada', prodId: 15 },
+    { nombre: 'Carmen V.', ciudad: 'Alicante', prodId: 27 },
+  ];
+  let notifVentaIdx = 0;
+  let notifVentaTimer = null;
+
+  function mostrarNotifVenta() {
+    const notif = document.getElementById('notifVenta');
+    if (!notif) return;
+    const venta = VENTAS_RECIENTES[notifVentaIdx % VENTAS_RECIENTES.length];
+    const prod = CAMISETAS.find(c => c.id === venta.prodId) || CAMISETAS[0];
+    if (!prod) return;
+    const hace = Math.floor(Math.random() * 55) + 5; // 5-59 minutos
+    const unidad = hace < 60 ? `hace ${hace} min` : 'hace 1h';
+
+    document.getElementById('notifImg').src = prod.imgs[0] + '?w=80';
+    document.getElementById('notifImg').alt = prod.nombre;
+    document.getElementById('notifNombre').textContent = venta.nombre + ' · ' + venta.ciudad;
+    document.getElementById('notifProducto').textContent = prod.nombre;
+    document.getElementById('notifTiempo').textContent = unidad;
+
+    notif.classList.add('visible');
+    notifVentaIdx++;
+
+    notifVentaTimer = setTimeout(() => {
+      notif.classList.remove('visible');
+      // Siguiente en 18-30 segundos
+      notifVentaTimer = setTimeout(mostrarNotifVenta, 18000 + Math.random() * 12000);
+    }, 5000);
+  }
+
+  // Primera notificación a los 12 segundos
+  setTimeout(mostrarNotifVenta, 12000);
+
+  /* ─── UPSELL EN CARRITO ─── */
+  function actualizarUpsell(unidades) {
+    const upsell = document.getElementById('upsellCarrito');
+    const card   = document.getElementById('upsellCard');
+    if (!upsell || !card) return;
+    if (unidades !== 1) { upsell.classList.remove('visible'); return; }
+
+    // Buscar un producto no en carrito, preferiblemente de la misma liga
+    const idsEnCarrito = carrito.map(i => i.id);
+    const ligas = [...new Set(carrito.map(i => { const p = CAMISETAS.find(c => c.id === i.id); return p ? p.liga : null; }).filter(Boolean))];
+    let candidatos = CAMISETAS.filter(c => !idsEnCarrito.includes(c.id) && ligas.includes(c.liga));
+    if (!candidatos.length) candidatos = CAMISETAS.filter(c => !idsEnCarrito.includes(c.id));
+    if (!candidatos.length) { upsell.classList.remove('visible'); return; }
+
+    const prod = candidatos[Math.floor(Math.random() * Math.min(candidatos.length, 8))];
+    card.innerHTML = `
+      <img src="${prod.imgs[0]}?w=120" alt="${prod.nombre}" loading="lazy" style="width:52px;height:52px;object-fit:cover;border-radius:8px;flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:0.8rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${prod.nombre}</div>
+        <div style="font-size:0.75rem;color:var(--verde-claro);">${fmt(prod.tipo==='retro'?PRECIO_RETRO:PRECIO_FAN)}</div>
+      </div>
+      <button onclick="event.stopPropagation();abrirProductoConId(${prod.id});cerrarCarrito();" style="flex-shrink:0;background:var(--verde);color:white;border:none;border-radius:8px;padding:6px 10px;font-size:0.75rem;font-weight:700;cursor:pointer;">Ver</button>
+    `;
+    card.style.display = 'flex';
+    card.style.alignItems = 'center';
+    card.style.gap = '10px';
+    upsell.classList.add('visible');
+  }
+
+  /* ─── AUTOCOMPLETE BUSCADOR ─── */
+  function initAutocomplete() {
+    const inputs = [
+      { inputId: 'buscadorInput',  dropdownId: 'autocompleteDropdown' },
+      { inputId: 'headerBuscador', dropdownId: 'autocompleteDropdown' },
+    ];
+
+    const dropdown = document.getElementById('autocompleteDropdown');
+    if (!dropdown) return;
+
+    function posicionarDropdown(input) {
+      const rect = input.getBoundingClientRect();
+      dropdown.style.position = 'fixed';
+      dropdown.style.top  = (rect.bottom + 4) + 'px';
+      dropdown.style.left = rect.left + 'px';
+      dropdown.style.width = rect.width + 'px';
+    }
+
+    function mostrarSugerencias(q, input) {
+      if (!q || q.length < 2) { dropdown.classList.remove('visible'); return; }
+      const ql = q.toLowerCase();
+      const matches = CAMISETAS.filter(c =>
+        c.nombre.toLowerCase().includes(ql) ||
+        (c.liga && c.liga.toLowerCase().includes(ql))
+      ).slice(0, 6);
+
+      if (!matches.length) { dropdown.classList.remove('visible'); return; }
+
+      dropdown.innerHTML = matches.map(c => `
+        <div class="autocomplete-item" onclick="seleccionarSugerencia(${c.id})">
+          <img src="${c.imgs[0]}?w=80" alt="${c.nombre}" loading="lazy">
+          <div class="autocomplete-item-info">
+            <div class="autocomplete-item-nombre">${c.nombre}</div>
+            <div class="autocomplete-item-precio">${fmt(c.tipo==='retro'?PRECIO_RETRO:PRECIO_FAN)}</div>
+          </div>
+        </div>`).join('');
+      posicionarDropdown(input);
+      dropdown.classList.add('visible');
+    }
+
+    inputs.forEach(({ inputId }) => {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      input.addEventListener('input', e => mostrarSugerencias(e.target.value, e.target));
+      input.addEventListener('focus', e => mostrarSugerencias(e.target.value, e.target));
+    });
+
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target) && !document.getElementById('buscadorInput')?.contains(e.target) && !document.getElementById('headerBuscador')?.contains(e.target)) {
+        dropdown.classList.remove('visible');
+      }
+    });
+    window.addEventListener('resize', () => dropdown.classList.remove('visible'));
+  }
+
+  function seleccionarSugerencia(id) {
+    const prod = CAMISETAS.find(c => c.id === id);
+    if (!prod) return;
+    document.getElementById('autocompleteDropdown')?.classList.remove('visible');
+    busqueda = '';
+    sincronizarBuscadores('');
+    renderCamisetas(filtroActual);
+    setTimeout(() => abrirProductoConId(id), 100);
+  }
+
+  /* ─── BOTÓN SCROLL TOP ─── */
+  (function initScrollTop() {
+    const btn = document.getElementById('btnScrollTop');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+      btn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+  })();
+
   // Init
   renderCamisetas();
   renderReseñas();
   renderRecientes();
   initBuscador();
+  initAutocomplete();
   // Inicializar inputs de tarjeta cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', initCardInputs);
   // Por si ya cargó
