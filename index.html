@@ -3190,7 +3190,11 @@
     clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => t.classList.remove('visible'), 3000);
   }
-  function irArriba() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function irArriba() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   function sincronizarBuscadores(q) {
     ['buscadorInput', 'headerBuscador'].forEach(id => {
@@ -3549,9 +3553,14 @@
   (function initScrollTop() {
     const btn = document.getElementById('btnScrollTop');
     if (!btn) return;
-    window.addEventListener('scroll', () => {
-      btn.classList.toggle('visible', window.scrollY > 400);
-    }, { passive: true });
+    function getScrollY() {
+      return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    function onScroll() {
+      btn.classList.toggle('visible', getScrollY() > 400);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('scroll', onScroll, { passive: true });
   })();
 
   // Init
