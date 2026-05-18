@@ -1149,6 +1149,108 @@
     to { opacity: 1; transform: translateY(0); }
   }
   .camiseta-card { animation: fadeInUp 0.5s ease forwards; }
+
+  /* ── 1. POPUP DESCUENTO ── */
+  .descuento-overlay {
+    position: fixed; inset: 0; z-index: 8500;
+    background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transition: opacity 0.3s ease;
+  }
+  .descuento-overlay.visible { opacity: 1; visibility: visible; }
+  .descuento-box {
+    background: white; border-radius: 20px; overflow: hidden;
+    max-width: 420px; width: 92%; position: relative;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    transform: scale(0.9); transition: transform 0.3s ease;
+  }
+  .descuento-overlay.visible .descuento-box { transform: scale(1); }
+  .descuento-header {
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    padding: 28px 24px 20px; text-align: center; color: white;
+  }
+  .descuento-emoji { font-size: 3rem; margin-bottom: 8px; }
+  .descuento-header h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; }
+  .descuento-header p { font-size: 0.9rem; opacity: 0.85; }
+  .descuento-badge {
+    display: inline-block; background: var(--dorado); color: var(--verde);
+    font-size: 2rem; font-weight: 900; padding: 8px 24px; border-radius: 50px;
+    margin: 16px 0; box-shadow: 0 4px 16px rgba(201,168,76,0.4);
+  }
+  .descuento-body { padding: 24px; }
+  .descuento-body p { font-size: 0.88rem; color: var(--gris); margin-bottom: 16px; text-align: center; }
+  .descuento-input-row { display: flex; gap: 8px; }
+  .descuento-input {
+    flex: 1; padding: 12px 16px; border: 2px solid var(--gris-claro);
+    border-radius: 10px; font-size: 0.9rem; transition: var(--transicion);
+  }
+  .descuento-input:focus { outline: none; border-color: var(--verde-claro); }
+  .btn-descuento {
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    color: white; border: none; padding: 12px 20px; border-radius: 10px;
+    font-weight: 700; cursor: pointer; white-space: nowrap; font-size: 0.9rem;
+  }
+  .descuento-skip {
+    display: block; text-align: center; margin-top: 12px;
+    font-size: 0.8rem; color: #bbb; cursor: pointer; text-decoration: underline;
+  }
+  .descuento-cerrar {
+    position: absolute; top: 12px; right: 14px; background: rgba(255,255,255,0.2);
+    border: none; color: white; font-size: 1.2rem; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+  .cupon-activo {
+    background: #e8f5ed; border: 2px dashed var(--verde-claro);
+    border-radius: 10px; padding: 10px 16px; margin: 12px 16px 0;
+    font-size: 0.85rem; color: var(--verde); font-weight: 700; text-align: center;
+  }
+
+  /* ── 2. TRUST BADGES ── */
+  .trust-badges {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    padding: 14px 0 4px; border-top: 1px solid #eee; margin-top: 8px;
+  }
+  .trust-badge {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.75rem; color: var(--gris); font-weight: 600;
+  }
+
+  /* ── 4. PRODUCTOS RELACIONADOS ── */
+  .relacionados { padding: 20px 0 4px; border-top: 1px solid #eee; margin-top: 8px; }
+  .relacionados-titulo { font-size: 0.82rem; font-weight: 700; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .relacionados-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .relacionados-grid::-webkit-scrollbar { display: none; }
+  .rel-card {
+    flex: 0 0 110px; cursor: pointer; border-radius: 10px; overflow: hidden;
+    border: 2px solid var(--gris-claro); transition: var(--transicion); background: white;
+  }
+  .rel-card:hover { border-color: var(--verde-claro); transform: translateY(-2px); }
+  .rel-card img { width: 100%; height: 80px; object-fit: cover; display: block; }
+  .rel-card-nombre { font-size: 0.68rem; font-weight: 600; color: var(--texto); padding: 5px 6px; line-height: 1.3; }
+
+  /* ── 6. VISTOS RECIENTEMENTE ── */
+  .recientes-seccion {
+    max-width: 1280px; margin: 0 auto; padding: 0 24px 40px;
+  }
+  .recientes-titulo { font-size: 1.1rem; font-weight: 800; color: var(--verde); margin-bottom: 16px; }
+  .recientes-grid { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--gris-claro) transparent; }
+  .reciente-card {
+    flex: 0 0 140px; cursor: pointer; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08); background: white; transition: var(--transicion);
+  }
+  .reciente-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.14); }
+  .reciente-card img { width: 100%; height: 110px; object-fit: cover; display: block; }
+  .reciente-card-info { padding: 8px 10px; }
+  .reciente-card-nombre { font-size: 0.72rem; font-weight: 700; color: var(--texto); line-height: 1.3; }
+  .reciente-card-precio { font-size: 0.75rem; color: var(--verde); font-weight: 800; margin-top: 3px; }
+
+  /* ── 9. ERROR 404 ── */
+  .error-404 {
+    display: none; min-height: 60vh; align-items: center; justify-content: center;
+    flex-direction: column; text-align: center; padding: 40px 24px;
+  }
+  .error-404.visible { display: flex; }
+  .error-404 h1 { font-size: 5rem; font-weight: 900; color: var(--verde); line-height: 1; }
+  .error-404 p { color: var(--gris); margin: 12px 0 24px; font-size: 1rem; }
 </style>
 </head>
 <body>
@@ -1164,6 +1266,28 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- POPUP DESCUENTO PRIMERA COMPRA -->
+<div class="descuento-overlay" id="descuentoOverlay">
+  <div class="descuento-box">
+    <button class="descuento-cerrar" onclick="cerrarDescuento()">✕</button>
+    <div class="descuento-header">
+      <div class="descuento-emoji">🎁</div>
+      <h2>¡Bienvenido a GoalStore!</h2>
+      <p>Regístrate y consigue</p>
+      <div class="descuento-badge">10% DESCUENTO</div>
+      <p>en tu primera compra</p>
+    </div>
+    <div class="descuento-body">
+      <p>Déjanos tu email y te enviamos el cupón al instante</p>
+      <div class="descuento-input-row">
+        <input type="email" class="descuento-input" id="descuentoEmail" placeholder="tu@email.com">
+        <button class="btn-descuento" onclick="reclamarDescuento()">Quiero mi 10%</button>
+      </div>
+      <span class="descuento-skip" onclick="cerrarDescuento()">No, gracias</span>
+    </div>
+  </div>
+</div>
 
 <!-- COOKIE BANNER -->
 <div class="cookie-banner" id="cookieBanner">
@@ -1443,6 +1567,14 @@
         </div>
       </div>
 
+      <!-- TRUST BADGES -->
+      <div class="trust-badges">
+        <span class="trust-badge">🔒 Pago seguro SSL</span>
+        <span class="trust-badge">✅ Compra garantizada</span>
+        <span class="trust-badge">↩️ Devolución 30 días</span>
+        <span class="trust-badge">🌍 Envío mundial</span>
+      </div>
+
       <!-- ── PROCESANDO ── -->
       <div class="procesando" id="procesando">
         <div class="spinner"></div>
@@ -1575,6 +1707,20 @@
   </div>
   <div class="camisetas-grid" id="camisetasGrid"></div>
 </section>
+
+<!-- ERROR 404 -->
+<div class="error-404" id="error404">
+  <div style="font-size:5rem;">⚽</div>
+  <h1>404</h1>
+  <p>Vaya, esta página no existe.<br>Pero tenemos +500 camisetas esperándote.</p>
+  <button class="btn-primario" onclick="document.getElementById('error404').classList.remove('visible');scrollTop()">Ver el catálogo →</button>
+</div>
+
+<!-- VISTOS RECIENTEMENTE -->
+<div class="recientes-seccion" id="recientesSeccion" style="display:none;">
+  <div class="recientes-titulo">🕐 Vistos recientemente</div>
+  <div class="recientes-grid" id="recientesGrid"></div>
+</div>
 
 <!-- RESEÑAS -->
 <section class="reseñas-section reveal">
@@ -2079,7 +2225,10 @@
             <div class="prod-cabecera-nombre">${prod.nombre}</div>
           </div>
         </div>
-        <button class="btn-cerrar" onclick="cerrarProducto()">✕</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button onclick="compartirProducto(${prod.id})" title="Compartir" style="background:none;border:2px solid var(--gris-claro);border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transicion);" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='var(--gris-claro)'">🔗</button>
+          <button class="btn-cerrar" onclick="cerrarProducto()">✕</button>
+        </div>
       </div>
       <div class="prod-cuerpo">
         <div class="prod-galeria">
@@ -2161,6 +2310,7 @@
             </div>`).join('')}
           </div>`;
         })()}
+        ${relacionadosHTML(prod)}
       </div>`;
 
     if (!esRetro) {
@@ -2174,6 +2324,7 @@
     galeriaIdx = 0;
     document.getElementById('prodOverlay').classList.add('abierto');
     document.body.style.overflow = 'hidden';
+    registrarVisto(prod.id);
   }
 
   function toggleDorsal() {
@@ -2888,6 +3039,103 @@
     }
   }
 
+  /* ─── 1. POPUP DESCUENTO PRIMERA COMPRA ─── */
+  const CUPON_DESCUENTO = 'BIENVENIDO10';
+  let cuponActivo = false;
+
+  function abrirDescuento() {
+    document.getElementById('descuentoOverlay').classList.add('visible');
+  }
+  function cerrarDescuento() {
+    document.getElementById('descuentoOverlay').classList.remove('visible');
+    localStorage.setItem('gs_descuento_visto', '1');
+  }
+  function reclamarDescuento() {
+    const email = document.getElementById('descuentoEmail').value.trim();
+    if (!email || !email.includes('@')) { mostrarToast('⚠️ Introduce un email válido'); return; }
+    localStorage.setItem('gs_descuento_email', email);
+    localStorage.setItem('gs_cupon_activo', CUPON_DESCUENTO);
+    cuponActivo = true;
+    cerrarDescuento();
+    mostrarToast(`🎉 ¡Cupón ${CUPON_DESCUENTO} activado! 10% de descuento en tu pedido`);
+    mostrarCuponActivo();
+  }
+  function mostrarCuponActivo() {
+    let el = document.getElementById('cuponActivoBanner');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'cuponActivoBanner';
+      el.className = 'cupon-activo';
+      el.innerHTML = `🏷️ Cupón <strong>${CUPON_DESCUENTO}</strong> activo — 10% de descuento aplicado`;
+      const pie = document.querySelector('.carrito-pie');
+      if (pie) pie.insertBefore(el, pie.firstChild);
+    }
+    el.style.display = 'block';
+  }
+  (function initDescuento() {
+    if (localStorage.getItem('gs_cupon_activo')) {
+      cuponActivo = true;
+      setTimeout(mostrarCuponActivo, 500);
+    } else if (!localStorage.getItem('gs_descuento_visto')) {
+      setTimeout(abrirDescuento, 8000);
+    }
+  })();
+
+  /* ─── 3. COMPARTIR POR WHATSAPP / WEB SHARE ─── */
+  function compartirProducto(id) {
+    const prod = CAMISETAS.find(c => c.id === id);
+    if (!prod) return;
+    const texto = `⚽ Mira esta camiseta en GoalStore: ${prod.nombre}\nhttps://www.goalstore.es`;
+    if (navigator.share) {
+      navigator.share({ title: prod.nombre, text: texto, url: 'https://www.goalstore.es' }).catch(() => {});
+    } else {
+      const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+      window.open(url, '_blank');
+    }
+  }
+
+  /* ─── 4. PRODUCTOS RELACIONADOS ─── */
+  function relacionadosHTML(prod) {
+    const relacionados = CAMISETAS
+      .filter(c => c.id !== prod.id && (c.liga === prod.liga || c.categoria.some(cat => prod.categoria.includes(cat))))
+      .slice(0, 6);
+    if (!relacionados.length) return '';
+    const cards = relacionados.map(c => `
+      <div class="rel-card" onclick="cerrarProducto();setTimeout(()=>abrirProductoConId(${c.id}),200)">
+        <img src="${c.imgs[0]}?w=220" alt="${c.nombre}" loading="lazy">
+        <div class="rel-card-nombre">${c.nombre}</div>
+      </div>`).join('');
+    return `<div class="relacionados"><div class="relacionados-titulo">También te puede gustar</div><div class="relacionados-grid">${cards}</div></div>`;
+  }
+
+  /* ─── 6. VISTOS RECIENTEMENTE ─── */
+  let recientes = [];
+  function registrarVisto(id) {
+    recientes = [id, ...recientes.filter(r => r !== id)].slice(0, 8);
+    try { localStorage.setItem('gs_recientes', JSON.stringify(recientes)); } catch(e) {}
+    renderRecientes();
+  }
+  function cargarRecientes() {
+    try { const s = localStorage.getItem('gs_recientes'); if (s) recientes = JSON.parse(s); } catch(e) {}
+  }
+  function renderRecientes() {
+    const sec = document.getElementById('recientesSeccion');
+    const grid = document.getElementById('recientesGrid');
+    if (!sec || !grid) return;
+    const prods = recientes.map(id => CAMISETAS.find(c => c.id === id)).filter(Boolean);
+    if (prods.length < 2) { sec.style.display = 'none'; return; }
+    sec.style.display = 'block';
+    grid.innerHTML = prods.map(c => `
+      <div class="reciente-card" onclick="abrirProductoConId(${c.id})">
+        <img src="${c.imgs[0]}?w=280" alt="${c.nombre}" loading="lazy">
+        <div class="reciente-card-info">
+          <div class="reciente-card-nombre">${c.nombre}</div>
+          <div class="reciente-card-precio">${fmt(c.tipo==='retro'?PRECIO_RETRO:PRECIO_FAN)}</div>
+        </div>
+      </div>`).join('');
+  }
+  cargarRecientes();
+
   /* ─── COOKIES ─── */
   function aceptarCookies() {
     localStorage.setItem('gs_cookies', 'ok');
@@ -2911,9 +3159,18 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+  /* ─── 404 ─── */
+  (function init404() {
+    const path = window.location.pathname;
+    if (path !== '/' && path !== '/index.html' && path !== '') {
+      document.getElementById('error404')?.classList.add('visible');
+    }
+  })();
+
   // Init
   renderCamisetas();
   renderReseñas();
+  renderRecientes();
   initBuscador();
   // Inicializar inputs de tarjeta cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', initCardInputs);
