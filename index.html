@@ -994,6 +994,11 @@
       <div class="icono">🛒</div>
       <p style="font-weight:600;">Tu carrito está vacío</p>
       <p style="font-size:0.85rem;">Elige una camiseta para empezar</p>
+      <div style="margin-top:16px;background:#f0f7f3;border-radius:10px;padding:12px 16px;text-align:left;width:100%;font-size:0.82rem;color:var(--gris);line-height:1.8;">
+        <div>📦 <strong style="color:var(--texto);">Envío: 4,99 €</strong> a todo el mundo</div>
+        <div>🎁 <strong style="color:#25a244;">Gratis</strong> a partir de 2 camisetas</div>
+        <div>🗓️ Entrega en aprox. <strong style="color:var(--texto);">2 semanas</strong></div>
+      </div>
     </div>
   </div>
   <div class="carrito-pie">
@@ -1001,7 +1006,13 @@
       🎁 ¡Añade 1 camiseta más y el envío es gratis!
     </div>
     <div class="subtotal-linea"><span>Subtotal</span><span id="subtotalPrecio">0,00 €</span></div>
-    <div class="subtotal-linea"><span>Envío</span><span id="envioPrecio">—</span></div>
+    <div class="subtotal-linea" id="envioLinea">
+      <span>Envío <span id="envioDescripcion" style="font-size:0.75rem;color:#aaa;"></span></span>
+      <span id="envioPrecio" style="font-weight:700;">—</span>
+    </div>
+    <div id="envioAhorro" style="display:none;text-align:right;font-size:0.78rem;color:#25a244;font-weight:700;margin-top:-4px;margin-bottom:6px;">
+      ✅ ¡Ahorraste 4,99 € en envío!
+    </div>
     <div class="total-linea">
       <span class="total-label">Total</span>
       <span class="total-precio" id="totalPrecio">0,00 €</span>
@@ -1599,12 +1610,24 @@
     document.getElementById('carritoContador').textContent = unidades;
     document.getElementById('subtotalPrecio').textContent  = fmt(subtotal);
     document.getElementById('totalPrecio').textContent     = fmt(total);
+    const envioPrecioEl = document.getElementById('envioPrecio');
+    const envioDescEl   = document.getElementById('envioDescripcion');
+    const envioAhorroEl = document.getElementById('envioAhorro');
     if (unidades === 0) {
-      document.getElementById('envioPrecio').textContent = '—';
+      envioPrecioEl.textContent = '—';
+      envioPrecioEl.style.color = '';
+      if (envioDescEl) envioDescEl.textContent = '';
+      if (envioAhorroEl) envioAhorroEl.style.display = 'none';
     } else if (envio === 0) {
-      document.getElementById('envioPrecio').textContent = 'Gratis 🎉';
+      envioPrecioEl.textContent = 'GRATIS 🎉';
+      envioPrecioEl.style.color = '#25a244';
+      if (envioDescEl) envioDescEl.textContent = '· mundial';
+      if (envioAhorroEl) envioAhorroEl.style.display = 'block';
     } else {
-      document.getElementById('envioPrecio').textContent = fmt(envio);
+      envioPrecioEl.textContent = fmt(envio);
+      envioPrecioEl.style.color = '';
+      if (envioDescEl) envioDescEl.textContent = '· mundial';
+      if (envioAhorroEl) envioAhorroEl.style.display = 'none';
     }
     // Mensaje promo envío gratis
     const promoEl = document.getElementById('envioPromo');
