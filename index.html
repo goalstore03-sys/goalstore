@@ -1711,7 +1711,7 @@
 <!-- HEADER -->
 <header>
   <div class="header-inner">
-    <div class="logo" onclick="scrollTop()">
+    <div class="logo" onclick="irArriba()">
       <img class="logo-img" src="logo.png" alt="GoalStore"
            onerror="this.style.display='none'; document.querySelector('.logo-text').style.display='block'">
       <span class="logo-text">Goal<span>Store</span></span>
@@ -1944,7 +1944,7 @@
 </div>
 
 <!-- BOTÓN SCROLL TOP -->
-<button class="btn-scroll-top" id="btnScrollTop" onclick="scrollTop()" title="Volver arriba">↑</button>
+<button class="btn-scroll-top" id="btnScrollTop" onclick="irArriba()" title="Volver arriba">↑</button>
 
 <!-- AUTOCOMPLETE (dropdown del buscador) -->
 <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
@@ -3190,7 +3190,7 @@
     clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => t.classList.remove('visible'), 3000);
   }
-  function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function irArriba() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
   function sincronizarBuscadores(q) {
     ['buscadorInput', 'headerBuscador'].forEach(id => {
