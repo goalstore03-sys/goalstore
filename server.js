@@ -68,7 +68,50 @@ function jsonResponse(res, code, data) {
   res.end(JSON.stringify(data));
 }
 
+// ── Visitas en directo (en memoria) ──
+const visitors = new Map(); // sessionId -> { lastSeen, firstSeen, page, referrer, ua }
+function cleanupVisitors() {
+  const now = Date.now();
+  for (const [id, v] of visitors) {
+    if (now - v.lastSeen > 60000) visitors.delete(id);
+  }
+}
+setInterval(cleanupVisitors, 30000);
+
 async function handleApi(req, res) {
+  // POST /api/heartbeat — public, no requiere DB
+  if (req.url === '/api/heartbeat' && req.method === 'POST') {
+    const d = await readBody(req);
+    if (!d.sessionId) return jsonResponse(res, 400, { error: 'sessionId required' });
+    const now = Date.now();
+    const existing = visitors.get(d.sessionId);
+    visitors.set(d.sessionId, {
+      lastSeen:  now,
+      firstSeen: existing ? existing.firstSeen : now,
+      page:      (d.page || '/').slice(0, 200),
+      referrer:  (d.referrer || existing?.referrer || '').slice(0, 200),
+      ua:        (req.headers['user-agent'] || '').slice(0, 200)
+    });
+    return jsonResponse(res, 200, { ok: true });
+  }
+
+  // GET /api/admin/visitas — protegido
+  if (req.url === '/api/admin/visitas' && req.method === 'GET') {
+    if (!checkAuth(req)) return jsonResponse(res, 401, { error: 'Unauthorized' });
+    const now = Date.now();
+    const lista = [...visitors.values()]
+      .filter(v => now - v.lastSeen < 30000)
+      .map(v => ({
+        page:             v.page,
+        tiempoEnSitio:    Math.floor((now - v.firstSeen) / 1000),
+        ultimaActividad:  Math.floor((now - v.lastSeen) / 1000),
+        referrer:         v.referrer,
+        movil:            /Mobile|Android|iPhone/i.test(v.ua)
+      }))
+      .sort((a, b) => a.ultimaActividad - b.ultimaActividad);
+    return jsonResponse(res, 200, { activos: lista.length, lista });
+  }
+
   if (!pool) return jsonResponse(res, 503, { error: 'Database not configured' });
 
   // POST /api/pedido — guardar pedido nuevo (publico)

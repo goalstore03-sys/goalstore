@@ -3581,6 +3581,30 @@
     setTimeout(() => abrirProductoConId(id), 100);
   }
 
+  /* ─── HEARTBEAT VISITAS EN DIRECTO ─── */
+  (function trackVisit() {
+    let sessionId = sessionStorage.getItem('gs_session');
+    if (!sessionId) {
+      sessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+      sessionStorage.setItem('gs_session', sessionId);
+    }
+    function ping() {
+      if (document.hidden) return;
+      fetch('/api/heartbeat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          page: window.location.pathname,
+          referrer: document.referrer
+        })
+      }).catch(() => {});
+    }
+    ping();
+    setInterval(ping, 15000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) ping(); });
+  })();
+
   /* ─── BOTÓN SCROLL TOP ─── */
   (function initScrollTop() {
     const btn = document.getElementById('btnScrollTop');

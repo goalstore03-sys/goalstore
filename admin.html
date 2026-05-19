@@ -159,6 +159,27 @@
   .empty { text-align: center; padding: 60px 24px; color: var(--gris); }
   .empty-emoji { font-size: 3rem; margin-bottom: 12px; }
 
+  /* ── VISITAS EN DIRECTO ── */
+  .live-count {
+    background: #10b981; color: white; padding: 4px 14px;
+    border-radius: 14px; font-size: 0.85rem; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .live-count::before {
+    content: ''; width: 8px; height: 8px; background: white; border-radius: 50%;
+    animation: pulseLive 1.4s infinite;
+  }
+  @keyframes pulseLive { 0%,100%{opacity:1} 50%{opacity:0.25} }
+  .visita-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px; border-bottom: 1px solid var(--gris-claro); gap: 12px;
+  }
+  .visita-item:last-child { border-bottom: none; }
+  .visita-pag { color: var(--verde); font-weight: 600; font-size: 0.9rem; }
+  .visita-info { font-size: 0.78rem; color: var(--gris); margin-top: 2px; }
+  .visita-ref { font-size: 0.75rem; color: var(--gris); text-align: right; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .visita-device { font-size: 0.95rem; }
+
   /* ── DETALLE MODAL ── */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100;
@@ -253,6 +274,15 @@
         <div class="stat-valor" id="stTicket">—</div>
         <div class="stat-sub">Por pedido</div>
       </div>
+    </div>
+
+    <!-- VISITAS EN DIRECTO -->
+    <div class="seccion">
+      <div class="seccion-titulo">
+        <span>Visitantes ahora mismo en la web</span>
+        <span class="live-count" id="liveCount">0</span>
+      </div>
+      <div id="visitasLista"></div>
     </div>
 
     <!-- GRÁFICO + TOP PRODUCTOS -->
@@ -359,11 +389,49 @@
       renderStats(stats);
       pedidos = lista;
       renderPedidos();
+      cargarVisitas();
     } catch(e) {
       if (e.message === 'unauth') { cerrarSesion(); return; }
       alert('Error cargando datos: ' + e.message);
     }
   }
+
+  function fmtTiempo(s) {
+    if (s < 60)   return s + 's';
+    if (s < 3600) return Math.floor(s/60) + 'm';
+    return Math.floor(s/3600) + 'h';
+  }
+
+  function refHost(r) {
+    if (!r) return 'directo';
+    try { return new URL(r).hostname; } catch { return 'directo'; }
+  }
+
+  async function cargarVisitas() {
+    try {
+      const r = await api('/api/admin/visitas');
+      document.getElementById('liveCount').textContent = r.activos;
+      const cont = document.getElementById('visitasLista');
+      if (r.lista.length === 0) {
+        cont.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gris);font-size:0.88rem;">No hay visitantes ahora mismo</div>';
+        return;
+      }
+      cont.innerHTML = r.lista.map(v => `
+        <div class="visita-item">
+          <div class="visita-device">${v.movil ? '📱' : '💻'}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="visita-pag">${v.page === '/' ? '🏠 Inicio' : (v.page === '/admin.html' ? '⚙️ Admin' : v.page)}</div>
+            <div class="visita-info">${fmtTiempo(v.tiempoEnSitio)} en la web · activo hace ${v.ultimaActividad}s</div>
+          </div>
+          <div class="visita-ref" title="${v.referrer || ''}">de: ${refHost(v.referrer)}</div>
+        </div>`).join('');
+    } catch(e) {
+      if (e.message === 'unauth') cerrarSesion();
+    }
+  }
+
+  // Auto-refresh visitas cada 5s
+  setInterval(cargarVisitas, 5000);
 
   function renderStats(s) {
     document.getElementById('stMes').textContent  = s.mes.n;
