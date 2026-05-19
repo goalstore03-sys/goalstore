@@ -1638,8 +1638,8 @@
         <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gris);margin-bottom:12px;">Método de pago</div>
         <div class="pago-tabs">
           <div class="pago-tab activo" id="tabPaypal" onclick="selMetodo('paypal')">
-            <div class="pago-tab-icon"><img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" style="width:28px;height:28px;object-fit:contain;" onerror="this.outerHTML='<span style=font-size:1.6rem>🅿</span>'"></div>
-            <div class="pago-tab-txt">PayPal</div>
+            <div class="pago-tab-icon">💳</div>
+            <div class="pago-tab-txt">Tarjeta / PayPal</div>
           </div>
           <div class="pago-tab" id="tabTransferencia" onclick="selMetodo('transferencia')">
             <div class="pago-tab-icon">🏦</div>
@@ -1650,7 +1650,7 @@
         <!-- Panel: PayPal -->
         <div class="pago-panel activo" id="panelPaypal">
           <div class="paypal-area">
-            <p style="font-size:0.85rem;color:var(--gris);margin-bottom:16px;">Paga de forma segura con tu cuenta PayPal o con tarjeta a través de PayPal.</p>
+            <p style="font-size:0.85rem;color:var(--gris);margin-bottom:16px;">Paga con <strong>tarjeta de crédito/débito</strong> o con tu cuenta PayPal. No necesitas cuenta PayPal para pagar con tarjeta.</p>
             <div id="paypal-button-container"></div>
           </div>
           <div class="seguridad" style="margin-top:16px;">
@@ -3128,7 +3128,7 @@
 
     cont.innerHTML = '<p style="text-align:center;color:var(--gris);padding:20px;">Cargando PayPal…</p>';
     const s = document.createElement('script');
-    s.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=EUR&locale=es_ES`;
+    s.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=EUR&locale=es_ES&enable-funding=card`;
     s.onload  = () => { cont.innerHTML = ''; renderBotones(); };
     s.onerror = () => { cont.innerHTML = '<p style="color:var(--gris);text-align:center;padding:20px;font-size:0.85rem;">PayPal no disponible.</p>'; };
     document.body.appendChild(s);
