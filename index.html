@@ -3033,6 +3033,38 @@
       iban:               esTransferencia ? `${BANK_DETAILS.iban} (${BANK_DETAILS.banco})` : '—',
       referencia_pago:    esTransferencia ? refPedido : '—',
     });
+
+    // Guardar el pedido en la base de datos (silencioso — si falla, no rompe la confirmación)
+    const descuentoEur = cuponActivo ? subtotal * 0.10 : 0;
+    fetch('/api/pedido', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cliente_nombre:    nombre,
+        cliente_email:     email,
+        cliente_telefono:  telefono,
+        cliente_direccion: direccion,
+        cliente_ciudad:    ciudad,
+        cliente_cp:        cp,
+        cliente_pais:      pais,
+        subtotal:          +subtotal.toFixed(2),
+        envio:             +envio.toFixed(2),
+        descuento:         +descuentoEur.toFixed(2),
+        total:             +total.toFixed(2),
+        metodo_pago:       esTransferencia ? 'Transferencia bancaria' : 'PayPal',
+        items: carrito.map(i => ({
+          id:        i.id,
+          nombre:    i.nombre,
+          version:   i.tipo === 'retro' ? 'Retro' : (i.version === 'jugador' ? 'Jugador' : 'Fan'),
+          talla:     i.talla,
+          dorsal:    i.dorsal  ? `${i.dorsal.nombre} ${i.dorsal.numero}` : null,
+          parche:    i.parche  ? i.parche.descripcion : null,
+          precio:    i.precio,
+          cantidad:  i.cantidad
+        })),
+        notas: 'Ref: ' + refPedido
+      })
+    }).catch(() => {});
   }
 
   function cerrarTodo() {
