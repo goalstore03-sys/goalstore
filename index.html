@@ -241,6 +241,8 @@
   }
   .camiseta-badge.retro { background: #7b5e2a; }
   .camiseta-badge.nuevo { background: #e74c3c; }
+  .camiseta-badge.top   { background: linear-gradient(135deg, #ff6b00, #e84848); font-weight:700; letter-spacing:0.5px; animation: pulseTop 2s infinite; }
+  @keyframes pulseTop { 0%,100%{opacity:1} 50%{opacity:0.8} }
   .ver-mas-hover {
     position: absolute; inset: 0; background: rgba(26,58,42,0.7);
     display: flex; align-items: center; justify-content: center;
@@ -1977,7 +1979,7 @@
   const CDN = 'https://media.sellfy.store/images/lC8jT75D/';
   const CAMISETAS = [
     // ── TEMPORADA 25/26 · LA LIGA ──
-    { id:1,  nombre:'FC Barcelona Edición Especial 25/26',           liga:'laliga',      categoria:['laliga'], imgs:[CDN+'CRic/59ffa6d9.jpg',CDN+'wK7t/759c6a3b.jpg',CDN+'ClWd/7df7440f.jpg',CDN+'5wxE/febacce0.jpg'],  tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:1,  nombre:'FC Barcelona Edición Especial 25/26',           liga:'laliga',      categoria:['laliga'], imgs:[CDN+'CRic/59ffa6d9.jpg',CDN+'wK7t/759c6a3b.jpg',CDN+'ClWd/7df7440f.jpg',CDN+'5wxE/febacce0.jpg'],  tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo', orden:1 },
     { id:2,  nombre:'FC Barcelona Edición Especial 25/26 (II)',      liga:'laliga',      categoria:['laliga'], imgs:[CDN+'NvnN/a016cce7.jpg',CDN+'umVF/2a08b003.jpg',CDN+'BwN5/a995d1b6.jpg',CDN+'ui2T/51c96f12.jpg'],  tipo:'regular', badge:null },
     { id:3,  nombre:'FC Barcelona Edición Especial 25/26 (III)',     liga:'laliga',      categoria:['laliga'], imgs:[CDN+'QaX8/2e8e7106.jpg',CDN+'FL5N/af8c6393.jpg',CDN+'YEh5/8c092cd8.jpg',CDN+'ho7U/7a7f3bad.jpg'],  tipo:'regular', badge:null },
     // ── TEMPORADA 25/26 · PREMIER LEAGUE ──
@@ -1985,7 +1987,7 @@
     { id:5,  nombre:'Arsenal Edición Especial 25/26',                liga:'premier',     categoria:['premier'],imgs:[CDN+'Tj6m/3a29760b.jpg',CDN+'vFc1/b4929dd3.jpg',CDN+'rIRV/64ae545a.jpg',CDN+'1bEp/ad7a028a.jpg'],  tipo:'regular', badge:null },
     { id:6,  nombre:'Arsenal Edición Especial 25/26 (II)',           liga:'premier',     categoria:['premier'],imgs:[CDN+'pImE/f7064740.jpg',CDN+'zJ1m/8656f6ef.jpg',CDN+'OZ1q/357a5161.jpg',CDN+'Wrhd/bb5b80f2.jpg'],  tipo:'regular', badge:null },
     { id:7,  nombre:'Arsenal Edición Especial 25/26 (III)',          liga:'premier',     categoria:['premier'],imgs:[CDN+'bxOB/9fa98423.jpg',CDN+'zb6Q/a95664d8.jpg',CDN+'uQER/1a3034c3.jpg',CDN+'HLTv/006644fc.jpg'],  tipo:'regular', badge:null },
-    { id:8,  nombre:'Liverpool Tercera Equipación 25/26',            liga:'premier',     categoria:['premier'],imgs:[CDN+'WoCF/5e67f80c.jpg',CDN+'1jH9/9dcf060a.jpg',CDN+'mcCO/c3e33179.jpg',CDN+'TbUJ/8868f1de.jpg'],  tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:8,  nombre:'Liverpool Tercera Equipación 25/26',            liga:'premier',     categoria:['premier'],imgs:[CDN+'WoCF/5e67f80c.jpg',CDN+'1jH9/9dcf060a.jpg',CDN+'mcCO/c3e33179.jpg',CDN+'TbUJ/8868f1de.jpg'],  tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo', orden:2 },
     { id:9,  nombre:'Chelsea Tercera Equipación 25/26',              liga:'premier',     categoria:['premier'],imgs:[CDN+'LIcc/d9dd7582.jpg',CDN+'OoNp/5cf25256.jpg',CDN+'Yxa4/936cd6a4.jpg',CDN+'DUYp/bcf64b11.jpg'],  tipo:'regular', badge:null },
     { id:10, nombre:'Everton Tercera Equipación 25/26',              liga:'premier',     categoria:['premier'],            imgs:[CDN+'PdY2/45cf8b68.jpg',CDN+'jx33/febe1c75.jpg',CDN+'c621/2077bc73.jpg',CDN+'2QNe/e249345b.jpg'], tipo:'regular', badge:null },
     { id:11, nombre:'Fulham Primera Equipación 25/26',               liga:'premier',     categoria:['premier'],            imgs:[CDN+'1Nac/a21eb010.jpg',CDN+'vHuG/a3e049bb.jpg',CDN+'qdxu/90e1abc1.jpg',CDN+'tt1j/4f3877f7.jpg'], tipo:'regular', badge:null },
@@ -1997,10 +1999,10 @@
     { id:17, nombre:'Wolverhampton Primera Equipación 25/26',        liga:'premier',     categoria:['premier'],            imgs:[CDN+'aYpI/ece27259.jpg',CDN+'Pg2x/e25c3fae.jpg',CDN+'qKmO/fc2d071d.jpg',CDN+'DuHm/8d0b65d0.jpg'], tipo:'regular', badge:null },
     // ── TEMPORADA 25/26 · CHAMPIONS ──
     { id:18, nombre:'Bayern München Segunda Equipación 25/26',       liga:'bundesliga',  categoria:['bundesliga'],         imgs:[CDN+'iRtt/620d00f2.jpg',CDN+'Qce1/f72ddf89.jpg',CDN+'z7JK/05a3568a.jpg'], tipo:'regular', badge:null },
-    { id:19, nombre:'Bayern München Edición Especial 25/26',         liga:'bundesliga',  categoria:['bundesliga'],         imgs:[CDN+'l2Mn/14b72647.jpg',CDN+'anDo/4a0ab168.jpg',CDN+'dQY9/4cd93dbf.jpg',CDN+'vP3x/5717197e.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:19, nombre:'Bayern München Edición Especial 25/26',         liga:'bundesliga',  categoria:['bundesliga'],         imgs:[CDN+'l2Mn/14b72647.jpg',CDN+'anDo/4a0ab168.jpg',CDN+'dQY9/4cd93dbf.jpg',CDN+'vP3x/5717197e.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo', orden:3 },
     { id:20, nombre:'Inter de Milán Segunda Equipación 25/26',       liga:'seriea',      categoria:['seriea'],             imgs:[CDN+'KIAm/fafd0fa8.jpg',CDN+'4g25/823d62cb.jpg',CDN+'rREI/1de89fa1.jpg'], tipo:'regular', badge:null },
     { id:21, nombre:'Inter de Milán Tercera Equipación 25/26',       liga:'seriea',      categoria:['seriea'],             imgs:[CDN+'O0HC/acd84b65.jpg',CDN+'HAHJ/3d1718cc.jpg',CDN+'46GG/569471bc.jpg',CDN+'yUDy/5b93208c.jpg'], tipo:'regular', badge:null },
-    { id:22, nombre:'PSG Edición Especial 25/26',                    liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'MI6a/2d567fe0.jpg',CDN+'xfWz/c795a5a1.jpg',CDN+'iRZy/7b3bceef.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:22, nombre:'PSG Edición Especial 25/26',                    liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'MI6a/2d567fe0.jpg',CDN+'xfWz/c795a5a1.jpg',CDN+'iRZy/7b3bceef.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo', orden:4 },
     { id:23, nombre:'Ajax Edición Especial 25/26',                   liga:'eredivisie',  categoria:['eredivisie'],         imgs:[CDN+'B12A/e5ed9bd4.jpg',CDN+'mmZB/66f31489.jpg',CDN+'bC0X/eb1751bf.jpg',CDN+'t0gH/45d4c938.jpg'], tipo:'regular', badge:null },
     { id:24, nombre:'Ajax Edición Especial 25/26 (II)',              liga:'eredivisie',  categoria:['eredivisie'],         imgs:[CDN+'Y09X/f2a49c7a.jpg',CDN+'mwtX/82779660.jpg',CDN+'zPVc/d80c07db.jpg'], tipo:'regular', badge:null },
     { id:25, nombre:'Ajax Edición Especial 25/26 (III)',             liga:'eredivisie',  categoria:['eredivisie'],         imgs:[CDN+'LXSJ/05b664e3.jpg'], tipo:'regular', badge:null },
@@ -2016,7 +2018,7 @@
     { id:35, nombre:'Marsella Tercera Equipación 25/26',             liga:'ligue1',      categoria:['ligue1'],             imgs:[CDN+'6rzM/704b2250.jpg',CDN+'ODgk/f7f87fc4.jpg',CDN+'g8AW/3bfc5b52.jpg',CDN+'V4pw/c341b93b.jpg'], tipo:'regular', badge:null },
     { id:36, nombre:'Sporting de Portugal Tercera Equipación 25/26', liga:'primeiraliga',categoria:['primeiraliga'],        imgs:[CDN+'XyzY/61d1de04.jpg',CDN+'wurg/bca0eb86.jpg',CDN+'t0UQ/d22d7fd5.jpg',CDN+'0332/33d2270b.jpg'], tipo:'regular', badge:null },
     // ── TEMPORADA 25/26 · SELECCIONES ──
-    { id:37, nombre:'Italia Primera Equipación Mundial 2026',        liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'PdMI/cdc80e68.jpg',CDN+'IE8f/607e7b45.jpg',CDN+'h3X0/c9f55977.jpg',CDN+'LqJZ/ee2925b7.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
+    { id:37, nombre:'Italia Primera Equipación Mundial 2026',        liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'PdMI/cdc80e68.jpg',CDN+'IE8f/607e7b45.jpg',CDN+'h3X0/c9f55977.jpg',CDN+'LqJZ/ee2925b7.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo', orden:7 },
     { id:38, nombre:'Colombia Primera Equipación Mundial 2026',      liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'g49L/0339ed75.jpg',CDN+'Qbxg/f0ae4fd1.jpg',CDN+'3y44/9f6a45c6.jpg',CDN+'GDYB/5138bb0a.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
     { id:39, nombre:'México Primera Equipación Mundial 2026',        liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'EUbM/e4ea20f0.jpg',CDN+'BM12/076cf136.jpg',CDN+'euFU/78d63d2d.jpg',CDN+'dHXq/7b984258.jpg'], tipo:'regular', badge:'nuevo',  badgeTexto:'Nuevo' },
     { id:40, nombre:'Marruecos Primera Equipación 2025',             liga:'selecciones', categoria:['selecciones'],        imgs:[CDN+'bjQi/2ea2d170.jpg',CDN+'w5AT/6325674c.jpg',CDN+'udGx/8127cedf.jpg',CDN+'vVNI/441f06da.jpg'], tipo:'regular', badge:null },
@@ -2064,12 +2066,12 @@
       tipo:'regular', badge:'nuevo', badgeTexto:'Nuevo' },
     { id:58, nombre:'España 2ª Equipación · Mundial 2026',          liga:'selecciones', categoria:['selecciones'],
       imgs:['https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287416/595f8c7f_z0luom.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287417/a7494a84_rxwnqn.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287416/b5885ea3_cqhmgl.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287415/d1ca21a7_bpbnui.jpg'],
-      tipo:'regular', badge:'nuevo', badgeTexto:'Nuevo' },
+      tipo:'regular', badge:'top', badgeTexto:'🔥 Más Vendida', orden:0 },
     { id:59, nombre:'Alemania 2ª Equipación · Mundial 2026',        liga:'selecciones', categoria:['selecciones'],
       imgs:['https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287414/e49f0d53_udprev.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287414/f97d8518_jhtgfb.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287414/06cb476d_xfoqob.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287413/74a653e0_jjkubb.jpg'],
       tipo:'regular', badge:'nuevo', badgeTexto:'Nuevo' },
     { id:60, nombre:'Argentina 2ª Equipación · Mundial 2026',       liga:'selecciones', categoria:['selecciones'],
-      imgs:['https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287412/ed83d678_d73qek.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287413/e8ad5285_gjdikv.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287412/14e8ae81_d62hfl.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287412/51d73189_zseoeu.jpg'],
+      imgs:['https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287412/ed83d678_d73qek.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287413/e8ad5285_gjdikv.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287412/14e8ae81_d62hfl.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287412/51d73189_zseoeu.jpg'], orden:5,
       tipo:'regular', badge:'nuevo', badgeTexto:'Nuevo' },
     { id:61, nombre:'Inglaterra 2ª Equipación · Mundial 2026',      liga:'selecciones', categoria:['selecciones'],
       imgs:['https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287409/70ad6a72_s9fxdy.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287409/7a570a72_zv7zh1.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287408/c0805123_h5k6ku.jpg','https://res.cloudinary.com/dol4vb6ah/image/upload/v1779287408/042c4bfb_enw6vq.jpg'],
@@ -2077,7 +2079,7 @@
     // ════════════════════════════════════════════════════════
     // ── RETRO ──
     // ════════════════════════════════════════════════════════
-    { id:101, nombre:'Real Madrid 02/03 Primera Equipación',                 liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'E7ed/e6908738.jpeg',CDN+'mRlG/5e902d8c.jpeg',CDN+'6QdU/d11afc34.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
+    { id:101, nombre:'Real Madrid 02/03 Primera Equipación',                 liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'E7ed/e6908738.jpeg',CDN+'mRlG/5e902d8c.jpeg',CDN+'6QdU/d11afc34.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro', orden:6 },
     { id:102, nombre:'Rayo Vallecano 01/02 Primera Equipación',              liga:'retro', categoria:['retro','laliga'],      imgs:[CDN+'INlT/12d6c9df.jpeg',CDN+'OeO3/a6ac1585.jpeg',CDN+'x9Jh/e759c66d.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
     { id:103, nombre:'PSV 94/95 Primera Equipación',                         liga:'retro', categoria:['retro','eredivisie'],  imgs:[CDN+'d0gq/c3f28f21.jpeg',CDN+'vPYo/7064644a.jpeg',CDN+'1LgE/d806082d.jpeg',CDN+'ixXb/3efad366.jpeg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
     { id:104, nombre:'Portugal 2004 Segunda Equipación',                     liga:'retro', categoria:['retro','selecciones'], imgs:[CDN+'zDmj/f480da02.jpg',CDN+'2TGy/11c494ce.jpg',CDN+'v6ie/5b35f4e9.jpg'],  tipo:'retro', badge:'retro', badgeTexto:'Retro' },
@@ -2231,8 +2233,13 @@
         return arr.sort((a, b) => precioBase(b) - precioBase(a));
       case 'nombre':
         return arr.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
-      default: // relevancia: novedades > temporada > retro
+      default: // relevancia: top > orden manual > novedades > temporada > retro
         return arr.sort((a, b) => {
+          if (a.badge === 'top' && b.badge !== 'top') return -1;
+          if (b.badge === 'top' && a.badge !== 'top') return 1;
+          const aO = a.orden !== undefined ? a.orden : 9999;
+          const bO = b.orden !== undefined ? b.orden : 9999;
+          if (aO !== bO) return aO - bO;
           const peso = c => c.badge === 'nuevo' ? 0 : c.tipo === 'retro' ? 2 : 1;
           return peso(a) - peso(b);
         });
