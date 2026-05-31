@@ -256,8 +256,32 @@
   .camiseta-nombre { font-size: 1rem; font-weight: 700; color: var(--texto); margin-bottom: 10px; line-height: 1.3; }
   .camiseta-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .precio-desde { font-size: 0.72rem; color: var(--gris); display: block; line-height: 1; }
+  .precio-tachado { font-size: 0.82rem; color: var(--gris); text-decoration: line-through; margin-right: 3px; }
+  .descuento-badge { font-size: 0.64rem; font-weight: 800; background: #e74c3c; color: white; border-radius: 4px; padding: 2px 5px; vertical-align: middle; margin-left: 3px; }
   .camiseta-precio { font-size: 1.3rem; font-weight: 800; color: var(--verde); }
   .camiseta-precio.retro-precio { color: var(--dorado-oscuro); }
+  /* ── OFERTA BANNER ── */
+  .oferta-banner {
+    background: linear-gradient(90deg, #b71c1c, #e53935, #b71c1c);
+    background-size: 200% 100%;
+    animation: ofertaSlide 4s linear infinite;
+    color: white; padding: 10px 20px; position: sticky; top: 70px; z-index: 95;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  @keyframes ofertaSlide { 0%{background-position:0%} 100%{background-position:200%} }
+  .oferta-inner {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; flex-wrap: wrap; max-width: 900px; margin: 0 auto;
+  }
+  .oferta-etiqueta { font-size: 0.88rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
+  .oferta-cnt {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(0,0,0,0.25); border-radius: 8px; padding: 4px 12px;
+  }
+  .cnt-bloque { text-align: center; min-width: 34px; }
+  .cnt-num { font-size: 1.25rem; font-weight: 900; display: block; line-height: 1; }
+  .cnt-lbl { font-size: 0.55rem; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px; }
+  .cnt-sep { font-size: 1.2rem; font-weight: 900; opacity: 0.6; padding-bottom: 8px; }
   .btn-ver {
     background: linear-gradient(135deg, var(--verde), var(--verde-claro));
     color: white; border: none; padding: 9px 14px; border-radius: 8px;
@@ -1743,6 +1767,22 @@
   </div>
 </header>
 
+<!-- OFERTA BANNER -->
+<div class="oferta-banner" id="ofertaBanner">
+  <div class="oferta-inner">
+    <span>🔥</span>
+    <span class="oferta-etiqueta">Oferta flash · -10% en todo el catálogo</span>
+    <div class="oferta-cnt">
+      <div class="cnt-bloque"><span class="cnt-num" id="cntH">00</span><span class="cnt-lbl">horas</span></div>
+      <span class="cnt-sep">:</span>
+      <div class="cnt-bloque"><span class="cnt-num" id="cntM">00</span><span class="cnt-lbl">min</span></div>
+      <span class="cnt-sep">:</span>
+      <div class="cnt-bloque"><span class="cnt-num" id="cntS">00</span><span class="cnt-lbl">seg</span></div>
+    </div>
+    <span>🔥</span>
+  </div>
+</div>
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-decoracion">⚽</div>
@@ -1967,12 +2007,17 @@
   };
 
   /* ─── DATOS ─── */
-  const PRECIO_JUGADOR = 29.99;
-  const PRECIO_FAN     = 24.99;
+  const PRECIO_JUGADOR_ORIG = 29.99;
+  const PRECIO_FAN_ORIG     = 24.99;
+  const PRECIO_RETRO_ORIG   = 39.99;
+  const DESCUENTO           = 0.10;
+  const PRECIO_JUGADOR = +((PRECIO_JUGADOR_ORIG * (1 - DESCUENTO)).toFixed(2)); // 26.99
+  const PRECIO_FAN     = +((PRECIO_FAN_ORIG     * (1 - DESCUENTO)).toFixed(2)); // 22.49
+  const PRECIO_RETRO   = +((PRECIO_RETRO_ORIG   * (1 - DESCUENTO)).toFixed(2)); // 35.99
   const GASTOS_ENVIO   = 4.99; // gratis si se compran 2+ unidades
   const PRECIO_DORSAL  = 2.99;
   const PRECIO_PARCHE  = 1.99;
-  const PRECIO_RETRO   = 39.99;
+  const OFERTA_FIN     = new Date('2026-06-02T23:59:59+02:00').getTime();
 
   const TALLAS = ['S','M','L','XL','XXL','2XL'];
 
@@ -2469,7 +2514,7 @@
             <input type="radio" name="pv" id="pv_jugador" value="jugador">
             <label class="version-label" for="pv_jugador">
               <span class="version-nombre">⚡ Versión Jugador</span>
-              <span class="version-precio">${fmt(PRECIO_JUGADOR)}</span>
+              <span class="version-precio"><s style="color:#bbb;font-weight:400;font-size:0.88em">${fmt(PRECIO_JUGADOR_ORIG)}</s> ${fmt(PRECIO_JUGADOR)}</span>
               <span class="version-desc">Tejido técnico termosellado · Corte ajustado</span>
             </label>
           </div>
@@ -2477,7 +2522,7 @@
             <input type="radio" name="pv" id="pv_fan" value="fan">
             <label class="version-label" for="pv_fan">
               <span class="version-nombre">⭐ Versión Fan</span>
-              <span class="version-precio">${fmt(PRECIO_FAN)}</span>
+              <span class="version-precio"><s style="color:#bbb;font-weight:400;font-size:0.88em">${fmt(PRECIO_FAN_ORIG)}</s> ${fmt(PRECIO_FAN)}</span>
               <span class="version-desc">Tejido transpirable · Corte regular</span>
             </label>
           </div>
@@ -2752,8 +2797,8 @@
     filtradas.forEach((c, i) => {
       const esRetro  = c.tipo === 'retro';
       const precioTag = esRetro
-        ? `<span class="camiseta-precio retro-precio">${fmt(PRECIO_RETRO)}</span>`
-        : `<span class="precio-desde">Desde</span><span class="camiseta-precio">${fmt(PRECIO_FAN)}</span>`;
+        ? `<span class="precio-tachado">${fmt(PRECIO_RETRO_ORIG)}</span><span class="camiseta-precio retro-precio">${fmt(PRECIO_RETRO)}</span><span class="descuento-badge">-10%</span>`
+        : `<span class="precio-desde">Desde</span><span class="precio-tachado">${fmt(PRECIO_FAN_ORIG)}</span><span class="camiseta-precio">${fmt(PRECIO_FAN)}</span><span class="descuento-badge">-10%</span>`;
       const div = document.createElement('div');
       div.className = 'camiseta-card';
       div.style.animationDelay = `${i * 0.05}s`;
@@ -3717,6 +3762,21 @@
   document.addEventListener('DOMContentLoaded', initCardInputs);
   // Por si ya cargó
   if (document.readyState !== 'loading') initCardInputs();
+
+  // ── CONTADOR OFERTA FLASH ──
+  (function tickContador() {
+    const diff = OFERTA_FIN - Date.now();
+    const banner = document.getElementById('ofertaBanner');
+    if (!banner) return;
+    if (diff <= 0) { banner.style.display = 'none'; return; }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cntH').textContent = String(h).padStart(2,'0');
+    document.getElementById('cntM').textContent = String(m).padStart(2,'0');
+    document.getElementById('cntS').textContent = String(s).padStart(2,'0');
+    setTimeout(tickContador, 1000);
+  })();
 </script>
 
 </body>
