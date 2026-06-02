@@ -1535,6 +1535,9 @@
   <div class="carrito-pie">
     <div id="envioPromo" style="display:none;"></div>
     <div class="subtotal-linea"><span>Subtotal</span><span id="subtotalPrecio">0,00 €</span></div>
+    <div class="subtotal-linea" id="flashDescuentoLinea" style="display:none;color:#e53935;font-weight:700;font-size:0.85rem;">
+      <span>🔥 Oferta flash −10%</span><span id="flashDescuentoPrecio">−0,00 €</span>
+    </div>
     <div class="subtotal-linea" id="envioLinea">
       <span>Envío <span id="envioDescripcion" style="font-size:0.75rem;color:#aaa;"></span></span>
       <span id="envioPrecio" style="font-weight:700;">—</span>
@@ -2430,7 +2433,20 @@
     const unidades = carrito.reduce((s, i) => s + i.cantidad, 0);
     const envio    = calcEnvio();
 
-    // Cupón descuento
+    // Flash discount — siempre visible cuando hay artículos
+    const flashLinea    = document.getElementById('flashDescuentoLinea');
+    const flashPrecioEl = document.getElementById('flashDescuentoPrecio');
+    if (flashLinea && flashPrecioEl) {
+      if (subtotal > 0) {
+        const ahorroFlash = +(subtotal * DESCUENTO / (1 - DESCUENTO)).toFixed(2);
+        flashPrecioEl.textContent = '−' + fmt(ahorroFlash);
+        flashLinea.style.display = 'flex';
+      } else {
+        flashLinea.style.display = 'none';
+      }
+    }
+
+    // Cupón descuento (adicional)
     const descuentoLinea = document.getElementById('descuentoLinea');
     const descuentoPrecioEl = document.getElementById('descuentoPrecio');
     let descuento = 0;
@@ -3030,14 +3046,18 @@
   }
 
   function actualizarResumenCheckout() {
-    const subtotal = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
-    const envio    = calcEnvio();
-    const total    = subtotal + envio;
-    const envioTxt = envio === 0 ? 'Gratis 🎉' : fmt(envio);
+    const subtotal    = carrito.reduce((s, i) => s + i.precio * i.cantidad, 0);
+    const envio       = calcEnvio();
+    const total       = subtotal + envio;
+    const envioTxt    = envio === 0 ? 'Gratis 🎉' : fmt(envio);
+    const ahorroFlash = +(subtotal * DESCUENTO / (1 - DESCUENTO)).toFixed(2);
     const itemsHtml = carrito.map(i => {
       const v = i.tipo === 'retro' ? 'Retro' : i.version === 'jugador' ? 'Jugador' : 'Fan';
-      return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span>${fmt(i.precio * i.cantidad)}</span></div>`;
-    }).join('') + `<div class="resumen-item" style="border-top:1px solid #eee;margin-top:6px;padding-top:6px;"><span>Envío</span><span>${envioTxt}</span></div>`;
+      const precioOrig = +(i.precio / (1 - DESCUENTO)).toFixed(2);
+      return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span><s style="color:#bbb;font-size:0.82em;font-weight:400">${fmt(precioOrig * i.cantidad)}</s> ${fmt(i.precio * i.cantidad)}</span></div>`;
+    }).join('') +
+    `<div class="resumen-item" style="color:#e53935;font-weight:700;font-size:0.85em;"><span>🔥 Oferta flash −10%</span><span>−${fmt(ahorroFlash)}</span></div>` +
+    `<div class="resumen-item" style="border-top:1px solid #eee;margin-top:6px;padding-top:6px;"><span>Envío</span><span>${envioTxt}</span></div>`;
     ['ck_totalPaso1','ck_totalPaso2'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
     const cont = document.getElementById('ck_items1'); if (cont) cont.innerHTML = itemsHtml;
     ['btnPagarImporte','bizumImporte'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
