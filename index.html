@@ -2434,13 +2434,16 @@
     const envio    = calcEnvio();
 
     // Flash discount — siempre visible cuando hay artículos
+    // Mostramos el precio original en "Subtotal" y la diferencia como descuento
     const flashLinea    = document.getElementById('flashDescuentoLinea');
     const flashPrecioEl = document.getElementById('flashDescuentoPrecio');
     if (flashLinea && flashPrecioEl) {
       if (subtotal > 0) {
-        const ahorroFlash = +(subtotal * DESCUENTO / (1 - DESCUENTO)).toFixed(2);
+        const subtotalOrig = +(subtotal / (1 - DESCUENTO)).toFixed(2);
+        const ahorroFlash  = +(subtotalOrig - subtotal).toFixed(2);
         flashPrecioEl.textContent = '−' + fmt(ahorroFlash);
         flashLinea.style.display = 'flex';
+        document.getElementById('subtotalPrecio').textContent = fmt(subtotalOrig);
       } else {
         flashLinea.style.display = 'none';
       }
@@ -2460,7 +2463,8 @@
 
     const total = subtotal - descuento + envio;
     document.getElementById('carritoContador').textContent = unidades;
-    document.getElementById('subtotalPrecio').textContent  = fmt(subtotal);
+    // subtotalPrecio se actualiza arriba con precio original (si hay flash); si no hay items, resetear
+    if (subtotal === 0) document.getElementById('subtotalPrecio').textContent = fmt(0);
     document.getElementById('totalPrecio').textContent     = fmt(total);
     const envioPrecioEl = document.getElementById('envioPrecio');
     const envioDescEl   = document.getElementById('envioDescripcion');
@@ -3050,13 +3054,15 @@
     const envio       = calcEnvio();
     const total       = subtotal + envio;
     const envioTxt    = envio === 0 ? 'Gratis 🎉' : fmt(envio);
-    const ahorroFlash = +(subtotal * DESCUENTO / (1 - DESCUENTO)).toFixed(2);
+    // Los precios del carrito ya incluyen el -10%. Mostramos precio original → descuento → total
+    const subtotalOrig = +(subtotal / (1 - DESCUENTO)).toFixed(2);
+    const ahorroFlash  = +(subtotalOrig - subtotal).toFixed(2);
     const itemsHtml = carrito.map(i => {
       const v = i.tipo === 'retro' ? 'Retro' : i.version === 'jugador' ? 'Jugador' : 'Fan';
       const precioOrig = +(i.precio / (1 - DESCUENTO)).toFixed(2);
-      return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span><s style="color:#bbb;font-size:0.82em;font-weight:400">${fmt(precioOrig * i.cantidad)}</s> ${fmt(i.precio * i.cantidad)}</span></div>`;
+      return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span>${fmt(precioOrig * i.cantidad)}</span></div>`;
     }).join('') +
-    `<div class="resumen-item" style="color:#e53935;font-weight:700;font-size:0.85em;"><span>🔥 Oferta flash −10%</span><span>−${fmt(ahorroFlash)}</span></div>` +
+    `<div class="resumen-item" style="color:#e53935;font-weight:700;"><span>🔥 Oferta flash −10%</span><span>−${fmt(ahorroFlash)}</span></div>` +
     `<div class="resumen-item" style="border-top:1px solid #eee;margin-top:6px;padding-top:6px;"><span>Envío</span><span>${envioTxt}</span></div>`;
     ['ck_totalPaso1','ck_totalPaso2'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
     const cont = document.getElementById('ck_items1'); if (cont) cont.innerHTML = itemsHtml;
