@@ -1535,9 +1535,6 @@
   <div class="carrito-pie">
     <div id="envioPromo" style="display:none;"></div>
     <div class="subtotal-linea"><span>Subtotal</span><span id="subtotalPrecio">0,00 €</span></div>
-    <div class="subtotal-linea" id="flashDescuentoLinea" style="display:none;color:#e53935;font-weight:700;font-size:0.85rem;">
-      <span>🔥 Oferta flash −10%</span><span id="flashDescuentoPrecio">−0,00 €</span>
-    </div>
     <div class="subtotal-linea" id="envioLinea">
       <span>Envío <span id="envioDescripcion" style="font-size:0.75rem;color:#aaa;"></span></span>
       <span id="envioPrecio" style="font-weight:700;">—</span>
@@ -1770,22 +1767,6 @@
   </div>
 </header>
 
-<!-- OFERTA BANNER -->
-<div class="oferta-banner" id="ofertaBanner">
-  <div class="oferta-inner">
-    <span>🔥</span>
-    <span class="oferta-etiqueta">Oferta flash · -10% en todo el catálogo</span>
-    <div class="oferta-cnt">
-      <div class="cnt-bloque"><span class="cnt-num" id="cntH">00</span><span class="cnt-lbl">horas</span></div>
-      <span class="cnt-sep">:</span>
-      <div class="cnt-bloque"><span class="cnt-num" id="cntM">00</span><span class="cnt-lbl">min</span></div>
-      <span class="cnt-sep">:</span>
-      <div class="cnt-bloque"><span class="cnt-num" id="cntS">00</span><span class="cnt-lbl">seg</span></div>
-    </div>
-    <span>🔥</span>
-  </div>
-</div>
-
 <!-- HERO -->
 <section class="hero">
   <div class="hero-decoracion">⚽</div>
@@ -2010,17 +1991,16 @@
   };
 
   /* ─── DATOS ─── */
-  const PRECIO_JUGADOR_ORIG = 29.99;
-  const PRECIO_FAN_ORIG     = 24.99;
-  const PRECIO_RETRO_ORIG   = 39.99;
-  const DESCUENTO           = 0.10;
-  const PRECIO_JUGADOR = +((PRECIO_JUGADOR_ORIG * (1 - DESCUENTO)).toFixed(2)); // 26.99
-  const PRECIO_FAN     = +((PRECIO_FAN_ORIG     * (1 - DESCUENTO)).toFixed(2)); // 22.49
-  const PRECIO_RETRO   = +((PRECIO_RETRO_ORIG   * (1 - DESCUENTO)).toFixed(2)); // 35.99
-  const GASTOS_ENVIO   = 4.99; // gratis si se compran 2+ unidades
-  const PRECIO_DORSAL  = 2.99;
-  const PRECIO_PARCHE  = 1.99;
-  const OFERTA_FIN     = 1780392264535; // ahora + 48h exactas
+  const PRECIO_JUGADOR = 29.99;
+  const PRECIO_FAN     = 24.99;
+  const PRECIO_RETRO   = 39.99;
+  // Precios de referencia (PVPR) mostrados tachados para destacar el ahorro
+  const PVPR_FAN     = 79.99;
+  const PVPR_JUGADOR = 119.00;
+  const PVPR_RETRO   = 149.99;
+  const GASTOS_ENVIO = 4.99; // gratis si se compran 2+ unidades
+  const PRECIO_DORSAL = 2.99;
+  const PRECIO_PARCHE = 1.99;
 
   const TALLAS = ['S','M','L','XL','XXL','2XL'];
 
@@ -2433,23 +2413,7 @@
     const unidades = carrito.reduce((s, i) => s + i.cantidad, 0);
     const envio    = calcEnvio();
 
-    // Flash discount — siempre visible cuando hay artículos
-    // Mostramos el precio original en "Subtotal" y la diferencia como descuento
-    const flashLinea    = document.getElementById('flashDescuentoLinea');
-    const flashPrecioEl = document.getElementById('flashDescuentoPrecio');
-    if (flashLinea && flashPrecioEl) {
-      if (subtotal > 0) {
-        const subtotalOrig = +(subtotal / (1 - DESCUENTO)).toFixed(2);
-        const ahorroFlash  = +(subtotalOrig - subtotal).toFixed(2);
-        flashPrecioEl.textContent = '−' + fmt(ahorroFlash);
-        flashLinea.style.display = 'flex';
-        document.getElementById('subtotalPrecio').textContent = fmt(subtotalOrig);
-      } else {
-        flashLinea.style.display = 'none';
-      }
-    }
-
-    // Cupón descuento (adicional)
+    // Cupón descuento
     const descuentoLinea = document.getElementById('descuentoLinea');
     const descuentoPrecioEl = document.getElementById('descuentoPrecio');
     let descuento = 0;
@@ -2463,8 +2427,7 @@
 
     const total = subtotal - descuento + envio;
     document.getElementById('carritoContador').textContent = unidades;
-    // subtotalPrecio se actualiza arriba con precio original (si hay flash); si no hay items, resetear
-    if (subtotal === 0) document.getElementById('subtotalPrecio').textContent = fmt(0);
+    document.getElementById('subtotalPrecio').textContent  = fmt(subtotal);
     document.getElementById('totalPrecio').textContent     = fmt(total);
     const envioPrecioEl = document.getElementById('envioPrecio');
     const envioDescEl   = document.getElementById('envioDescripcion');
@@ -2549,7 +2512,7 @@
             <input type="radio" name="pv" id="pv_jugador" value="jugador">
             <label class="version-label" for="pv_jugador">
               <span class="version-nombre">⚡ Versión Jugador</span>
-              <span class="version-precio"><s style="color:#bbb;font-weight:400;font-size:0.88em">${fmt(PRECIO_JUGADOR_ORIG)}</s> ${fmt(PRECIO_JUGADOR)}</span>
+              <span class="version-precio"><s style="color:#bbb;font-weight:400;font-size:0.88em">${fmt(PVPR_JUGADOR)}</s> ${fmt(PRECIO_JUGADOR)}</span>
               <span class="version-desc">Tejido técnico termosellado · Corte ajustado</span>
             </label>
           </div>
@@ -2557,7 +2520,7 @@
             <input type="radio" name="pv" id="pv_fan" value="fan">
             <label class="version-label" for="pv_fan">
               <span class="version-nombre">⭐ Versión Fan</span>
-              <span class="version-precio"><s style="color:#bbb;font-weight:400;font-size:0.88em">${fmt(PRECIO_FAN_ORIG)}</s> ${fmt(PRECIO_FAN)}</span>
+              <span class="version-precio"><s style="color:#bbb;font-weight:400;font-size:0.88em">${fmt(PVPR_FAN)}</s> ${fmt(PRECIO_FAN)}</span>
               <span class="version-desc">Tejido transpirable · Corte regular</span>
             </label>
           </div>
@@ -2832,8 +2795,8 @@
     filtradas.forEach((c, i) => {
       const esRetro  = c.tipo === 'retro';
       const precioTag = esRetro
-        ? `<span class="precio-tachado">${fmt(PRECIO_RETRO_ORIG)}</span><span class="camiseta-precio retro-precio">${fmt(PRECIO_RETRO)}</span><span class="descuento-badge">-10%</span>`
-        : `<span class="precio-desde">Desde</span><span class="precio-tachado">${fmt(PRECIO_FAN_ORIG)}</span><span class="camiseta-precio">${fmt(PRECIO_FAN)}</span><span class="descuento-badge">-10%</span>`;
+        ? `<span class="precio-tachado">${fmt(PVPR_RETRO)}</span><span class="camiseta-precio retro-precio">${fmt(PRECIO_RETRO)}</span>`
+        : `<span class="precio-desde">Desde</span><span class="precio-tachado">${fmt(PVPR_FAN)}</span><span class="camiseta-precio">${fmt(PRECIO_FAN)}</span>`;
       const div = document.createElement('div');
       div.className = 'camiseta-card';
       div.style.animationDelay = `${i * 0.05}s`;
@@ -3054,15 +3017,11 @@
     const envio       = calcEnvio();
     const total       = subtotal + envio;
     const envioTxt    = envio === 0 ? 'Gratis 🎉' : fmt(envio);
-    // Los precios del carrito ya incluyen el -10%. Mostramos precio original → descuento → total
-    const subtotalOrig = +(subtotal / (1 - DESCUENTO)).toFixed(2);
-    const ahorroFlash  = +(subtotalOrig - subtotal).toFixed(2);
     const itemsHtml = carrito.map(i => {
       const v = i.tipo === 'retro' ? 'Retro' : i.version === 'jugador' ? 'Jugador' : 'Fan';
-      const precioOrig = +(i.precio / (1 - DESCUENTO)).toFixed(2);
-      return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span>${fmt(precioOrig * i.cantidad)}</span></div>`;
+      const pvpr = i.tipo === 'retro' ? PVPR_RETRO : (i.version === 'jugador' ? PVPR_JUGADOR : PVPR_FAN);
+      return `<div class="resumen-item"><span>${i.nombre} · ${v} · T.${i.talla} ×${i.cantidad}</span><span><s style="color:#bbb;font-size:0.82em;font-weight:400">${fmt(pvpr * i.cantidad)}</s> ${fmt(i.precio * i.cantidad)}</span></div>`;
     }).join('') +
-    `<div class="resumen-item" style="color:#e53935;font-weight:700;"><span>🔥 Oferta flash −10%</span><span>−${fmt(ahorroFlash)}</span></div>` +
     `<div class="resumen-item" style="border-top:1px solid #eee;margin-top:6px;padding-top:6px;"><span>Envío</span><span>${envioTxt}</span></div>`;
     ['ck_totalPaso1','ck_totalPaso2'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=fmt(total); });
     const cont = document.getElementById('ck_items1'); if (cont) cont.innerHTML = itemsHtml;
@@ -3804,20 +3763,6 @@
   // Por si ya cargó
   if (document.readyState !== 'loading') initCardInputs();
 
-  // ── CONTADOR OFERTA FLASH ──
-  (function tickContador() {
-    const diff = OFERTA_FIN - Date.now();
-    const banner = document.getElementById('ofertaBanner');
-    if (!banner) return;
-    if (diff <= 0) { banner.style.display = 'none'; return; }
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cntH').textContent = String(h).padStart(2,'0');
-    document.getElementById('cntM').textContent = String(m).padStart(2,'0');
-    document.getElementById('cntS').textContent = String(s).padStart(2,'0');
-    setTimeout(tickContador, 1000);
-  })();
 </script>
 
 </body>
