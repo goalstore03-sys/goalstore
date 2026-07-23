@@ -242,7 +242,9 @@
   .camiseta-badge.retro { background: #7b5e2a; }
   .camiseta-badge.nuevo { background: #e74c3c; }
   .camiseta-badge.top   { background: linear-gradient(135deg, #ff6b00, #e84848); font-weight:700; letter-spacing:0.5px; animation: pulseTop 2s infinite; }
+  .camiseta-badge.campeon { background: linear-gradient(135deg, #c9a84c, #f5d77a, #c9a84c); color: #1a1a1a; font-weight:900; letter-spacing:1px; animation: pulseCampeon 1.5s infinite; box-shadow: 0 0 10px rgba(201,168,76,0.7); }
   @keyframes pulseTop { 0%,100%{opacity:1} 50%{opacity:0.8} }
+  @keyframes pulseCampeon { 0%,100%{opacity:1; box-shadow:0 0 10px rgba(201,168,76,0.7)} 50%{opacity:0.9; box-shadow:0 0 18px rgba(201,168,76,1)} }
   .ver-mas-hover {
     position: absolute; inset: 0; background: rgba(26,58,42,0.7);
     display: flex; align-items: center; justify-content: center;
@@ -2281,6 +2283,12 @@
     { id:218, nombre:'FC Barcelona Pre-Partido 26/27',             liga:'laliga',  categoria:['laliga'],
       imgs:['https://lh3.googleusercontent.com/d/1jUfMj9Udrd-FAUB7YoP4XSJkDOaC5M0k','https://lh3.googleusercontent.com/d/1lLEZuPuq_m-j3F9xdNYRfeH62h8nykCo','https://lh3.googleusercontent.com/d/1V8pyz1keZxpFDapx2Sfid6Ou-UiJTwn4','https://lh3.googleusercontent.com/d/1G20BfgGq3VyLhHg-c4y570H4RSopDF1p'],
       tipo:'regular', badge:'nuevo', badgeTexto:'Nuevo' },
+    { id:219, nombre:'España 1ª Equipación ★★ Mundial 2026',      liga:'selecciones', categoria:['selecciones'],
+      imgs:['https://lh3.googleusercontent.com/d/1P2LFr3Hm2BLkh5zjx5Z6pHR33oZWRswc','https://lh3.googleusercontent.com/d/1YPUxTpAY9vHx1kDxtHQ8dL-HKOwG9fTr','https://lh3.googleusercontent.com/d/1BEzxVlb9b0diMbwbfKm7xlcgoykUZ-QZ','https://lh3.googleusercontent.com/d/1DYiu01BGyKn0dDmJlXBm5QyN6SUtjBXI'],
+      tipo:'regular', badge:'campeon', badgeTexto:'★★ Campeones', orden:-2 },
+    { id:220, nombre:'España 2ª Equipación ★★ Mundial 2026',      liga:'selecciones', categoria:['selecciones'],
+      imgs:['https://lh3.googleusercontent.com/d/1feeUths3uMf19EQrcLt2uRJER6CZRVGS','https://lh3.googleusercontent.com/d/1NdKlwfbOKvU6QaG1uAFN_-7GMvOya5wg','https://lh3.googleusercontent.com/d/1G8PU1Pwf9NhiosOVg1pK_k2nZWuTa5J_','https://lh3.googleusercontent.com/d/11L5vRyZFos-15tSd-HgyjgRwb5Fmh4PR'],
+      tipo:'regular', badge:'campeon', badgeTexto:'★★ Campeones', orden:-1 },
     // ════════════════════════════════════════════════════════
     // ── RETRO ──
     // ════════════════════════════════════════════════════════
@@ -2440,8 +2448,9 @@
         return arr.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
       default: // relevancia: top > orden manual > novedades > temporada > retro
         return arr.sort((a, b) => {
-          if (a.badge === 'top' && b.badge !== 'top') return -1;
-          if (b.badge === 'top' && a.badge !== 'top') return 1;
+          const isTop = c => c.badge === 'top' || c.badge === 'campeon';
+          if (isTop(a) && !isTop(b)) return -1;
+          if (isTop(b) && !isTop(a)) return 1;
           const aO = a.orden !== undefined ? a.orden : 9999;
           const bO = b.orden !== undefined ? b.orden : 9999;
           if (aO !== bO) return aO - bO;
