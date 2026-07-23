@@ -215,6 +215,18 @@
     cursor: pointer; position: relative;
   }
   .camiseta-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,0.15); }
+  .camiseta-card.featured {
+    grid-column: span 2;
+    border: 2px solid var(--dorado);
+    box-shadow: 0 4px 24px rgba(201,168,76,0.3);
+  }
+  .camiseta-card.featured:hover { box-shadow: 0 16px 48px rgba(201,168,76,0.45); }
+  .camiseta-card.featured .camiseta-imagen { height: 380px; }
+  .camiseta-card.featured .camiseta-nombre { font-size: 1.2rem; }
+  @media (max-width: 560px) {
+    .camiseta-card.featured { grid-column: span 1; }
+    .camiseta-card.featured .camiseta-imagen { height: 280px; }
+  }
   .camiseta-imagen {
     background: #f0f2f0;
     height: 220px; display: flex; align-items: center; justify-content: center;
@@ -2933,7 +2945,7 @@
         ? `<span class="precio-tachado">${fmt(PVPR_RETRO)}</span><span class="camiseta-precio retro-precio">${fmt(PRECIO_RETRO)}</span>`
         : `<span class="precio-desde">Desde</span><span class="precio-tachado">${fmt(PVPR_FAN)}</span><span class="camiseta-precio">${fmt(PRECIO_FAN)}</span>`;
       const div = document.createElement('div');
-      div.className = 'camiseta-card';
+      div.className = 'camiseta-card' + (c.badge === 'campeon' ? ' featured' : '');
       div.style.animationDelay = `${i * 0.05}s`;
       div.onclick = () => abrirProductoConId(c.id);
       div.innerHTML = `
