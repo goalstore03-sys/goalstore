@@ -2302,7 +2302,7 @@
       imgs:['https://lh3.googleusercontent.com/d/1P2LFr3Hm2BLkh5zjx5Z6pHR33oZWRswc','https://lh3.googleusercontent.com/d/1YPUxTpAY9vHx1kDxtHQ8dL-HKOwG9fTr','https://lh3.googleusercontent.com/d/1BEzxVlb9b0diMbwbfKm7xlcgoykUZ-QZ','https://lh3.googleusercontent.com/d/1DYiu01BGyKn0dDmJlXBm5QyN6SUtjBXI'],
       tipo:'regular', badge:'campeon', badgeTexto:'★★ Campeones', orden:-2 },
     { id:220, nombre:'España 2ª Equipación ★★ Mundial 2026',      liga:'selecciones', categoria:['selecciones'],
-      imgs:['https://lh3.googleusercontent.com/d/1feeUths3uMf19EQrcLt2uRJER6CZRVGS','https://lh3.googleusercontent.com/d/1NdKlwfbOKvU6QaG1uAFN_-7GMvOya5wg','https://lh3.googleusercontent.com/d/1G8PU1Pwf9NhiosOVg1pK_k2nZWuTa5J_','https://lh3.googleusercontent.com/d/11L5vRyZFos-15tSd-HgyjgRwb5Fmh4PR'],
+      imgs:['https://lh3.googleusercontent.com/d/1G8PU1Pwf9NhiosOVg1pK_k2nZWuTa5J_','https://lh3.googleusercontent.com/d/11L5vRyZFos-15tSd-HgyjgRwb5Fmh4PR','https://lh3.googleusercontent.com/d/1G8PU1Pwf9NhiosOVg1pK_k2nZWuTa5J_','https://lh3.googleusercontent.com/d/11L5vRyZFos-15tSd-HgyjgRwb5Fmh4PR'],
       tipo:'regular', badge:'campeon', badgeTexto:'★★ Campeones', orden:-1 },
     // ── LA LIGA nuevas 26/27 ──
     { id:223, nombre:'Valencia CF 1ª Equipación 26/27',                liga:'laliga',      categoria:['laliga'],
@@ -2787,7 +2787,7 @@
       const div = document.createElement('div');
       div.className = 'carrito-item';
       div.innerHTML = `
-        <img class="item-thumb" src="${item.img}?w=120" alt="${item.nombre}">
+        <img class="item-thumb" src="${imgUrl(item.img, 120)}" referrerpolicy="no-referrer" alt="${item.nombre}">
         <div class="item-detalles">
           <div class="item-nombre">${item.nombre}</div>
           <div class="item-meta">
@@ -2869,10 +2869,10 @@
           <div class="prod-galeria-main">
             ${esRetro ? '<div class="prod-retro-tag">🏺 Edición Retro</div>' : ''}
             ${prod.imgs.length > 1 ? '<button class="gal-arrow gal-prev" onclick="galeriaNav(-1)">&#8249;</button>' : ''}
-            <img class="prod-img-grande" id="galMainImg" src="${prod.imgs[0]}?w=600" alt="${prod.nombre}" onclick="abrirZoom(this.src)">
+            <img class="prod-img-grande" id="galMainImg" src="${imgUrl(prod.imgs[0], 600)}" alt="${prod.nombre}" referrerpolicy="no-referrer" onclick="abrirZoom(this.src)">
             ${prod.imgs.length > 1 ? '<button class="gal-arrow gal-next" onclick="galeriaNav(1)">&#8250;</button>' : ''}
           </div>
-          ${prod.imgs.length > 1 ? `<div class="prod-galeria-thumbs">${prod.imgs.map((img,i)=>`<img class="gal-thumb${i===0?' activo':''}" src="${img}?w=120" onclick="galeriaSetImg(${i})" alt="Vista ${i+1}">`).join('')}</div>` : ''}
+          ${prod.imgs.length > 1 ? `<div class="prod-galeria-thumbs">${prod.imgs.map((img,i)=>`<img class="gal-thumb${i===0?' activo':''}" src="${imgUrl(img, 120)}" referrerpolicy="no-referrer" onclick="galeriaSetImg(${i})" alt="Vista ${i+1}">`).join('')}</div>` : ''}
         </div>
         ${precioRetroHTML}
         ${stockBadgeHTML(prod.id) ? `<div style="margin-bottom:12px;">${stockBadgeHTML(prod.id)}</div>` : ''}
@@ -3010,7 +3010,7 @@
   function galeriaSetImg(idx) {
     galeriaIdx = idx;
     const mainImg = document.getElementById('galMainImg');
-    if (mainImg) { mainImg.style.opacity='0'; setTimeout(()=>{ mainImg.src = galeria[idx]+'?w=600'; mainImg.style.opacity='1'; }, 150); }
+    if (mainImg) { mainImg.style.opacity='0'; setTimeout(()=>{ mainImg.src = imgUrl(galeria[idx], 600); mainImg.style.opacity='1'; }, 150); }
     document.querySelectorAll('.gal-thumb').forEach((t, i) => t.classList.toggle('activo', i === idx));
   }
 
@@ -3080,6 +3080,16 @@
     return `<div class="stock-badge mirando"><span class="stock-dot"></span> ${info.n} personas mirando</div>`;
   }
 
+  /* convierte URL de Drive (lh3) a formato thumbnail público */
+  function imgUrl(url, sz) {
+    if (!url) return '';
+    if (url.includes('lh3.googleusercontent.com/d/')) {
+      const id = url.split('/d/')[1].replace(/[=?].*$/, '');
+      return `https://drive.google.com/thumbnail?id=${id}&sz=w${sz}`;
+    }
+    return `${url}?w=${sz}`;
+  }
+
   /* ─── CATÁLOGO ─── */
   function renderCamisetas(filtro = filtroActual) {
     filtroActual = filtro;
@@ -3117,7 +3127,7 @@
         <div class="camiseta-imagen">
           ${c.badge ? `<div class="camiseta-badge ${c.badge}">${c.badgeTexto}</div>` : ''}
           <div class="ver-mas-hover"><span>👁️</span>Ver opciones</div>
-          <img class="camiseta-img" data-src="${c.imgs[0]}?w=460" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="">
+          <img class="camiseta-img" data-src="${imgUrl(c.imgs[0], 460)}" data-fb="${imgUrl(c.imgs.length>1?c.imgs[1]:c.imgs[0], 460)}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="" referrerpolicy="no-referrer" onerror="if(!this._fb){this._fb=1;this.src=this.dataset.fb}">
         </div>
         <div class="camiseta-info">
           <div class="camiseta-liga">${LIGA_NOMBRES[c.liga] || c.liga}</div>
