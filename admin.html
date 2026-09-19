@@ -2,610 +2,556 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow">
-<title>GoalStore · Panel de administración</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GoalStore Admin — Imágenes</title>
 <style>
   :root {
-    --verde: #1a3a2a;
-    --verde-medio: #2d5a3d;
-    --verde-claro: #3d7a52;
-    --dorado: #c9a84c;
-    --gris: #6b7280;
-    --gris-claro: #e5e7eb;
-    --gris-fondo: #f5f7f6;
-    --texto: #1f2937;
-    --rojo: #c0392b;
-    --naranja: #f59e0b;
-    --azul: #3b82f6;
+    --verde: #1a3a2a; --verde-medio: #2d5a3d; --verde-claro: #3d7a52;
+    --dorado: #c9a84c; --bg: #f0f4f0; --card: #fff;
+    --radio: 10px; --sombra: 0 2px 8px rgba(0,0,0,.12);
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--gris-fondo); color: var(--texto); min-height: 100vh; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: var(--bg); color: #222; }
 
-  /* ── LOGIN ── */
-  .login-screen {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, var(--verde), var(--verde-medio));
-    padding: 24px;
+  header {
+    background: var(--verde); color: #fff; padding: 14px 20px;
+    display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.3);
   }
-  .login-box {
-    background: white; border-radius: 16px; padding: 40px 32px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 380px; width: 100%;
-  }
-  .login-logo { text-align: center; margin-bottom: 24px; font-size: 1.6rem; font-weight: 800; color: var(--verde); }
-  .login-logo span { color: var(--dorado); }
-  .login-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; text-align: center; }
-  .login-sub { color: var(--gris); text-align: center; margin-bottom: 24px; font-size: 0.88rem; }
-  .login-input {
-    width: 100%; padding: 12px 14px; border: 1px solid var(--gris-claro);
-    border-radius: 10px; font-size: 1rem; margin-bottom: 12px; transition: all 0.2s;
-  }
-  .login-input:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(26,58,42,0.1); }
-  .login-btn {
-    width: 100%; padding: 12px; background: var(--verde); color: white;
-    border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer;
-    transition: background 0.2s;
-  }
-  .login-btn:hover { background: var(--verde-medio); }
-  .login-error { color: var(--rojo); font-size: 0.85rem; text-align: center; margin-top: 12px; min-height: 20px; }
+  header h1 { font-size: 1.1rem; flex: 1; }
+  header span { font-size: .85rem; opacity: .7; }
 
-  /* ── DASHBOARD ── */
-  .dashboard { display: none; }
-  .dashboard.activo { display: block; }
+  #tokenArea {
+    max-width: 600px; margin: 40px auto; background: var(--card);
+    border-radius: var(--radio); padding: 28px; box-shadow: var(--sombra);
+  }
+  #tokenArea h2 { color: var(--verde); margin-bottom: 12px; }
+  #tokenArea p { color: #555; font-size: .9rem; line-height: 1.5; margin-bottom: 16px; }
+  #tokenArea ol { padding-left: 20px; color: #444; font-size: .88rem; line-height: 2; margin-bottom: 16px; }
+  #tokenArea a { color: var(--verde-claro); }
+  #tokenInput { width: 100%; padding: 10px; border: 1.5px solid #ccc; border-radius: 6px; font-size: .95rem; margin-bottom: 10px; }
+  #tokenInput:focus { outline: none; border-color: var(--verde-claro); }
 
-  .topbar {
-    background: var(--verde); color: white; padding: 16px 24px;
-    display: flex; justify-content: space-between; align-items: center;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  .btn {
+    background: var(--verde-claro); color: #fff; border: none; border-radius: 6px;
+    padding: 10px 22px; font-size: .95rem; cursor: pointer; font-weight: 600;
+    transition: background .2s;
   }
-  .topbar-logo { font-size: 1.3rem; font-weight: 800; }
-  .topbar-logo span { color: var(--dorado); }
-  .topbar-actions { display: flex; gap: 12px; align-items: center; }
-  .topbar-btn {
-    background: rgba(255,255,255,0.15); color: white; border: none;
-    padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; cursor: pointer;
-    transition: background 0.2s;
-  }
-  .topbar-btn:hover { background: rgba(255,255,255,0.25); }
+  .btn:hover { background: var(--verde-medio); }
+  .btn.dorado { background: var(--dorado); color: #1a1a1a; }
+  .btn.dorado:hover { background: #b8952e; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
 
-  .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+  #mainArea { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; }
 
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px; margin-bottom: 24px;
+  .toolbar {
+    display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
   }
-  .stat-card {
-    background: white; border-radius: 12px; padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid var(--verde);
+  .toolbar input[type=text] {
+    flex: 1; min-width: 200px; padding: 9px 14px; border: 1.5px solid #ccc;
+    border-radius: 6px; font-size: .9rem;
   }
-  .stat-label { font-size: 0.78rem; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .stat-valor { font-size: 1.7rem; font-weight: 800; color: var(--verde); }
-  .stat-sub { font-size: 0.78rem; color: var(--gris); margin-top: 4px; }
-  .stat-card.pendientes { border-left-color: var(--naranja); }
-  .stat-card.pendientes .stat-valor { color: var(--naranja); }
-  .stat-card.total { border-left-color: var(--dorado); }
-  .stat-card.total .stat-valor { color: var(--dorado); }
-  .stat-card.facturado { border-left-color: var(--azul); }
-  .stat-card.facturado .stat-valor { color: var(--azul); }
-
-  .seccion {
-    background: white; border-radius: 12px; padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 24px;
-  }
-  .seccion-titulo {
-    font-size: 1rem; font-weight: 700; color: var(--verde);
-    margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;
+  .toolbar input:focus { outline: none; border-color: var(--verde-claro); }
+  .toolbar select {
+    padding: 9px 14px; border: 1.5px solid #ccc; border-radius: 6px;
+    font-size: .9rem; background: #fff;
   }
 
-  /* ── TOP PRODUCTOS ── */
-  .top-prod-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 0; border-bottom: 1px solid var(--gris-claro);
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
   }
-  .top-prod-item:last-child { border-bottom: none; }
-  .top-prod-nombre { font-size: 0.9rem; color: var(--texto); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 12px; }
-  .top-prod-cantidad {
-    background: var(--verde); color: white; padding: 4px 12px;
-    border-radius: 12px; font-size: 0.8rem; font-weight: 700;
+  .card {
+    background: var(--card); border-radius: var(--radio);
+    box-shadow: var(--sombra); overflow: hidden; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,.15); }
+  .card img {
+    width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
+    background: #e8ede8;
+  }
+  .card img.error { opacity: .3; }
+  .card .info { padding: 8px 10px; }
+  .card .info .id { font-size: .7rem; color: #888; }
+  .card .info .nombre { font-size: .78rem; font-weight: 600; color: #222; line-height: 1.3; margin-top: 2px; }
+  .card .info .liga-badge {
+    display: inline-block; margin-top: 4px; font-size: .65rem; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px; background: #e8f0e8; color: var(--verde);
+    text-transform: uppercase;
   }
 
-  /* ── GRAFICO ── */
-  .chart {
-    display: flex; align-items: flex-end; gap: 8px; height: 140px;
-    border-bottom: 2px solid var(--gris-claro); padding-bottom: 4px;
+  /* MODAL */
+  #modal {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55);
+    z-index: 200; align-items: center; justify-content: center; padding: 16px;
   }
-  .chart-bar {
-    flex: 1; background: linear-gradient(180deg, var(--verde-claro), var(--verde));
-    border-radius: 6px 6px 0 0; position: relative; min-height: 4px;
-    transition: opacity 0.2s;
+  #modal.open { display: flex; }
+  #modalBox {
+    background: var(--card); border-radius: 12px; width: 100%; max-width: 700px;
+    max-height: 90vh; overflow-y: auto; padding: 24px; position: relative;
   }
-  .chart-bar:hover { opacity: 0.8; }
-  .chart-bar-label {
-    position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
-    font-size: 0.65rem; color: var(--gris); white-space: nowrap;
+  #modalBox h2 { font-size: 1rem; color: var(--verde); margin-bottom: 4px; }
+  #modalBox .subtitle { font-size: .8rem; color: #888; margin-bottom: 18px; }
+  #modalClose {
+    position: absolute; top: 12px; right: 14px; background: none; border: none;
+    font-size: 1.4rem; cursor: pointer; color: #888; line-height: 1;
   }
-  .chart-bar-valor {
-    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-    font-size: 0.7rem; font-weight: 700; color: var(--verde); white-space: nowrap;
-  }
-  .chart-wrap { padding: 24px 0 30px; }
 
-  /* ── FILTROS ── */
-  .filtros-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-  .filtro-btn {
-    background: white; border: 1px solid var(--gris-claro); color: var(--gris);
-    padding: 6px 14px; border-radius: 8px; font-size: 0.82rem; cursor: pointer;
-    transition: all 0.2s; font-weight: 600;
+  .img-row { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; flex-wrap: wrap; }
+  .img-slot { flex: 1; min-width: 140px; }
+  .img-slot label { font-size: .75rem; font-weight: 700; color: #555; display: block; margin-bottom: 4px; }
+  .img-slot .preview { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; background: #e8ede8; display: block; margin-bottom: 6px; }
+  .img-slot input {
+    width: 100%; padding: 6px 8px; border: 1.5px solid #ccc; border-radius: 5px;
+    font-size: .75rem; font-family: monospace;
   }
-  .filtro-btn:hover { border-color: var(--verde); color: var(--verde); }
-  .filtro-btn.activo { background: var(--verde); color: white; border-color: var(--verde); }
+  .img-slot input:focus { outline: none; border-color: var(--verde-claro); }
+  .img-slot .hint { font-size: .68rem; color: #aaa; margin-top: 3px; }
 
-  /* ── TABLA PEDIDOS ── */
-  .tabla-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-  th { text-align: left; padding: 10px 12px; background: var(--gris-fondo); color: var(--gris); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid var(--gris-claro); }
-  td { padding: 12px; border-bottom: 1px solid var(--gris-claro); vertical-align: middle; }
-  tbody tr { cursor: pointer; transition: background 0.15s; }
-  tbody tr:hover { background: var(--gris-fondo); }
-  .badge {
-    display: inline-block; padding: 3px 10px; border-radius: 12px;
-    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .badge.pendiente { background: #fef3c7; color: #d97706; }
-  .badge.enviado   { background: #dbeafe; color: #2563eb; }
-  .badge.entregado { background: #d1fae5; color: #059669; }
-  .badge.cancelado { background: #fee2e2; color: #dc2626; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 
-  .empty { text-align: center; padding: 60px 24px; color: var(--gris); }
-  .empty-emoji { font-size: 3rem; margin-bottom: 12px; }
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1a3a2a; color: #fff; padding: 12px 24px; border-radius: 8px;
+    font-size: .9rem; font-weight: 600; z-index: 999; opacity: 0;
+    transition: opacity .3s; pointer-events: none; white-space: nowrap;
+  }
+  #toast.show { opacity: 1; }
+  #toast.error { background: #8b1a1a; }
 
-  /* ── VISITAS EN DIRECTO ── */
-  .live-count {
-    background: #10b981; color: white; padding: 4px 14px;
-    border-radius: 14px; font-size: 0.85rem; font-weight: 700;
-    display: inline-flex; align-items: center; gap: 8px;
+  #publishBar {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--verde); color: #fff; padding: 12px 20px;
+    display: none; align-items: center; gap: 14px; z-index: 150;
+    box-shadow: 0 -2px 12px rgba(0,0,0,.2);
   }
-  .live-count::before {
-    content: ''; width: 8px; height: 8px; background: white; border-radius: 50%;
-    animation: pulseLive 1.4s infinite;
-  }
-  @keyframes pulseLive { 0%,100%{opacity:1} 50%{opacity:0.25} }
-  .visita-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 12px; border-bottom: 1px solid var(--gris-claro); gap: 12px;
-  }
-  .visita-item:last-child { border-bottom: none; }
-  .visita-pag { color: var(--verde); font-weight: 600; font-size: 0.9rem; }
-  .visita-info { font-size: 0.78rem; color: var(--gris); margin-top: 2px; }
-  .visita-ref { font-size: 0.75rem; color: var(--gris); text-align: right; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .visita-device { font-size: 0.95rem; }
-
-  /* ── DETALLE MODAL ── */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100;
-    display: none; align-items: center; justify-content: center; padding: 20px;
-  }
-  .modal-overlay.visible { display: flex; }
-  .modal-box {
-    background: white; border-radius: 14px; max-width: 560px; width: 100%;
-    max-height: 90vh; overflow-y: auto; padding: 24px;
-  }
-  .modal-cerrar {
-    float: right; background: none; border: none; font-size: 1.4rem;
-    cursor: pointer; color: var(--gris);
-  }
-  .modal-titulo { font-size: 1.2rem; font-weight: 700; color: var(--verde); margin-bottom: 4px; }
-  .modal-fecha { font-size: 0.8rem; color: var(--gris); margin-bottom: 20px; }
-  .modal-seccion { margin-bottom: 18px; }
-  .modal-seccion-titulo { font-size: 0.78rem; color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 700; }
-  .modal-line { font-size: 0.9rem; margin-bottom: 4px; }
-  .modal-line strong { display: inline-block; min-width: 110px; color: var(--gris); }
-  .modal-items { background: var(--gris-fondo); border-radius: 8px; padding: 12px; font-size: 0.85rem; }
-  .modal-item { padding: 6px 0; border-bottom: 1px solid var(--gris-claro); }
-  .modal-item:last-child { border-bottom: none; }
-  .modal-total { font-size: 1.1rem; font-weight: 800; color: var(--verde); text-align: right; padding-top: 8px; border-top: 2px solid var(--gris-claro); margin-top: 8px; }
-  .modal-acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
-  .modal-acciones button {
-    flex: 1; min-width: 100px; padding: 10px; border: none; border-radius: 8px;
-    font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s;
-  }
-  .modal-acciones button:hover { opacity: 0.85; }
-  .btn-enviado    { background: var(--azul); color: white; }
-  .btn-entregado  { background: #059669; color: white; }
-  .btn-pendiente  { background: var(--naranja); color: white; }
-  .btn-cancelado  { background: var(--rojo); color: white; }
-  .btn-eliminar   { background: white; color: var(--rojo); border: 1px solid var(--rojo) !important; }
-
-  @media (max-width: 640px) {
-    .container { padding: 16px; }
-    .topbar { padding: 12px 16px; }
-    .topbar-logo { font-size: 1.1rem; }
-    .stat-valor { font-size: 1.4rem; }
-    th, td { padding: 8px; font-size: 0.82rem; }
-    .col-mobile-hide { display: none; }
-  }
+  #publishBar.visible { display: flex; }
+  #publishBar span { flex: 1; font-size: .9rem; }
+  #publishBar .changes-count { font-weight: 700; color: var(--dorado); }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <form class="login-box" id="loginForm" onsubmit="event.preventDefault(); intentarLogin();">
-    <div class="login-logo">Goal<span>Store</span></div>
-    <div class="login-titulo">Panel de administración</div>
-    <div class="login-sub">Introduce la contraseña para continuar</div>
-    <input type="password" class="login-input" id="passwordInput" placeholder="Contraseña" autocomplete="current-password" required>
-    <button type="submit" class="login-btn">Entrar</button>
-    <div class="login-error" id="loginError"></div>
-  </form>
+<header>
+  <h1>⚙️ GoalStore Admin — Gestión de Imágenes</h1>
+  <span id="headerStatus">Conectando...</span>
+  <button class="btn" id="logoutBtn" onclick="logout()" style="display:none;padding:6px 14px;font-size:.8rem">Cerrar sesión</button>
+</header>
+
+<!-- TOKEN SETUP -->
+<div id="tokenArea">
+  <h2>🔑 Configuración inicial (solo una vez)</h2>
+  <p>Para publicar cambios directamente a la web necesitas un <b>token de GitHub</b>. Créalo siguiendo estos pasos:</p>
+  <ol>
+    <li>Inicia sesión en GitHub como <b>goalstore03-sys</b></li>
+    <li>Ve a <a href="https://github.com/settings/tokens/new" target="_blank">github.com → Settings → Tokens (classic) → New token</a></li>
+    <li>Marca la casilla <b>repo</b> (acceso completo al repositorio)</li>
+    <li>Haz clic en <b>Generate token</b> y copia el token</li>
+    <li>Pégalo aquí:</li>
+  </ol>
+  <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" />
+  <br>
+  <button class="btn" onclick="saveToken()">Guardar y entrar →</button>
 </div>
 
-<!-- DASHBOARD -->
-<div class="dashboard" id="dashboard">
-  <div class="topbar">
-    <div class="topbar-logo">Goal<span>Store</span> · Admin</div>
-    <div class="topbar-actions">
-      <button class="topbar-btn" onclick="cargarTodo()">🔄 Actualizar</button>
-      <button class="topbar-btn" onclick="cerrarSesion()">Cerrar sesión</button>
-    </div>
+<!-- MAIN ADMIN -->
+<div id="mainArea">
+  <div class="toolbar">
+    <input type="text" id="searchBox" placeholder="🔍 Buscar por nombre o liga..." oninput="renderGrid()">
+    <select id="ligaFilter" onchange="renderGrid()">
+      <option value="">Todas las ligas</option>
+      <option value="laliga">LaLiga</option>
+      <option value="premier">Premier League</option>
+      <option value="seriea">Serie A</option>
+      <option value="bundesliga">Bundesliga</option>
+      <option value="ligue1">Ligue 1</option>
+      <option value="eredivisie">Eredivisie</option>
+      <option value="superlig">Süper Lig</option>
+      <option value="primeiraliga">Primeira Liga</option>
+      <option value="selecciones">Selecciones</option>
+      <option value="saudi">Saudi Pro League</option>
+      <option value="retro">Retro</option>
+      <option value="otros">Otros</option>
+    </select>
+    <span id="countLabel" style="font-size:.85rem;color:#666"></span>
   </div>
+  <div id="grid"></div>
+</div>
 
-  <div class="container">
-
-    <!-- STATS -->
-    <div class="stats-grid" id="statsGrid">
-      <div class="stat-card">
-        <div class="stat-label">Pedidos del mes</div>
-        <div class="stat-valor" id="stMes">—</div>
-        <div class="stat-sub">Últimos 30 días</div>
-      </div>
-      <div class="stat-card facturado">
-        <div class="stat-label">Facturado del mes</div>
-        <div class="stat-valor" id="stFact">—</div>
-        <div class="stat-sub">Últimos 30 días</div>
-      </div>
-      <div class="stat-card pendientes">
-        <div class="stat-label">Pendientes de enviar</div>
-        <div class="stat-valor" id="stPend">—</div>
-        <div class="stat-sub">Por gestionar</div>
-      </div>
-      <div class="stat-card total">
-        <div class="stat-label">Ticket medio</div>
-        <div class="stat-valor" id="stTicket">—</div>
-        <div class="stat-sub">Por pedido</div>
-      </div>
-    </div>
-
-    <!-- VISITAS EN DIRECTO -->
-    <div class="seccion">
-      <div class="seccion-titulo">
-        <span>Visitantes ahora mismo en la web</span>
-        <span class="live-count" id="liveCount">0</span>
-      </div>
-      <div id="visitasLista"></div>
-    </div>
-
-    <!-- GRÁFICO + TOP PRODUCTOS -->
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;" id="midRow">
-      <div class="seccion">
-        <div class="seccion-titulo">📈 Ventas últimos 14 días</div>
-        <div class="chart-wrap"><div class="chart" id="chartBars"></div></div>
-      </div>
-      <div class="seccion">
-        <div class="seccion-titulo">🏆 Top 5 productos</div>
-        <div id="topProductos"></div>
-      </div>
-    </div>
-
-    <!-- PEDIDOS -->
-    <div class="seccion">
-      <div class="seccion-titulo">
-        <span>📦 Pedidos</span>
-        <span id="contadorPedidos" style="font-size:0.8rem;color:var(--gris);font-weight:500;"></span>
-      </div>
-      <div class="filtros-row">
-        <button class="filtro-btn activo" onclick="filtrarPedidos(this,'todos')">Todos</button>
-        <button class="filtro-btn" onclick="filtrarPedidos(this,'pendiente')">Pendientes</button>
-        <button class="filtro-btn" onclick="filtrarPedidos(this,'enviado')">Enviados</button>
-        <button class="filtro-btn" onclick="filtrarPedidos(this,'entregado')">Entregados</button>
-        <button class="filtro-btn" onclick="filtrarPedidos(this,'cancelado')">Cancelados</button>
-      </div>
-      <div class="tabla-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Fecha</th>
-              <th>Cliente</th>
-              <th class="col-mobile-hide">Email</th>
-              <th>Total</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody id="tbodyPedidos"></tbody>
-        </table>
-      </div>
+<!-- MODAL EDITOR -->
+<div id="modal">
+  <div id="modalBox">
+    <button id="modalClose" onclick="closeModal()">×</button>
+    <h2 id="modalTitle"></h2>
+    <div class="subtitle" id="modalSubtitle"></div>
+    <div id="imgSlots"></div>
+    <div class="modal-actions">
+      <button class="btn dorado" onclick="saveChanges()">💾 Guardar cambios</button>
+      <button class="btn" style="background:#e8ede8;color:#1a3a2a" onclick="addSlot()">+ Añadir imagen</button>
+      <button class="btn" style="background:#e8ede8;color:#1a3a2a" onclick="closeModal()">Cancelar</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL DETALLE -->
-<div class="modal-overlay" id="modalDetalle" onclick="if(event.target===this)cerrarDetalle()">
-  <div class="modal-box">
-    <button class="modal-cerrar" onclick="cerrarDetalle()">✕</button>
-    <div id="modalContenido"></div>
-  </div>
+<!-- PUBLISH BAR -->
+<div id="publishBar">
+  <span>✏️ <span class="changes-count" id="changesCount">0</span> producto(s) modificado(s) sin publicar</span>
+  <button class="btn dorado" onclick="publishChanges()" id="publishBtn">🚀 Publicar en la web</button>
+  <button class="btn" style="background:rgba(255,255,255,.15);color:#fff" onclick="discardChanges()">Descartar todo</button>
 </div>
+
+<div id="toast"></div>
 
 <script>
-  let password = sessionStorage.getItem('gs_admin_pw') || '';
-  let pedidos = [];
-  let filtroEstado = 'todos';
-  let pedidoActual = null;
+// ─── CONFIG ───
+const REPO = 'goalstore03-sys/goalstore';
+const BRANCH = 'master';
+const FILE_PATH = 'camisetas-data.js';
 
-  const fmt = n => (Number(n) || 0).toFixed(2).replace('.', ',') + ' €';
-  const fmtFecha = iso => {
-    const d = new Date(iso);
-    return d.toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'2-digit' }) +
-           ' ' + d.toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' });
-  };
+// ─── STATE ───
+let token = '';
+let originalContent = '';   // JS file content as string
+let camisetas = [];         // parsed array
+let pendingChanges = {};    // id → {imgs: [...]}
+let currentProd = null;
 
-  async function api(url, opts={}) {
-    const headers = { 'Content-Type': 'application/json', 'X-Admin-Password': password, ...(opts.headers||{}) };
-    const r = await fetch(url, { ...opts, headers });
-    if (r.status === 401) throw new Error('unauth');
-    if (!r.ok) throw new Error('http_' + r.status);
-    return r.json();
+// ─── AUTH ───
+function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) return showToast('Introduce el token', true);
+  token = t;
+  localStorage.setItem('gs_admin_token', t);
+  init();
+}
+function logout() {
+  localStorage.removeItem('gs_admin_token');
+  location.reload();
+}
+
+// ─── INIT ───
+async function init() {
+  token = token || localStorage.getItem('gs_admin_token') || '';
+  if (!token) {
+    document.getElementById('tokenArea').style.display = 'block';
+    document.getElementById('headerStatus').textContent = 'Sin sesión';
+    return;
   }
+  document.getElementById('tokenArea').style.display = 'none';
+  document.getElementById('headerStatus').textContent = 'Cargando...';
+  document.getElementById('logoutBtn').style.display = '';
 
-  async function intentarLogin() {
-    const input = document.getElementById('passwordInput');
-    const err = document.getElementById('loginError');
-    password = input.value;
-    err.textContent = '';
-    try {
-      await api('/api/admin/stats');
-      sessionStorage.setItem('gs_admin_pw', password);
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('dashboard').classList.add('activo');
-      cargarTodo();
-    } catch(e) {
-      err.textContent = e.message === 'unauth' ? 'Contraseña incorrecta' : 'Error de conexión';
-      password = '';
+  try {
+    const { content, sha } = await fetchFile();
+    window._fileSha = sha;
+    originalContent = content;
+    camisetas = parseContent(content);
+    document.getElementById('mainArea').style.display = 'block';
+    document.getElementById('headerStatus').textContent = `${camisetas.length} camisetas cargadas`;
+    renderGrid();
+  } catch(e) {
+    console.error(e);
+    showToast('Error: ' + e.message, true);
+    document.getElementById('headerStatus').textContent = 'Error al cargar';
+    if (e.message.includes('401') || e.message.includes('403')) {
+      localStorage.removeItem('gs_admin_token');
+      document.getElementById('tokenArea').style.display = 'block';
     }
   }
+}
 
-  function cerrarSesion() {
-    sessionStorage.removeItem('gs_admin_pw');
-    location.reload();
-  }
+async function fetchFile() {
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`, {
+    headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+  });
+  if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
+  const data = await r.json();
+  const content = atob(data.content.replace(/\n/g, ''));
+  return { content, sha: data.sha };
+}
 
-  async function cargarTodo() {
-    try {
-      const [stats, lista] = await Promise.all([
-        api('/api/admin/stats'),
-        api('/api/admin/pedidos')
-      ]);
-      renderStats(stats);
-      pedidos = lista;
-      renderPedidos();
-      cargarVisitas();
-    } catch(e) {
-      if (e.message === 'unauth') { cerrarSesion(); return; }
-      alert('Error cargando datos: ' + e.message);
-    }
-  }
-
-  function fmtTiempo(s) {
-    if (s < 60)   return s + 's';
-    if (s < 3600) return Math.floor(s/60) + 'm';
-    return Math.floor(s/3600) + 'h';
-  }
-
-  function refHost(r) {
-    if (!r) return 'directo';
-    try { return new URL(r).hostname; } catch { return 'directo'; }
-  }
-
-  async function cargarVisitas() {
-    try {
-      const r = await api('/api/admin/visitas');
-      document.getElementById('liveCount').textContent = r.activos;
-      const cont = document.getElementById('visitasLista');
-      if (r.lista.length === 0) {
-        cont.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gris);font-size:0.88rem;">No hay visitantes ahora mismo</div>';
-        return;
+// ─── PARSE ───
+function parseContent(src) {
+  // Eval in a sandbox to get CAMISETAS array
+  const sandbox = {};
+  try {
+    const fn = new Function('sandbox', `
+      with(sandbox) {
+        ${src}
+        sandbox.CDN = CDN;
+        sandbox.CAMISETAS = CAMISETAS;
       }
-      cont.innerHTML = r.lista.map(v => `
-        <div class="visita-item">
-          <div class="visita-device">${v.movil ? '📱' : '💻'}</div>
-          <div style="flex:1;min-width:0;">
-            <div class="visita-pag">${v.page === '/' ? '🏠 Inicio' : (v.page === '/admin.html' ? '⚙️ Admin' : v.page)}</div>
-            <div class="visita-info">${fmtTiempo(v.tiempoEnSitio)} en la web · activo hace ${v.ultimaActividad}s</div>
-          </div>
-          <div class="visita-ref" title="${v.referrer || ''}">de: ${refHost(v.referrer)}</div>
-        </div>`).join('');
-    } catch(e) {
-      if (e.message === 'unauth') cerrarSesion();
-    }
+    `);
+    fn(sandbox);
+    return sandbox.CAMISETAS || [];
+  } catch(e) {
+    console.error('Parse error:', e);
+    return [];
   }
+}
 
-  // Auto-refresh visitas cada 5s
-  setInterval(cargarVisitas, 5000);
-
-  function renderStats(s) {
-    document.getElementById('stMes').textContent  = s.mes.n;
-    document.getElementById('stFact').textContent = fmt(s.mes.total);
-    document.getElementById('stPend').textContent = s.pendientes.n;
-    const ticket = s.todos.n > 0 ? s.todos.total / s.todos.n : 0;
-    document.getElementById('stTicket').textContent = fmt(ticket);
-
-    // Top productos
-    const topEl = document.getElementById('topProductos');
-    if (s.topProductos.length === 0) {
-      topEl.innerHTML = '<div style="color:var(--gris);text-align:center;padding:20px;font-size:0.85rem;">Sin datos aún</div>';
-    } else {
-      topEl.innerHTML = s.topProductos.map(p => `
-        <div class="top-prod-item">
-          <div class="top-prod-nombre" title="${p.nombre}">${p.nombre}</div>
-          <div class="top-prod-cantidad">${p.cantidad}</div>
-        </div>`).join('');
-    }
-
-    // Chart
-    const chart = document.getElementById('chartBars');
-    if (s.porDia.length === 0) {
-      chart.innerHTML = '<div style="color:var(--gris);text-align:center;width:100%;padding:30px 0;font-size:0.85rem;">Sin ventas en los últimos 14 días</div>';
-      return;
-    }
-    const max = Math.max(...s.porDia.map(d => d.total), 1);
-    chart.innerHTML = s.porDia.map(d => {
-      const h = (d.total / max) * 100;
-      const fecha = new Date(d.dia + 'T00:00:00');
-      const label = fecha.toLocaleDateString('es-ES', { day:'numeric', month:'short' });
-      return `<div class="chart-bar" style="height:${h}%;" title="${d.n} pedido(s) · ${fmt(d.total)}">
-        <div class="chart-bar-valor">${fmt(d.total).replace(' €','€')}</div>
-        <div class="chart-bar-label">${label}</div>
-      </div>`;
-    }).join('');
+// ─── RENDER GRID ───
+function imgUrl(url, sz) {
+  if (!url) return '';
+  if (url.includes('lh3.googleusercontent.com/d/')) {
+    const id = url.split('/d/')[1].replace(/[=?].*$/, '');
+    return `https://drive.google.com/thumbnail?id=${id}&sz=w${sz}`;
   }
-
-  function filtrarPedidos(btn, estado) {
-    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
-    btn.classList.add('activo');
-    filtroEstado = estado;
-    renderPedidos();
+  if (url.includes('drive.google.com/file/d/')) {
+    const id = url.split('/file/d/')[1].split('/')[0];
+    return `https://drive.google.com/thumbnail?id=${id}&sz=w${sz}`;
   }
+  return url;
+}
 
-  function renderPedidos() {
-    const tbody = document.getElementById('tbodyPedidos');
-    const contador = document.getElementById('contadorPedidos');
-    const filtrados = filtroEstado === 'todos' ? pedidos : pedidos.filter(p => p.estado === filtroEstado);
-    contador.textContent = `${filtrados.length} pedido${filtrados.length !== 1 ? 's' : ''}`;
+function renderGrid() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  const liga = document.getElementById('ligaFilter').value;
 
-    if (filtrados.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-emoji">📭</div>Sin pedidos ${filtroEstado === 'todos' ? 'aún' : 'en este estado'}</div></td></tr>`;
-      return;
-    }
+  const filtered = camisetas.filter(c => {
+    if (liga && !c.categoria?.includes(liga) && c.liga !== liga) return false;
+    if (q && !c.nombre.toLowerCase().includes(q) && !String(c.id).includes(q)) return false;
+    return true;
+  });
 
-    tbody.innerHTML = filtrados.map(p => `
-      <tr onclick="abrirDetalle(${p.id})">
-        <td><strong>#${p.id}</strong></td>
-        <td>${fmtFecha(p.created_at)}</td>
-        <td>${p.cliente_nombre || '—'}</td>
-        <td class="col-mobile-hide">${p.cliente_email || '—'}</td>
-        <td><strong>${fmt(p.total)}</strong></td>
-        <td><span class="badge ${p.estado}">${p.estado}</span></td>
-      </tr>`).join('');
-  }
+  document.getElementById('countLabel').textContent = `${filtered.length} camisetas`;
 
-  function abrirDetalle(id) {
-    pedidoActual = pedidos.find(p => p.id === id);
-    if (!pedidoActual) return;
-    const p = pedidoActual;
-    const items = Array.isArray(p.items) ? p.items : (p.items ? JSON.parse(p.items) : []);
-
-    document.getElementById('modalContenido').innerHTML = `
-      <div class="modal-titulo">Pedido #${p.id} <span class="badge ${p.estado}" style="margin-left:8px;">${p.estado}</span></div>
-      <div class="modal-fecha">${fmtFecha(p.created_at)}</div>
-
-      <div class="modal-seccion">
-        <div class="modal-seccion-titulo">Cliente</div>
-        <div class="modal-line"><strong>Nombre:</strong> ${p.cliente_nombre || '—'}</div>
-        <div class="modal-line"><strong>Email:</strong> <a href="mailto:${p.cliente_email}">${p.cliente_email || '—'}</a></div>
-        <div class="modal-line"><strong>Teléfono:</strong> ${p.cliente_telefono || '—'}</div>
+  const grid = document.getElementById('grid');
+  grid.innerHTML = filtered.map(c => {
+    const hasPending = !!pendingChanges[c.id];
+    const imgs = pendingChanges[c.id]?.imgs || c.imgs || [];
+    const thumb = imgUrl(imgs[0], 200);
+    return `<div class="card${hasPending ? ' pending' : ''}" onclick="openModal(${c.id})" title="${c.nombre}">
+      <img src="${thumb}" referrerpolicy="no-referrer" alt="" onerror="this.classList.add('error')"
+           ${hasPending ? 'style="outline:3px solid #c9a84c"' : ''}>
+      <div class="info">
+        <div class="id">#${c.id}${hasPending ? ' ✏️' : ''}</div>
+        <div class="nombre">${c.nombre}</div>
+        <div class="liga-badge">${c.liga}</div>
       </div>
+    </div>`;
+  }).join('');
+}
 
-      <div class="modal-seccion">
-        <div class="modal-seccion-titulo">Dirección de envío</div>
-        <div class="modal-line">${p.cliente_direccion || '—'}</div>
-        <div class="modal-line">${p.cliente_cp || ''} ${p.cliente_ciudad || ''}, ${p.cliente_pais || ''}</div>
-      </div>
+// ─── MODAL ───
+function openModal(id) {
+  const prod = camisetas.find(c => c.id === id);
+  if (!prod) return;
+  currentProd = prod;
 
-      <div class="modal-seccion">
-        <div class="modal-seccion-titulo">Artículos (${items.length})</div>
-        <div class="modal-items">
-          ${items.map(it => `
-            <div class="modal-item">
-              <strong>${it.nombre}</strong><br>
-              <span style="color:var(--gris);font-size:0.82rem;">
-                ${it.version} · Talla ${it.talla}
-                ${it.dorsal ? ' · ✏️ ' + it.dorsal : ''}
-                ${it.parche ? ' · 🎽 ' + it.parche : ''}
-                · x${it.cantidad} · ${fmt(it.precio * it.cantidad)}
-              </span>
-            </div>`).join('')}
-        </div>
-      </div>
+  document.getElementById('modalTitle').textContent = prod.nombre;
+  document.getElementById('modalSubtitle').textContent = `ID: ${prod.id} · Liga: ${prod.liga}`;
+  document.getElementById('modal').classList.add('open');
 
-      <div class="modal-seccion">
-        <div class="modal-seccion-titulo">Pago</div>
-        <div class="modal-line"><strong>Método:</strong> ${p.metodo_pago || '—'}</div>
-        <div class="modal-line"><strong>Subtotal:</strong> ${fmt(p.subtotal)}</div>
-        <div class="modal-line"><strong>Envío:</strong> ${Number(p.envio) === 0 ? 'Gratis' : fmt(p.envio)}</div>
-        ${Number(p.descuento) > 0 ? `<div class="modal-line"><strong>Descuento:</strong> −${fmt(p.descuento)}</div>` : ''}
-        <div class="modal-total">Total: ${fmt(p.total)}</div>
-      </div>
+  const workImgs = [...(pendingChanges[id]?.imgs || prod.imgs || [])];
+  renderSlots(workImgs);
+}
 
-      <div class="modal-acciones">
-        ${p.estado !== 'pendiente'  ? `<button class="btn-pendiente"  onclick="cambiarEstado('pendiente')">⏳ Pendiente</button>` : ''}
-        ${p.estado !== 'enviado'    ? `<button class="btn-enviado"    onclick="cambiarEstado('enviado')">📦 Enviado</button>` : ''}
-        ${p.estado !== 'entregado'  ? `<button class="btn-entregado"  onclick="cambiarEstado('entregado')">✅ Entregado</button>` : ''}
-        ${p.estado !== 'cancelado'  ? `<button class="btn-cancelado"  onclick="cambiarEstado('cancelado')">❌ Cancelar</button>` : ''}
-        <button class="btn-eliminar" onclick="eliminarPedido()">🗑️ Eliminar</button>
-      </div>
-    `;
-    document.getElementById('modalDetalle').classList.add('visible');
+function renderSlots(imgs) {
+  const container = document.getElementById('imgSlots');
+  const labels = ['📸 Imagen principal (frente)', '📸 Imagen 2', '📸 Imagen 3', '📸 Imagen 4'];
+  container.innerHTML = `
+    <div class="img-row">
+      ${imgs.map((url, i) => slotHtml(i, url, labels[i] || `📸 Imagen ${i+1}`)).join('')}
+    </div>`;
+  imgs.forEach((_, i) => attachPreview(i));
+}
+
+function slotHtml(i, url, label) {
+  const preview = imgUrl(url, 300);
+  return `<div class="img-slot" id="slot-${i}">
+    <label>${label}</label>
+    <img class="preview" id="prev-${i}" src="${preview}" referrerpolicy="no-referrer"
+         alt="" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1 1%22/%3E'">
+    <input type="text" id="inp-${i}" value="${url}" placeholder="URL de Google Drive o directa"
+           oninput="updatePreview(${i})">
+    <div class="hint">Pega el link de Drive: drive.google.com/file/d/ID/view o la URL directa</div>
+  </div>`;
+}
+
+function attachPreview(i) {
+  const inp = document.getElementById(`inp-${i}`);
+  if (inp) inp.addEventListener('input', () => updatePreview(i));
+}
+
+function updatePreview(i) {
+  const val = document.getElementById(`inp-${i}`)?.value || '';
+  const url = normalizeUrl(val);
+  const prev = document.getElementById(`prev-${i}`);
+  if (prev) {
+    prev.src = url ? imgUrl(url, 300) : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1 1%22/%3E';
+    prev.onerror = () => { prev.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1 1%22/%3E'; };
+  }
+}
+
+function normalizeUrl(val) {
+  val = val.trim();
+  if (!val) return '';
+  // drive.google.com/file/d/ID/view → lh3 format
+  const m1 = val.match(/drive\.google\.com\/file\/d\/([^/?\s]+)/);
+  if (m1) return `https://lh3.googleusercontent.com/d/${m1[1]}`;
+  // Already lh3 format
+  if (val.includes('lh3.googleusercontent.com')) return val;
+  // Already cloudinary or other
+  if (val.startsWith('http')) return val;
+  // Raw Drive ID (33 chars)
+  if (/^[A-Za-z0-9_-]{25,}$/.test(val)) return `https://lh3.googleusercontent.com/d/${val}`;
+  return val;
+}
+
+function addSlot() {
+  const slots = document.querySelectorAll('.img-slot');
+  const i = slots.length;
+  const row = document.querySelector('.img-row');
+  const div = document.createElement('div');
+  div.innerHTML = slotHtml(i, '', `📸 Imagen ${i+1}`);
+  row.appendChild(div.firstElementChild);
+  attachPreview(i);
+}
+
+function saveChanges() {
+  const slots = document.querySelectorAll('[id^="inp-"]');
+  const imgs = Array.from(slots)
+    .map(inp => normalizeUrl(inp.value))
+    .filter(u => u);
+
+  if (!imgs.length) {
+    showToast('Añade al menos una imagen', true);
+    return;
   }
 
-  function cerrarDetalle() {
-    document.getElementById('modalDetalle').classList.remove('visible');
-    pedidoActual = null;
-  }
+  pendingChanges[currentProd.id] = { imgs };
+  closeModal();
+  renderGrid();
+  updatePublishBar();
+  showToast('Cambios guardados. Pulsa "Publicar" cuando termines.');
+}
 
-  async function cambiarEstado(nuevo) {
-    if (!pedidoActual) return;
-    try {
-      await api('/api/admin/pedidos/' + pedidoActual.id, {
-        method: 'PATCH',
-        body: JSON.stringify({ estado: nuevo })
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  currentProd = null;
+}
+
+// ─── PUBLISH ───
+function updatePublishBar() {
+  const n = Object.keys(pendingChanges).length;
+  document.getElementById('changesCount').textContent = n;
+  const bar = document.getElementById('publishBar');
+  if (n > 0) bar.classList.add('visible');
+  else bar.classList.remove('visible');
+}
+
+function discardChanges() {
+  if (!confirm('¿Descartar todos los cambios sin publicar?')) return;
+  pendingChanges = {};
+  updatePublishBar();
+  renderGrid();
+}
+
+async function publishChanges() {
+  const n = Object.keys(pendingChanges).length;
+  if (!n) return;
+
+  const btn = document.getElementById('publishBtn');
+  btn.disabled = true;
+  btn.textContent = 'Publicando...';
+
+  try {
+    // Build updated JS content
+    let content = originalContent;
+
+    for (const [idStr, change] of Object.entries(pendingChanges)) {
+      const id = parseInt(idStr);
+      const prod = camisetas.find(c => c.id === id);
+      if (!prod) continue;
+
+      // Build new imgs array string
+      const imgsStr = JSON.stringify(change.imgs).replace(/"/g, "'");
+
+      // Replace imgs array for this product in the file
+      // Use regex to find "id:ID," line and replace its imgs:[...]
+      const escapedId = id.toString();
+      // Match the imgs:[...] on the same "block" as this id
+      // Strategy: find the line with "id:ID," and replace imgs:[...] on that same line
+      // Since each product is on one line, we can do line-by-line replacement
+      const lines = content.split('\n');
+      const updated = lines.map(line => {
+        if (!line.includes(`id:${escapedId},`) && !line.includes(`id:${escapedId} `) && !line.includes(` id:${escapedId},`) && !line.includes(` id:${escapedId} `)) return line;
+        // Make sure it's actually this product (check for exact id match)
+        const idMatch = line.match(/\bid:(\d+)[,\s]/);
+        if (!idMatch || parseInt(idMatch[1]) !== id) return line;
+        // Replace imgs:[...] with new value
+        return line.replace(/imgs:\[.*?\]/, `imgs:${imgsStr}`);
       });
-      cerrarDetalle();
-      cargarTodo();
-    } catch(e) {
-      alert('Error: ' + e.message);
+      content = updated.join('\n');
+
+      // Also update local array
+      prod.imgs = change.imgs;
     }
-  }
 
-  async function eliminarPedido() {
-    if (!pedidoActual) return;
-    if (!confirm('¿Eliminar el pedido #' + pedidoActual.id + ' definitivamente? Esta acción no se puede deshacer.')) return;
-    try {
-      await api('/api/admin/pedidos/' + pedidoActual.id, { method: 'DELETE' });
-      cerrarDetalle();
-      cargarTodo();
-    } catch(e) {
-      alert('Error: ' + e.message);
+    // Commit to GitHub
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `Admin: actualizar imágenes (${n} producto${n>1?'s':''})`,
+        content: encoded,
+        sha: window._fileSha,
+        branch: BRANCH
+      })
+    });
+
+    if (!r.ok) {
+      const err = await r.json();
+      throw new Error(err.message || r.statusText);
     }
-  }
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarDetalle(); });
+    const result = await r.json();
+    window._fileSha = result.content.sha;
+    originalContent = content;
+    pendingChanges = {};
+    updatePublishBar();
+    renderGrid();
+    showToast(`✅ ¡Publicado! La web se actualiza en ~30 segundos.`);
 
-  // Auto-login si ya hay password guardada
-  if (password) {
-    (async () => {
-      try {
-        await api('/api/admin/stats');
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('dashboard').classList.add('activo');
-        cargarTodo();
-      } catch(e) {
-        sessionStorage.removeItem('gs_admin_pw');
-        password = '';
-      }
-    })();
+  } catch(e) {
+    console.error(e);
+    showToast('Error al publicar: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 Publicar en la web';
   }
+}
+
+// ─── TOAST ───
+let toastTimer;
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (isError ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = '', 3500);
+}
+
+// ─── KEYBOARD & CLICK OUTSIDE ───
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+document.getElementById('tokenInput')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveToken();
+});
+
+// ─── START ───
+init();
 </script>
-
 </body>
 </html>
